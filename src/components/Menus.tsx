@@ -2,7 +2,7 @@ import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { useContext } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import { AppContext } from "../contexts/AppContext";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import Layout from "./Layout";
 const Menus = () => {
   const { menus, menusLocations } = useContext(AppContext);
@@ -31,7 +31,7 @@ const Menus = () => {
         }}
       >
         <Link
-          to={"/menus/create"}
+          href={"/menus/create"}
           style={{ textDecoration: "none", color: "black" }}
         >
           <Box
@@ -55,7 +55,7 @@ const Menus = () => {
         {filteredMenus &&
           filteredMenus.map((menu) => (
             <Link
-              to={`/menus/${menu.id}`}
+              href={`/menus/${menu.id}`}
               key={menu.id}
               style={{ textDecoration: "none" }}
             >

@@ -15,7 +15,7 @@ import CategoryIcon from "@mui/icons-material/Category";
 import LunchDiningIcon from "@mui/icons-material/LunchDining";
 import ClassIcon from "@mui/icons-material/Class";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { Divider } from "@mui/material";
 import RamenDiningIcon from "@mui/icons-material/RamenDining";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -76,7 +76,7 @@ export default function TemporaryDrawer() {
       <List>
         {sidebarMenuItems.slice(0, 7).map((item) => (
           <Link
-            to={item.route}
+            href={item.route}
             key={item.id}
             style={{ textDecoration: "none", color: "#636564" }}
           >
@@ -93,7 +93,7 @@ export default function TemporaryDrawer() {
       <List>
         {sidebarMenuItems.slice(-1).map((item) => (
           <Link
-            to={item.route}
+            href={item.route}
             key={item.id}
             style={{ textDecoration: "none", color: "#636564" }}
           >

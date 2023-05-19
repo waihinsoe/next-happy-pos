@@ -18,7 +18,7 @@ import FileDropzone from "./FileDropZone";
 import { config } from "../config/config";
 import { AppContext } from "../contexts/AppContext";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -32,7 +32,7 @@ const MenuProps = {
 };
 
 const CreateMenu = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { locations, fetchData } = useContext(AppContext);
   const accessToken = localStorage.getItem("accessToken");
   const [selectedLocationIds, setSelectedLocationIds] = useState<number[]>([]);
@@ -77,7 +77,7 @@ const CreateMenu = () => {
       });
 
       if (response.ok) {
-        navigate("/menus");
+        router.push("/menus");
         fetchData();
       }
 

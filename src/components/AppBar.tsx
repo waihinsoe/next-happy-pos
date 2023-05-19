@@ -4,7 +4,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import AppDrawer, { sidebarMenuItems } from "./AppDrawer";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { AppContext } from "../contexts/AppContext";
 import { useContext } from "react";
 
@@ -33,7 +33,7 @@ const ButtonAppBar = () => {
             {titleName}
           </Typography>
           <Link
-            to={accessToken ? "/logout" : "/login"}
+            href={accessToken ? "/logout" : "/login"}
             style={{ textDecoration: "none", color: "white" }}
           >
             <Button color="inherit">{accessToken ? "Logout" : "Login"}</Button>

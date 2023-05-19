@@ -3,7 +3,7 @@ import { useContext, useState } from "react";
 import { MenuCategory } from "../typings/types";
 import { config } from "../config/config";
 import { AppContext } from "../contexts/AppContext";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import Layout from "./Layout";
 const MenuCategories = () => {
   const { menuCategories, fetchData } = useContext(AppContext);
@@ -81,7 +81,7 @@ const MenuCategories = () => {
       >
         {menuCategories &&
           menuCategories.map((menu) => (
-            <Link to={`/menu-categories/${menu.id}`} key={menu.id}>
+            <Link href={`/menu-categories/${menu.id}`} key={menu.id}>
               <Chip
                 label={menu.name}
                 onClick={handleClick}

@@ -9,13 +9,15 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { useContext, useState } from "react";
 import { config } from "../config/config";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import Link from "next/link";
+import { useRouter } from "next/router";
+
 import { AppContext } from "../contexts/AppContext";
 import Layout from "./Layout";
 
 const Login = () => {
   const { updateData, ...data } = useContext(AppContext);
-  const navigate = useNavigate();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState({ email: "", password: "" });
   const accessToken = localStorage.getItem("accessToken");
@@ -33,7 +35,7 @@ const Login = () => {
         const responseData = await response.json();
         updateData({ ...data, accessToken: responseData.accessToken });
         localStorage.setItem("accessToken", responseData.accessToken);
-        return navigate("/");
+        return router.push("/");
       }
     } catch (err) {
       console.log("Error here: ", err);
@@ -62,7 +64,7 @@ const Login = () => {
       </IconButton>
     </>
   );
-  if (accessToken) return <Navigate to={"/"} />;
+  if (accessToken) router.push("/");
   return (
     <Layout>
       <Box
@@ -123,7 +125,7 @@ const Login = () => {
             <Button variant="contained" onClick={SignIn}>
               Log in
             </Button>
-            <Link to="/register">
+            <Link href="/register">
               <Typography variant="body1" sx={{ mt: 2 }}>
                 Register
               </Typography>

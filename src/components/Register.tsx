@@ -9,7 +9,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import { config } from "../config/config";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import Layout from "./Layout";
 
 const Register = () => {
@@ -107,7 +107,7 @@ const Register = () => {
             <Button variant="contained" onClick={Register}>
               Register
             </Button>
-            <Link to="/login">
+            <Link href="/login">
               <Typography variant="body1" sx={{ mt: 2 }}>
                 Login
               </Typography>
