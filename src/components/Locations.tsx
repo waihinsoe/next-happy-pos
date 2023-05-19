@@ -4,9 +4,10 @@ import Layout from "./Layout";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { Location } from "../typings/types";
 import { config } from "../config/config";
+import { getAccessToken } from "@/utils";
 
 const Locations = () => {
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = getAccessToken();
   const { locations, company, fetchData } = useContext(AppContext);
   const [newLocation, setNewLocation] = useState({ name: "", address: "" });
   const [updatedLocations, setUpdatedLocations] =

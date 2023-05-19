@@ -5,9 +5,10 @@ import { config } from "../config/config";
 import { AppContext } from "../contexts/AppContext";
 import Link from "next/link";
 import Layout from "./Layout";
+import { getAccessToken } from "@/utils";
 const MenuCategories = () => {
   const { menuCategories, fetchData } = useContext(AppContext);
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = getAccessToken();
   const [menuCategory, setMenuCategory] = useState<MenuCategory | null>(null);
   const createMenuCategory = async () => {
     if (!menuCategory?.name) throw new Error("hello");

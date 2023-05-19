@@ -7,15 +7,19 @@ import AppDrawer, { sidebarMenuItems } from "./AppDrawer";
 import Link from "next/link";
 import { AppContext } from "../contexts/AppContext";
 import { useContext } from "react";
+import { getAccessToken, getSelectedLocationId } from "@/utils";
 
 const ButtonAppBar = () => {
   const { locations } = useContext(AppContext);
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = getAccessToken();
+  let titleName;
+  if (typeof window !== "undefined") {
+    titleName = sidebarMenuItems.find(
+      (item) => item.route === location.pathname
+    )?.label;
+  }
 
-  const titleName = sidebarMenuItems.find(
-    (item) => item.route === location.pathname
-  )?.label;
-  const selectedLocationId = localStorage.getItem("selectedLocation");
+  const selectedLocationId = getSelectedLocationId();
   const selectedLocation = locations.find(
     (location) => String(location.id) === selectedLocationId
   );

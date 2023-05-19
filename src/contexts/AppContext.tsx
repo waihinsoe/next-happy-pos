@@ -9,6 +9,7 @@ import {
   MenuLocation,
 } from "../typings/types";
 import { config } from "../config/config";
+import { getAccessToken } from "@/utils";
 
 interface AppContextType {
   menus: Menu[];
@@ -39,7 +40,7 @@ export const AppContext = createContext<AppContextType>(defaultContext);
 
 const AppProvider = (props: any) => {
   const [data, updateData] = useState(defaultContext);
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = getAccessToken();
 
   useEffect(() => {
     if (accessToken) {
