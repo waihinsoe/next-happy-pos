@@ -14,13 +14,14 @@ import { useRouter } from "next/router";
 
 import { AppContext } from "../contexts/AppContext";
 import Layout from "./Layout";
+import { getAccessToken } from "@/utils";
 
 const Login = () => {
   const { updateData, ...data } = useContext(AppContext);
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState({ email: "", password: "" });
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = getAccessToken();
 
   const SignIn = async () => {
     const isValid = user.email.length > 0 && user.password.length > 0;

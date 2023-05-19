@@ -4,9 +4,10 @@ import AddIcon from "@mui/icons-material/Add";
 import { AppContext } from "../contexts/AppContext";
 import Link from "next/link";
 import Layout from "./Layout";
+import { getSelectedLocationId } from "@/utils";
 const Menus = () => {
   const { menus, menusLocations } = useContext(AppContext);
-  const selectedLocationId = localStorage.getItem("selectedLocation");
+  const selectedLocationId = getSelectedLocationId();
 
   const validMenuLocations = menusLocations
     .filter((menusLocation) => {

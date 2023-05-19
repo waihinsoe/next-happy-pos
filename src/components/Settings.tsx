@@ -13,10 +13,11 @@ import { useContext, useEffect, useState } from "react";
 import { Company, Location } from "../typings/types";
 import Layout from "./Layout";
 import { config } from "../config/config";
+import { getAccessToken, getSelectedLocationId } from "@/utils";
 
 const Settings = () => {
   const { locations, company } = useContext(AppContext);
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = getAccessToken();
   const [selectedLocation, setSelectedLocation] = useState<
     Location | undefined
   >();
@@ -24,10 +25,10 @@ const Settings = () => {
     name: "",
     address: "",
   });
-  console.log(companyInfo.name, companyInfo.address);
+
   useEffect(() => {
     if (locations.length) {
-      const selectedLocationId = localStorage.getItem("selectedLocation");
+      const selectedLocationId = getSelectedLocationId();
       if (!selectedLocationId) {
         localStorage.setItem("selectedLocation", String(locations[0].id));
         setSelectedLocation(locations[0]);

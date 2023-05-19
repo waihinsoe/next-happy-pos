@@ -19,6 +19,7 @@ import { config } from "../config/config";
 import { AppContext } from "../contexts/AppContext";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useRouter } from "next/router";
+import { getAccessToken } from "@/utils";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -34,7 +35,7 @@ const MenuProps = {
 const CreateMenu = () => {
   const router = useRouter();
   const { locations, fetchData } = useContext(AppContext);
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = getAccessToken();
   const [selectedLocationIds, setSelectedLocationIds] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [menuImage, setMenuImage] = useState<File>();
