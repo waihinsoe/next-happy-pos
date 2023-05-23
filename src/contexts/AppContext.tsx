@@ -42,12 +42,22 @@ const AppProvider = (props: any) => {
   const [data, updateData] = useState(defaultContext);
   const accessToken = getAccessToken();
 
+  // useEffect(() => {
+  //   if (accessToken) {
+  //     fetchData();
+  //     console.log(defaultContext);
+  //   }
+  // }, [accessToken]);
+
   useEffect(() => {
-    if (accessToken) {
-      fetchData();
-      console.log(defaultContext);
-    }
-  }, [accessToken]);
+    updateData({
+      ...data,
+      locations: [
+        { id: 1, name: "indaw", address: "innywar", companies_id: 12 },
+      ],
+    });
+  }, []);
+
   const fetchData = async () => {
     const response = await fetch(`${config.apiBaseUrl}/`, {
       headers: {
