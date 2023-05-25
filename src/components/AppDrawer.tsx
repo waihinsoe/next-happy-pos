@@ -23,29 +23,49 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 type Anchor = "left";
 
 export const sidebarMenuItems = [
-  { id: 1, label: "Home", icon: <HomeIcon />, route: "/" },
-  { id: 2, label: "Orders", icon: <RamenDiningIcon />, route: "/orders" },
-  { id: 3, label: "Menus", icon: <RestaurantMenuIcon />, route: "/menus" },
+  { id: 1, label: "Home", icon: <HomeIcon />, route: "/backoffice/" },
+  {
+    id: 2,
+    label: "Orders",
+    icon: <RamenDiningIcon />,
+    route: "/backoffice/orders",
+  },
+  {
+    id: 3,
+    label: "Menus",
+    icon: <RestaurantMenuIcon />,
+    route: "/backoffice/menus",
+  },
   {
     id: 4,
     label: "Menu Categories",
     icon: <CategoryIcon />,
-    route: "/menu-categories",
+    route: "/backoffice/menuCategories",
   },
-  { id: 5, label: "Addons", icon: <LunchDiningIcon />, route: "/addons" },
+  {
+    id: 5,
+    label: "Addons",
+    icon: <LunchDiningIcon />,
+    route: "/backoffice/addons",
+  },
   {
     id: 6,
     label: "Addon Categories",
     icon: <ClassIcon />,
-    route: "/addon-categories",
+    route: "/backoffice/addonCategories",
   },
   {
     id: 7,
     label: "Locations",
     icon: <LocationOnIcon />,
-    route: "/locations",
+    route: "/backoffice/locations",
   },
-  { id: 8, label: "Settings", icon: <SettingsIcon />, route: "/settings" },
+  {
+    id: 8,
+    label: "Settings",
+    icon: <SettingsIcon />,
+    route: "/backoffice/settings",
+  },
 ];
 
 export default function TemporaryDrawer() {
