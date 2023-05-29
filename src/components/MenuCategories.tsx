@@ -2,24 +2,27 @@ import { Box, Button, Chip, TextField, Typography } from "@mui/material";
 import { useContext, useState } from "react";
 import { MenuCategory } from "../typings/types";
 import { config } from "../config/config";
-import { AppContext } from "../contexts/AppContext";
+import { BackOfficeContext } from "../contexts/BackOfficeContext";
 import Link from "next/link";
 import Layout from "./Layout";
 import { getAccessToken } from "@/utils";
 const MenuCategories = () => {
-  const { menuCategories, fetchData } = useContext(AppContext);
+  const { menuCategories, fetchData } = useContext(BackOfficeContext);
   const accessToken = getAccessToken();
   const [menuCategory, setMenuCategory] = useState<MenuCategory | null>(null);
   const createMenuCategory = async () => {
     if (!menuCategory?.name) throw new Error("hello");
-    const response = await fetch(`${config.apiBaseUrl}/menu-categories`, {
-      method: "POST",
-      body: JSON.stringify(menuCategory),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const response = await fetch(
+      `${config.backOfficeApiBaseUrl}/menu-categories`,
+      {
+        method: "POST",
+        body: JSON.stringify(menuCategory),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
 
     if (response.ok) {
       fetchData();
@@ -32,7 +35,7 @@ const MenuCategories = () => {
 
   const handleDelete = async (menuCategoryId: number | undefined) => {
     const response = await fetch(
-      `${config.apiBaseUrl}/menu-categories/${menuCategoryId}`,
+      `${config.backOfficeApiBaseUrl}/menu-categories/${menuCategoryId}`,
       {
         method: "DELETE",
         headers: {

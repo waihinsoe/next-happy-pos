@@ -3,12 +3,12 @@ import { Autocomplete, Box, Button, TextField } from "@mui/material";
 import { Menu } from "../../../typings/types";
 import { config } from "../../../config/config";
 import Layout from "../../../components/Layout";
-import { AppContext } from "@/contexts/AppContext";
+import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import { useRouter } from "next/router";
 import { getAccessToken } from "@/utils";
 
 const MenuDetail = () => {
-  const { menus, addonCategories } = useContext(AppContext);
+  const { menus, addonCategories } = useContext(BackOfficeContext);
   const accessToken = getAccessToken();
   const router = useRouter();
   const menuId = router.query.id as string;
@@ -31,14 +31,17 @@ const MenuDetail = () => {
   }, [menu]);
 
   const updateMenu = async () => {
-    const response = await fetch(`${config.apiBaseUrl}/menus/${menu?.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify(newMenu),
-    });
+    const response = await fetch(
+      `${config.backOfficeApiBaseUrl}/menus/${menu?.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(newMenu),
+      }
+    );
     console.log(await response.json());
   };
   return (

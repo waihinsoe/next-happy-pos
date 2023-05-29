@@ -16,7 +16,7 @@ import { Location, Menu } from "../typings/types";
 import { useContext, useState } from "react";
 import FileDropzone from "./FileDropZone";
 import { config } from "../config/config";
-import { AppContext } from "../contexts/AppContext";
+import { BackOfficeContext } from "../contexts/BackOfficeContext";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useRouter } from "next/router";
 import { getAccessToken } from "@/utils";
@@ -34,7 +34,7 @@ const MenuProps = {
 
 const CreateMenu = () => {
   const router = useRouter();
-  const { locations, fetchData } = useContext(AppContext);
+  const { locations, fetchData } = useContext(BackOfficeContext);
   const accessToken = getAccessToken();
   const [selectedLocationIds, setSelectedLocationIds] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -60,7 +60,7 @@ const CreateMenu = () => {
       if (menuImage) {
         const formData = new FormData();
         formData.append("files", menuImage as Blob);
-        const response = await fetch(`${config.apiBaseUrl}/assets`, {
+        const response = await fetch(`${config.backOfficeApiBaseUrl}/assets`, {
           method: "POST",
           body: formData,
         });
@@ -68,7 +68,7 @@ const CreateMenu = () => {
         const assetUrl = responseJson.assetUrl;
         menu.asset_url = assetUrl;
       }
-      const response = await fetch(`${config.apiBaseUrl}/menus`, {
+      const response = await fetch(`${config.backOfficeApiBaseUrl}/menus`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

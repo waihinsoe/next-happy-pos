@@ -8,7 +8,7 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import { AppContext } from "../contexts/AppContext";
+import { BackOfficeContext } from "../contexts/BackOfficeContext";
 import { useContext, useEffect, useState } from "react";
 import { Company, Location } from "../typings/types";
 import Layout from "./Layout";
@@ -16,7 +16,7 @@ import { config } from "../config/config";
 import { getAccessToken, getSelectedLocationId } from "@/utils";
 
 const Settings = () => {
-  const { locations, company } = useContext(AppContext);
+  const { locations, company } = useContext(BackOfficeContext);
   const accessToken = getAccessToken();
   const [selectedLocation, setSelectedLocation] = useState<
     Location | undefined
@@ -51,7 +51,7 @@ const Settings = () => {
 
   const updateCompany = async () => {
     const response = await fetch(
-      `${config.apiBaseUrl}/settings/companies/${companyInfo.id}`,
+      `${config.backOfficeApiBaseUrl}/settings/companies/${companyInfo.id}`,
       {
         method: "PUT",
         headers: {

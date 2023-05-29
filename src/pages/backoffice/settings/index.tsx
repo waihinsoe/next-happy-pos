@@ -13,10 +13,10 @@ import { Company, Location } from "../../../typings/types";
 import Layout from "../../../components/Layout";
 import { config } from "../../../config/config";
 import { getAccessToken, getSelectedLocationId } from "@/utils";
-import { AppContext } from "@/contexts/AppContext";
+import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 
 const Settings = () => {
-  const { locations, company } = useContext(AppContext);
+  const { locations, company } = useContext(BackOfficeContext);
   const accessToken = getAccessToken();
   const [selectedLocation, setSelectedLocation] = useState<
     Location | undefined

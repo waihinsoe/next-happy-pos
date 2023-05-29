@@ -5,9 +5,9 @@ import Link from "next/link";
 
 import { getSelectedLocationId } from "@/utils";
 import Layout from "@/components/Layout";
-import { AppContext } from "@/contexts/AppContext";
+import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 const Menus = () => {
-  const { menus, menusLocations } = useContext(AppContext);
+  const { menus, menusLocations } = useContext(BackOfficeContext);
   const selectedLocationId = getSelectedLocationId();
 
   const validMenuLocations = menusLocations
