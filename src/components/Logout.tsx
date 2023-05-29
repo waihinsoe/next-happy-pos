@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { AppContext, defaultContext } from "../contexts/AppContext";
+import { AppContext, defaultContext } from "../contexts/BackOfficeContext";
 import Layout from "./Layout";
 import { Box, Typography } from "@mui/material";
 

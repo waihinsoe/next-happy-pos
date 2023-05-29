@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { AppContext } from "../contexts/AppContext";
+import { BackOfficeContext } from "../contexts/BackOfficeContext";
 import Layout from "./Layout";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { Location } from "../typings/types";
@@ -8,7 +8,7 @@ import { getAccessToken } from "@/utils";
 
 const Locations = () => {
   const accessToken = getAccessToken();
-  const { locations, company, fetchData } = useContext(AppContext);
+  const { locations, company, fetchData } = useContext(BackOfficeContext);
   const [newLocation, setNewLocation] = useState({ name: "", address: "" });
   const [updatedLocations, setUpdatedLocations] =
     useState<Location[]>(locations);
@@ -29,14 +29,17 @@ const Locations = () => {
       oldLocation?.name !== newLocation?.name ||
       oldLocation?.address !== newLocation?.address
     ) {
-      const response = await fetch(`${config.apiBaseUrl}/locations/`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(newLocation),
-      });
+      const response = await fetch(
+        `${config.backOfficeApiBaseUrl}/locations/`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify(newLocation),
+        }
+      );
       return response;
     }
   };
@@ -48,7 +51,7 @@ const Locations = () => {
       company?.id;
     if (!isValid) return console.log("name and address are both requied.");
     const response = await fetch(
-      `${config.apiBaseUrl}/locations/${company?.id}`,
+      `${config.backOfficeApiBaseUrl}/locations/${company?.id}`,
       {
         method: "POST",
         headers: {
@@ -67,7 +70,7 @@ const Locations = () => {
     if (!currentLocationId) return console.log("locationId is required.");
 
     const response = await fetch(
-      `${config.apiBaseUrl}/locations/${currentLocationId}`,
+      `${config.backOfficeApiBaseUrl}/locations/${currentLocationId}`,
       {
         method: "DELETE",
         headers: {

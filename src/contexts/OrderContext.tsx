@@ -7,12 +7,12 @@ import {
   Menu,
   MenuCategory,
   MenuLocation,
+  Order,
 } from "../typings/types";
 import { config } from "../config/config";
-import { getAccessToken } from "@/utils";
 import { useSession } from "next-auth/react";
 
-interface AppContextType {
+interface OrderContextType {
   menus: Menu[];
   menuCategories: MenuCategory[];
   addons: Addon[];
@@ -22,9 +22,10 @@ interface AppContextType {
   company: Company | null;
   updateData: (value: any) => void;
   fetchData: () => void;
+  cart: Order[];
 }
 
-export const defaultContext: AppContextType = {
+export const defaultOrderContext: OrderContextType = {
   menus: [],
   menuCategories: [],
   addons: [],
@@ -32,15 +33,16 @@ export const defaultContext: AppContextType = {
   locations: [],
   menusLocations: [],
   company: null,
-
   updateData: () => {},
   fetchData: () => {},
+  cart: [],
 };
 
-export const AppContext = createContext<AppContextType>(defaultContext);
+export const OrderContext =
+  createContext<OrderContextType>(defaultOrderContext);
 
-const AppProvider = (props: any) => {
-  const [data, updateData] = useState(defaultContext);
+const OrderProvider = (props: any) => {
+  const [data, updateData] = useState(defaultOrderContext);
   const { data: session } = useSession();
   useEffect(() => {
     if (session) {
@@ -49,15 +51,15 @@ const AppProvider = (props: any) => {
   }, [session]);
 
   const fetchData = async () => {
-    const response = await fetch(`${config.apiBaseUrl}/app`);
+    const response = await fetch(`${config.orderApiBaseUrl}`);
     const responseJson = await response.json();
     updateData({ ...data, ...responseJson });
   };
   return (
-    <AppContext.Provider value={{ ...data, updateData, fetchData }}>
+    <OrderContext.Provider value={{ ...data, updateData, fetchData }}>
       {props.children}
-    </AppContext.Provider>
+    </OrderContext.Provider>
   );
 };
 
-export default AppProvider;
+export default OrderProvider;

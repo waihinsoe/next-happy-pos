@@ -1,4 +1,5 @@
-import AppProvider from "@/contexts/AppContext";
+import BackOfficeProvider from "@/contexts/BackOfficeContext";
+import OrderProvider from "@/contexts/OrderContext";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
@@ -6,9 +7,11 @@ import { SessionProvider } from "next-auth/react";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <SessionProvider session={pageProps.session}>
-      <AppProvider>
-        <Component {...pageProps} />
-      </AppProvider>
+      <BackOfficeProvider>
+        <OrderProvider>
+          <Component {...pageProps} />
+        </OrderProvider>
+      </BackOfficeProvider>
     </SessionProvider>
   );
 }

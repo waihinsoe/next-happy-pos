@@ -1,7 +1,7 @@
 import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { useContext } from "react";
 import AddIcon from "@mui/icons-material/Add";
-import { AppContext } from "../contexts/AppContext";
+import { AppContext } from "../contexts/BackOfficeContext";
 import Link from "next/link";
 import Layout from "./Layout";
 import { getSelectedLocationId } from "@/utils";

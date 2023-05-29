@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import AppDrawer, { sidebarMenuItems } from "./AppDrawer";
 import Link from "next/link";
-import { AppContext } from "../contexts/AppContext";
+import { BackOfficeContext } from "../contexts/BackOfficeContext";
 import { useContext } from "react";
 import { getSelectedLocationId } from "@/utils";
 import { useSession, signIn, signOut } from "next-auth/react";
@@ -15,7 +15,7 @@ interface Props {
 }
 
 const ButtonAppBar = (props: Props) => {
-  const { locations } = useContext(AppContext);
+  const { locations } = useContext(BackOfficeContext);
   const { data: session } = useSession();
   console.log(session);
   let titleName;

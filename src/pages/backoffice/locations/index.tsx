@@ -4,10 +4,10 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import { getAccessToken } from "@/utils";
 import { config } from "@/config/config";
 import Layout from "@/components/Layout";
-import { AppContext } from "@/contexts/AppContext";
+import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import { Location } from "@/typings/types";
 const Locations = () => {
-  const { locations, company, fetchData } = useContext(AppContext);
+  const { locations, company, fetchData } = useContext(BackOfficeContext);
   const [newLocation, setNewLocation] = useState({ name: "", address: "" });
   const [updatedLocations, setUpdatedLocations] =
     useState<Location[]>(locations);
@@ -28,13 +28,16 @@ const Locations = () => {
       oldLocation?.name !== newLocation?.name ||
       oldLocation?.address !== newLocation?.address
     ) {
-      const response = await fetch(`${config.apiBaseUrl}/locations/`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newLocation),
-      });
+      const response = await fetch(
+        `${config.backOfficeApiBaseUrl}/locations/`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newLocation),
+        }
+      );
       return response;
     }
   };
@@ -46,7 +49,7 @@ const Locations = () => {
       company?.id;
     if (!isValid) return console.log("name and address are both requied.");
     const response = await fetch(
-      `${config.apiBaseUrl}/locations/?companyId=${company?.id}`,
+      `${config.backOfficeApiBaseUrl}/locations/?companyId=${company?.id}`,
       {
         method: "POST",
         headers: {
@@ -64,7 +67,7 @@ const Locations = () => {
     if (!currentLocationId) return console.log("locationId is required.");
 
     const response = await fetch(
-      `${config.apiBaseUrl}/locations/?locationId=${currentLocationId}`,
+      `${config.backOfficeApiBaseUrl}/locations/?locationId=${currentLocationId}`,
       {
         method: "DELETE",
         headers: {

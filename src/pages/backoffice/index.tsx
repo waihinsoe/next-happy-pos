@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import Layout from "../../components/Layout";
-import { AppContext } from "@/contexts/AppContext";
+import { AppContext } from "@/contexts/BackOfficeContext";
 import { Button } from "@mui/material";
 import { useSession, signOut, signIn } from "next-auth/react";
 

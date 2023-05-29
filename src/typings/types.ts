@@ -38,3 +38,7 @@ export interface Company {
   name: string;
   address: string;
 }
+
+export interface Order {
+  order: [{ menuIds: number[]; addonIds: number[] }];
+}

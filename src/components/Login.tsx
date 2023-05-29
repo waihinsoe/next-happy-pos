@@ -12,12 +12,12 @@ import { config } from "../config/config";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import { AppContext } from "../contexts/AppContext";
+import { BackOfficeContext } from "../contexts/BackOfficeContext";
 import Layout from "./Layout";
 import { getAccessToken } from "@/utils";
 
 const Login = () => {
-  const { updateData, ...data } = useContext(AppContext);
+  const { updateData, ...data } = useContext(BackOfficeContext);
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState({ email: "", password: "" });
