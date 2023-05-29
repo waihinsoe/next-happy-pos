@@ -10,6 +10,7 @@ import {
 } from "../typings/types";
 import { config } from "../config/config";
 import { getAccessToken } from "@/utils";
+import { useSession } from "next-auth/react";
 
 interface AppContextType {
   menus: Menu[];
@@ -40,30 +41,15 @@ export const AppContext = createContext<AppContextType>(defaultContext);
 
 const AppProvider = (props: any) => {
   const [data, updateData] = useState(defaultContext);
-  const accessToken = getAccessToken();
-
-  // useEffect(() => {
-  //   if (accessToken) {
-  //     fetchData();
-  //     console.log(defaultContext);
-  //   }
-  // }, [accessToken]);
-
+  const { data: session } = useSession();
   useEffect(() => {
-    updateData({
-      ...data,
-      locations: [
-        { id: 1, name: "indaw", address: "innywar", companies_id: 12 },
-      ],
-    });
-  }, []);
+    if (session) {
+      fetchData();
+    }
+  }, [session]);
 
   const fetchData = async () => {
-    const response = await fetch(`${config.apiBaseUrl}/`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const response = await fetch(`${config.apiBaseUrl}/app`);
     const responseJson = await response.json();
     updateData({ ...data, ...responseJson });
   };

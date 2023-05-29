@@ -7,7 +7,6 @@ import Layout from "@/components/Layout";
 import { AppContext } from "@/contexts/AppContext";
 import { Location } from "@/typings/types";
 const Locations = () => {
-  const accessToken = getAccessToken();
   const { locations, company, fetchData } = useContext(AppContext);
   const [newLocation, setNewLocation] = useState({ name: "", address: "" });
   const [updatedLocations, setUpdatedLocations] =
@@ -33,7 +32,6 @@ const Locations = () => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(newLocation),
       });
@@ -48,12 +46,11 @@ const Locations = () => {
       company?.id;
     if (!isValid) return console.log("name and address are both requied.");
     const response = await fetch(
-      `${config.apiBaseUrl}/locations/${company?.id}`,
+      `${config.apiBaseUrl}/locations/?companyId=${company?.id}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(newLocation),
       }
@@ -67,21 +64,21 @@ const Locations = () => {
     if (!currentLocationId) return console.log("locationId is required.");
 
     const response = await fetch(
-      `${config.apiBaseUrl}/locations/${currentLocationId}`,
+      `${config.apiBaseUrl}/locations/?locationId=${currentLocationId}`,
       {
         method: "DELETE",
         headers: {
           "Content-Type": "appliation/json",
-          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
     if (response.ok) {
       fetchData();
+    } else {
+      alert(
+        "cannot delete this location. Please delete menus associated with it first."
+      );
     }
-    alert(
-      "cannot delete this location. Please delete menus associated with it first."
-    );
   };
   return (
     <Layout>

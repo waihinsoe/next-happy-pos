@@ -7,11 +7,17 @@ import AppDrawer, { sidebarMenuItems } from "./AppDrawer";
 import Link from "next/link";
 import { AppContext } from "../contexts/AppContext";
 import { useContext } from "react";
-import { getAccessToken, getSelectedLocationId } from "@/utils";
+import { getSelectedLocationId } from "@/utils";
+import { useSession, signIn, signOut } from "next-auth/react";
 
-const ButtonAppBar = () => {
+interface Props {
+  title?: string;
+}
+
+const ButtonAppBar = (props: Props) => {
   const { locations } = useContext(AppContext);
-  const accessToken = getAccessToken();
+  const { data: session } = useSession();
+  console.log(session);
   let titleName;
   if (typeof window !== "undefined") {
     titleName = sidebarMenuItems.find(
@@ -28,20 +34,24 @@ const ButtonAppBar = () => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <AppDrawer />
-
+          {session && <AppDrawer />}
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {selectedLocation ? selectedLocation.name : ""}
           </Typography>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {titleName}
+            {props.title || titleName || ""}
           </Typography>
-          <Link
-            href={accessToken ? "/logout" : "/login"}
-            style={{ textDecoration: "none", color: "white" }}
-          >
-            <Button color="inherit">{accessToken ? "Logout" : "Login"}</Button>
-          </Link>
+
+          {session ? (
+            <Button
+              color="inherit"
+              onClick={() => signOut({ callbackUrl: "/auth/signin" })}
+            >
+              sign Out
+            </Button>
+          ) : (
+            <span></span>
+          )}
         </Toolbar>
       </AppBar>
     </Box>

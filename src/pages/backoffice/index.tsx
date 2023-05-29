@@ -1,13 +1,30 @@
 import { useContext } from "react";
 import Layout from "../../components/Layout";
 import { AppContext } from "@/contexts/AppContext";
+import { Button } from "@mui/material";
+import { useSession, signOut, signIn } from "next-auth/react";
 
 function App() {
-  const { locations } = useContext(AppContext);
-  console.log(locations);
+  const { data: session } = useSession();
   return (
     <Layout>
-      <h1>Home page</h1>
+      <div>
+        {session && session.user ? (
+          <>
+            Signed in as {session.user.email} <br />
+            <Button variant="contained" onClick={() => signOut()}>
+              Sign outs
+            </Button>
+          </>
+        ) : (
+          <>
+            Not signed in <br />
+            <Button variant="contained" onClick={() => signIn()}>
+              Sign in
+            </Button>
+          </>
+        )}
+      </div>
     </Layout>
   );
 }

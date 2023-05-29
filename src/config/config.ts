@@ -8,10 +8,12 @@ interface Config {
   dataBaseUserName: string;
   dataBasePassword: string;
   dataBaseName: string;
+  clientId: string;
+  clientSecret: string;
 }
 
 export const config: Config = {
-  apiBaseUrl: process.env.VITE_API_BASE_URL || "",
+  apiBaseUrl: process.env.NEXT_PUBLIC_API_BASE_URL || "",
   jwtSecret: process.env.JWT_SECRET || "",
   spaceAccessKeyId: process.env.SPACE_ACCESS_KEY_ID || "",
   spaceSecretAccessKey: process.env.SPACE_SECRET_ACCESS_KEY || "",
@@ -20,4 +22,6 @@ export const config: Config = {
   dataBaseUserName: process.env.DATABASE_USERNAME || "",
   dataBasePassword: process.env.DATABASE_PASSWORD || "",
   dataBaseName: process.env.DATABASE_NAME || "",
+  clientId: process.env.GOOGLE_CLIENT_ID || "",
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
 };
