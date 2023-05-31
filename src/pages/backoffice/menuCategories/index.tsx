@@ -3,25 +3,33 @@ import { useContext, useState } from "react";
 
 import Link from "next/link";
 
-import { getAccessToken } from "@/utils";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import Layout from "@/components/Layout";
 import { MenuCategory } from "@/typings/types";
 import { config } from "../../../config/config";
+import { getSelectedLocationId } from "@/utils";
 const MenuCategories = () => {
-  const { menuCategories, fetchData } = useContext(BackOfficeContext);
-  const accessToken = getAccessToken();
+  const { menuCategories, menusMenuCategoriesLocations, fetchData } =
+    useContext(BackOfficeContext);
   const [menuCategory, setMenuCategory] = useState<MenuCategory | null>(null);
+  const selectedLocationId = getSelectedLocationId() as string;
+
+  const validMenuCategoryIds = menusMenuCategoriesLocations
+    .filter((item) => item.locations_id === parseInt(selectedLocationId, 10))
+    .map((item) => item.menu_categories_id);
+  const filteredMenuCategories = menuCategories.filter(
+    (item) => item.id && validMenuCategoryIds.includes(item.id)
+  );
+
   const createMenuCategory = async () => {
-    if (!menuCategory?.name) throw new Error("hello");
+    if (!menuCategory?.name) return alert("name is required");
     const response = await fetch(
-      `${config.backOfficeApiBaseUrl}/menu-categories`,
+      `${config.backOfficeApiBaseUrl}/menuCategories/?locationId=${selectedLocationId}`,
       {
         method: "POST",
         body: JSON.stringify(menuCategory),
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -37,19 +45,16 @@ const MenuCategories = () => {
 
   const handleDelete = async (menuCategoryId: number | undefined) => {
     const response = await fetch(
-      `${config.backOfficeApiBaseUrl}/menu-categories/${menuCategoryId}`,
+      `${config.backOfficeApiBaseUrl}/menuCategories/?menuCategoryId=${menuCategoryId}`,
       {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
       }
     );
     if (response.ok) {
       fetchData();
     }
   };
-
+  // if (menuCategories.length === 0) return;
   return (
     <Layout>
       <Box
@@ -85,15 +90,16 @@ const MenuCategories = () => {
           marginTop: "3rem",
         }}
       >
-        {menuCategories &&
-          menuCategories.map((menu) => (
-            <Link href={`/menu-categories/${menu.id}`} key={menu.id}>
-              <Chip
-                label={menu.name}
-                onClick={handleClick}
-                onDelete={() => handleDelete(menu.id)}
-              />
-            </Link>
+        {filteredMenuCategories.length > 0 &&
+          filteredMenuCategories.map((menu) => (
+            // <Link href={`/menu-categories/${menu.id}`} key={menu.id}>
+            <Chip
+              key={menu.id}
+              label={menu.name}
+              onClick={handleClick}
+              onDelete={() => handleDelete(menu.id)}
+            />
+            // </Link>
           ))}
       </Box>
     </Layout>

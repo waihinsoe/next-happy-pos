@@ -27,9 +27,10 @@ export interface Location extends BaseType {
   address: string;
 }
 
-export interface MenuLocation extends BaseType {
+export interface MenuMenuCategoryLocation extends BaseType {
   menus_id: number;
   locations_id: number;
+  menu_categories_id: number;
   is_available: boolean;
 }
 
@@ -39,6 +40,22 @@ export interface Company {
   address: string;
 }
 
+export enum OrderLineStatus {
+  PENDING = "PENDING",
+  PREPARING = "PREPARING",
+  COMPLETE = "COMPLETE",
+}
+
+export interface OrderLine {
+  menu: Menu;
+  addons?: Addon[];
+  quantity: number;
+  status: OrderLineStatus;
+}
+
 export interface Order {
-  order: [{ menuIds: number[]; addonIds: number[] }];
+  id?: number;
+  isPaid: boolean;
+  tableId: number;
+  orderLines: OrderLine[];
 }

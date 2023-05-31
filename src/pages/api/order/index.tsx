@@ -15,15 +15,17 @@ export default async function handler(
       },
     });
 
-    const menusLocations = await prisma.menus_locations.findMany({
-      where: {
-        locations_id: Number(locationId),
-      },
-    });
+    const menusMenuCategoriesLocations =
+      await prisma.menus_menu_categories_locations.findMany({
+        where: {
+          locations_id: Number(locationId),
+        },
+      });
 
-    const menuIds = menusLocations.map(
-      (menuLocation) => menuLocation.menus_id
-    ) as number[];
+    //menuIds may be [1,2,null]
+    const menuIds = menusMenuCategoriesLocations
+      .map((item) => item.menus_id)
+      .filter((item) => item !== null) as number[];
 
     const menus = await prisma.menus.findMany({
       where: {
@@ -33,16 +35,8 @@ export default async function handler(
       },
     });
 
-    const menusMenuCategories = await prisma.menus_menu_categories.findMany({
-      where: {
-        menus_id: {
-          in: menuIds,
-        },
-      },
-    });
-
-    const menuCategoryIds = menusMenuCategories.map(
-      (menuMenuCategory) => menuMenuCategory.menu_categories_id
+    const menuCategoryIds = menusMenuCategoriesLocations.map(
+      (item) => item.menu_categories_id
     ) as number[];
 
     const menuCategories = await prisma.menu_categories.findMany({

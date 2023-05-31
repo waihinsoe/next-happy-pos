@@ -38,6 +38,10 @@ const Locations = () => {
           body: JSON.stringify(newLocation),
         }
       );
+
+      if (response.ok) {
+        fetchData();
+      }
       return response;
     }
   };
@@ -83,6 +87,9 @@ const Locations = () => {
       );
     }
   };
+
+  // if (locations.length === 0) return;
+
   return (
     <Layout>
       <Box sx={{ mt: 2, px: 2 }}>

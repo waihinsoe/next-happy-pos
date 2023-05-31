@@ -1,16 +1,20 @@
 import { OrderContext } from "@/contexts/OrderContext";
+import { MenuCategory } from "@/typings/types";
 import { Box, Button } from "@mui/material";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 const Order = () => {
   const { menuCategories, menus } = useContext(OrderContext);
-  const [selectedMenuCategory, setSelectedMenuCategory] = useState(
-    menuCategories[0]
-  );
+  const [selectedMenuCategory, setSelectedMenuCategory] =
+    useState<MenuCategory>();
   console.log("menuCategories", menuCategories);
+  useEffect(() => {
+    setSelectedMenuCategory(menuCategories[0]);
+  }, [menuCategories]);
   return (
     <Box>
       {menuCategories &&
+        selectedMenuCategory &&
         menuCategories.map((menuCategory) => {
           return (
             <Button

@@ -1,5 +1,5 @@
 import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import Link from "next/link";
 
@@ -7,17 +7,25 @@ import { getSelectedLocationId } from "@/utils";
 import Layout from "@/components/Layout";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 const Menus = () => {
-  const { menus, menusLocations } = useContext(BackOfficeContext);
+  const { menus, menusMenuCategoriesLocations } = useContext(BackOfficeContext);
+  // const [selectedLocationId, setSelectedLocationId] = useState<string | null>(
+  //   null
+  // );
   const selectedLocationId = getSelectedLocationId();
+  // useEffect(() => {
+  //   setSelectedLocationId(localStorage.getItem("selectedLocation"));
+  // }, []);
 
-  const validMenuLocations = menusLocations
-    .filter((menusLocation) => {
-      return String(menusLocation.locations_id) === selectedLocationId;
+  // if (selectedLocationId === null) return;
+
+  const validMenuIds = menusMenuCategoriesLocations
+    .filter((item) => {
+      return item.locations_id === Number(selectedLocationId);
     })
     .map((menusLocation) => menusLocation.menus_id);
 
   const filteredMenus = menus.filter(
-    (menu) => menu.id && validMenuLocations.includes(menu.id)
+    (menu) => menu.id && validMenuIds.includes(menu.id)
   );
 
   return (

@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import AppDrawer, { sidebarMenuItems } from "./AppDrawer";
 import Link from "next/link";
 import { BackOfficeContext } from "../contexts/BackOfficeContext";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getSelectedLocationId } from "@/utils";
 import { useSession, signIn, signOut } from "next-auth/react";
 
@@ -16,8 +16,10 @@ interface Props {
 
 const ButtonAppBar = (props: Props) => {
   const { locations } = useContext(BackOfficeContext);
+  const [selectedLocationId, setSelectedLocationId] = useState<string | null>(
+    null
+  );
   const { data: session } = useSession();
-  console.log(session);
   let titleName;
   if (typeof window !== "undefined") {
     titleName = sidebarMenuItems.find(
@@ -25,11 +27,17 @@ const ButtonAppBar = (props: Props) => {
     )?.label;
   }
 
-  const selectedLocationId = getSelectedLocationId();
+  // const selectedLocationId = getSelectedLocationId();
+
+  useEffect(() => {
+    setSelectedLocationId(localStorage.getItem("selectedLocation"));
+  });
+
+  if (selectedLocationId === null) return;
+
   const selectedLocation = locations.find(
     (location) => String(location.id) === selectedLocationId
   );
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">

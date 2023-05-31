@@ -6,7 +6,7 @@ import {
   Location,
   Menu,
   MenuCategory,
-  MenuLocation,
+  MenuMenuCategoryLocation,
   Order,
 } from "../typings/types";
 import { config } from "../config/config";
@@ -18,11 +18,11 @@ interface OrderContextType {
   addons: Addon[];
   addonCategories: AddonCategory[];
   locations: Location[];
-  menusLocations: MenuLocation[];
+  menusMenuCategoriesLocations: MenuMenuCategoryLocation[];
   company: Company | null;
   updateData: (value: any) => void;
   fetchData: () => void;
-  cart: Order[];
+  cart: Order | null;
 }
 
 export const defaultOrderContext: OrderContextType = {
@@ -31,11 +31,11 @@ export const defaultOrderContext: OrderContextType = {
   addons: [],
   addonCategories: [],
   locations: [],
-  menusLocations: [],
+  menusMenuCategoriesLocations: [],
   company: null,
   updateData: () => {},
   fetchData: () => {},
-  cart: [],
+  cart: null,
 };
 
 export const OrderContext =
@@ -51,7 +51,7 @@ const OrderProvider = (props: any) => {
   }, [session]);
 
   const fetchData = async () => {
-    const response = await fetch(`${config.orderApiBaseUrl}`);
+    const response = await fetch(`${config.orderApiBaseUrl}/?locationId=25`);
     const responseJson = await response.json();
     updateData({ ...data, ...responseJson });
   };
