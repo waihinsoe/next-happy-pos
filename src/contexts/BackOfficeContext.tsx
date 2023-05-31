@@ -6,7 +6,7 @@ import {
   Location,
   Menu,
   MenuCategory,
-  MenuLocation,
+  MenuMenuCategoryLocation,
 } from "../typings/types";
 import { config } from "../config/config";
 import { useSession } from "next-auth/react";
@@ -17,7 +17,7 @@ interface BackOfficeContextType {
   addons: Addon[];
   addonCategories: AddonCategory[];
   locations: Location[];
-  menusLocations: MenuLocation[];
+  menusMenuCategoriesLocations: MenuMenuCategoryLocation[];
   company: Company | null;
   updateData: (value: any) => void;
   fetchData: () => void;
@@ -29,7 +29,7 @@ export const defaultBackOfficeContext: BackOfficeContextType = {
   addons: [],
   addonCategories: [],
   locations: [],
-  menusLocations: [],
+  menusMenuCategoriesLocations: [],
   company: null,
 
   updateData: () => {},

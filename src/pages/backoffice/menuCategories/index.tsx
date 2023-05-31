@@ -3,15 +3,14 @@ import { useContext, useState } from "react";
 
 import Link from "next/link";
 
-import { getAccessToken } from "@/utils";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import Layout from "@/components/Layout";
 import { MenuCategory } from "@/typings/types";
 import { config } from "../../../config/config";
 const MenuCategories = () => {
   const { menuCategories, fetchData } = useContext(BackOfficeContext);
-  const accessToken = getAccessToken();
   const [menuCategory, setMenuCategory] = useState<MenuCategory | null>(null);
+  console.log("menuCategories", menuCategories);
   const createMenuCategory = async () => {
     if (!menuCategory?.name) throw new Error("hello");
     const response = await fetch(
@@ -21,7 +20,6 @@ const MenuCategories = () => {
         body: JSON.stringify(menuCategory),
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -37,19 +35,16 @@ const MenuCategories = () => {
 
   const handleDelete = async (menuCategoryId: number | undefined) => {
     const response = await fetch(
-      `${config.backOfficeApiBaseUrl}/menu-categories/${menuCategoryId}`,
+      `${config.backOfficeApiBaseUrl}/menuCategories/?menuCategoryId=${menuCategoryId}`,
       {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
       }
     );
     if (response.ok) {
       fetchData();
     }
   };
-
+  // if (menuCategories.length === 0) return;
   return (
     <Layout>
       <Box
@@ -85,15 +80,16 @@ const MenuCategories = () => {
           marginTop: "3rem",
         }}
       >
-        {menuCategories &&
+        {menuCategories.length > 0 &&
           menuCategories.map((menu) => (
-            <Link href={`/menu-categories/${menu.id}`} key={menu.id}>
-              <Chip
-                label={menu.name}
-                onClick={handleClick}
-                onDelete={() => handleDelete(menu.id)}
-              />
-            </Link>
+            // <Link href={`/menu-categories/${menu.id}`} key={menu.id}>
+            <Chip
+              key={menu.id}
+              label={menu.name}
+              onClick={handleClick}
+              onDelete={() => handleDelete(menu.id)}
+            />
+            // </Link>
           ))}
       </Box>
     </Layout>

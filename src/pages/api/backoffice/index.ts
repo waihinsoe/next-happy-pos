@@ -56,17 +56,6 @@ export default async function handler(
       newMenusData.map((menu) => prisma.menus.create({ data: menu }))
     );
 
-    const newMenusLocationsData = [
-      { menus_id: newMenus[0].id, locations_id: newLocation.id },
-      { menus_id: newMenus[1].id, locations_id: newLocation.id },
-    ];
-
-    const newMenusLocations = await prisma.$transaction(
-      newMenusLocationsData.map((menuLocation) =>
-        prisma.menus_locations.create({ data: menuLocation })
-      )
-    );
-
     const newMenuCategoriesData = [
       { name: "default category1" },
       { name: "default category2" },
@@ -77,19 +66,25 @@ export default async function handler(
         prisma.menu_categories.create({ data: menuCategory })
       )
     );
-
-    await prisma.menus_menu_categories.createMany({
-      data: [
-        {
-          menus_id: newMenus[0].id,
-          menu_categories_id: newMenuCategories[0].id,
-        },
-        {
-          menus_id: newMenus[1].id,
-          menu_categories_id: newMenuCategories[1].id,
-        },
-      ],
-    });
+    const newMenusMenuCategoriesLocationsData = [
+      {
+        menus_id: newMenus[0].id,
+        menu_categories_id: newMenuCategories[0].id,
+        locations_id: newLocation.id,
+      },
+      {
+        menus_id: newMenus[1].id,
+        menu_categories_id: newMenuCategories[1].id,
+        locations_id: newLocation.id,
+      },
+    ];
+    const newMenusMenuCategoriesLocations = await prisma.$transaction(
+      newMenusMenuCategoriesLocationsData.map((menuMenuCategoryLocation) =>
+        prisma.menus_menu_categories_locations.create({
+          data: menuMenuCategoryLocation,
+        })
+      )
+    );
 
     const newAddonCategoriesData = [
       { name: "drink", is_required: false },
@@ -148,7 +143,7 @@ export default async function handler(
       addons: newAddons,
       addonCategories: newAddonCategories,
       locations: newLocation,
-      menusLocations: newMenusLocations,
+      menusMenuCategoriesLocations: newMenusMenuCategoriesLocations,
       company: newCompany,
     });
   } else {
@@ -168,16 +163,17 @@ export default async function handler(
 
     const locationIds = locations.map((location) => location.id);
 
-    const menusLocations = await prisma.menus_locations.findMany({
-      where: {
-        locations_id: {
-          in: locationIds,
+    const menusMenuCategoriesLocations =
+      await prisma.menus_menu_categories_locations.findMany({
+        where: {
+          locations_id: {
+            in: locationIds,
+          },
         },
-      },
-    });
+      });
 
-    const menuIds = menusLocations.map(
-      (menusLocation) => menusLocation.menus_id
+    const menuIds = menusMenuCategoriesLocations.map(
+      (item) => item.menus_id
     ) as number[];
 
     const menus = await prisma.menus.findMany({
@@ -188,16 +184,8 @@ export default async function handler(
       },
     });
 
-    const menusMenuCategories = await prisma.menus_menu_categories.findMany({
-      where: {
-        menus_id: {
-          in: menuIds,
-        },
-      },
-    });
-
-    const menuCategoryIds = menusMenuCategories.map(
-      (menusMenuCategory) => menusMenuCategory.menu_categories_id
+    const menuCategoryIds = menusMenuCategoriesLocations.map(
+      (item) => item.menu_categories_id
     ) as number[];
 
     const menuCategories = await prisma.menu_categories.findMany({
@@ -241,7 +229,7 @@ export default async function handler(
       addons,
       addonCategories,
       locations,
-      menusLocations,
+      menusMenuCategoriesLocations,
       company,
     });
   }

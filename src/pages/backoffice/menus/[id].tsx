@@ -5,11 +5,9 @@ import { config } from "../../../config/config";
 import Layout from "../../../components/Layout";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import { useRouter } from "next/router";
-import { getAccessToken } from "@/utils";
 
 const MenuDetail = () => {
   const { menus, addonCategories } = useContext(BackOfficeContext);
-  const accessToken = getAccessToken();
   const router = useRouter();
   const menuId = router.query.id as string;
 
@@ -37,7 +35,6 @@ const MenuDetail = () => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(newMenu),
       }

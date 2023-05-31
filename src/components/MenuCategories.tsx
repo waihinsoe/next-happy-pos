@@ -5,11 +5,12 @@ import { config } from "../config/config";
 import { BackOfficeContext } from "../contexts/BackOfficeContext";
 import Link from "next/link";
 import Layout from "./Layout";
-import { getAccessToken } from "@/utils";
+// import { getAccessToken } from "@/utils";
 const MenuCategories = () => {
   const { menuCategories, fetchData } = useContext(BackOfficeContext);
-  const accessToken = getAccessToken();
+  // const accessToken = getAccessToken();
   const [menuCategory, setMenuCategory] = useState<MenuCategory | null>(null);
+
   const createMenuCategory = async () => {
     if (!menuCategory?.name) throw new Error("hello");
     const response = await fetch(
@@ -19,7 +20,6 @@ const MenuCategories = () => {
         body: JSON.stringify(menuCategory),
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -38,16 +38,12 @@ const MenuCategories = () => {
       `${config.backOfficeApiBaseUrl}/menu-categories/${menuCategoryId}`,
       {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
       }
     );
     if (response.ok) {
       fetchData();
     }
   };
-
   return (
     <Layout>
       <Box
@@ -83,7 +79,7 @@ const MenuCategories = () => {
           marginTop: "3rem",
         }}
       >
-        {menuCategories &&
+        {menuCategories.length > 0 &&
           menuCategories.map((menu) => (
             <Link href={`/menu-categories/${menu.id}`} key={menu.id}>
               <Chip
