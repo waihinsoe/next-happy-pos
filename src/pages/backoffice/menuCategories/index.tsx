@@ -7,14 +7,24 @@ import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import Layout from "@/components/Layout";
 import { MenuCategory } from "@/typings/types";
 import { config } from "../../../config/config";
+import { getSelectedLocationId } from "@/utils";
 const MenuCategories = () => {
-  const { menuCategories, fetchData } = useContext(BackOfficeContext);
+  const { menuCategories, menusMenuCategoriesLocations, fetchData } =
+    useContext(BackOfficeContext);
   const [menuCategory, setMenuCategory] = useState<MenuCategory | null>(null);
-  console.log("menuCategories", menuCategories);
+  const selectedLocationId = getSelectedLocationId() as string;
+
+  const validMenuCategoryIds = menusMenuCategoriesLocations
+    .filter((item) => item.locations_id === parseInt(selectedLocationId, 10))
+    .map((item) => item.menu_categories_id);
+  const filteredMenuCategories = menuCategories.filter(
+    (item) => item.id && validMenuCategoryIds.includes(item.id)
+  );
+
   const createMenuCategory = async () => {
-    if (!menuCategory?.name) throw new Error("hello");
+    if (!menuCategory?.name) return alert("name is required");
     const response = await fetch(
-      `${config.backOfficeApiBaseUrl}/menu-categories`,
+      `${config.backOfficeApiBaseUrl}/menuCategories/?locationId=${selectedLocationId}`,
       {
         method: "POST",
         body: JSON.stringify(menuCategory),
@@ -80,8 +90,8 @@ const MenuCategories = () => {
           marginTop: "3rem",
         }}
       >
-        {menuCategories.length > 0 &&
-          menuCategories.map((menu) => (
+        {filteredMenuCategories.length > 0 &&
+          filteredMenuCategories.map((menu) => (
             // <Link href={`/menu-categories/${menu.id}`} key={menu.id}>
             <Chip
               key={menu.id}

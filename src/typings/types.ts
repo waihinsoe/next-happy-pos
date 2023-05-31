@@ -30,7 +30,7 @@ export interface Location extends BaseType {
 export interface MenuMenuCategoryLocation extends BaseType {
   menus_id: number;
   locations_id: number;
-  menu_cateogires_id: number;
+  menu_categories_id: number;
   is_available: boolean;
 }
 

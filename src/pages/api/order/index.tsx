@@ -22,9 +22,10 @@ export default async function handler(
         },
       });
 
-    const menuIds = menusMenuCategoriesLocations.map(
-      (item) => item.menus_id
-    ) as number[];
+    //menuIds may be [1,2,null]
+    const menuIds = menusMenuCategoriesLocations
+      .map((item) => item.menus_id)
+      .filter((item) => item !== null) as number[];
 
     const menus = await prisma.menus.findMany({
       where: {

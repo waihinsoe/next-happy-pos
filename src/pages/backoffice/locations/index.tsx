@@ -38,6 +38,10 @@ const Locations = () => {
           body: JSON.stringify(newLocation),
         }
       );
+
+      if (response.ok) {
+        fetchData();
+      }
       return response;
     }
   };
