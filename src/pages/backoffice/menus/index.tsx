@@ -1,22 +1,13 @@
 import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import Link from "next/link";
-
 import { getSelectedLocationId } from "@/utils";
 import Layout from "@/components/Layout";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 const Menus = () => {
   const { menus, menusMenuCategoriesLocations } = useContext(BackOfficeContext);
-  // const [selectedLocationId, setSelectedLocationId] = useState<string | null>(
-  //   null
-  // );
   const selectedLocationId = getSelectedLocationId();
-  // useEffect(() => {
-  //   setSelectedLocationId(localStorage.getItem("selectedLocation"));
-  // }, []);
-
-  // if (selectedLocationId === null) return;
 
   const validMenuIds = menusMenuCategoriesLocations
     .filter((item) => {
@@ -41,13 +32,13 @@ const Menus = () => {
         }}
       >
         <Link
-          href={"/menus/create"}
+          href={"/backoffice/menus/create"}
           style={{ textDecoration: "none", color: "black" }}
         >
           <Box
             sx={{
-              width: "250px",
-              height: "250px",
+              width: "200px",
+              height: "200px",
               border: "2px dotted lightgray",
               borderRadius: 2,
               display: "flex",
@@ -65,18 +56,14 @@ const Menus = () => {
         {filteredMenus &&
           filteredMenus.map((menu) => (
             <Link
-              href={`/menus/${menu.id}`}
+              href={`/backoffice/menus/${menu.id}`}
               key={menu.id}
               style={{ textDecoration: "none" }}
             >
-              <Card sx={{ maxWidth: 250, height: 250 }}>
-                <CardMedia
-                  sx={{ height: 140 }}
-                  image={`${menu.asset_url}`}
-                  title="green iguana"
-                />
+              <Card sx={{ maxWidth: 200, height: 200 }}>
+                <CardMedia sx={{ height: 100 }} image={`${menu.asset_url}`} />
                 <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
+                  <Typography gutterBottom variant="h6" component="div">
                     {menu.name}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">

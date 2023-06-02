@@ -1,5 +1,17 @@
-import { Box, Button, Chip, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useContext, useState } from "react";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import Link from "next/link";
 
@@ -12,6 +24,7 @@ const MenuCategories = () => {
   const { menuCategories, menusMenuCategoriesLocations, fetchData } =
     useContext(BackOfficeContext);
   const [menuCategory, setMenuCategory] = useState<MenuCategory | null>(null);
+  const [open, setOpen] = useState(false);
   const selectedLocationId = getSelectedLocationId() as string;
 
   const validMenuCategoryIds = menusMenuCategoriesLocations
@@ -20,6 +33,14 @@ const MenuCategories = () => {
   const filteredMenuCategories = menuCategories.filter(
     (item) => item.id && validMenuCategoryIds.includes(item.id)
   );
+
+  const getMenuCount = (menuCategoryId?: number) => {
+    if (!menuCategoryId) return 0;
+    return menusMenuCategoriesLocations.filter(
+      (item) =>
+        item.menus_id !== null && item.menu_categories_id === menuCategoryId
+    ).length;
+  };
 
   const createMenuCategory = async () => {
     if (!menuCategory?.name) return alert("name is required");
@@ -54,54 +75,98 @@ const MenuCategories = () => {
       fetchData();
     }
   };
-  // if (menuCategories.length === 0) return;
   return (
     <Layout>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          maxWidth: "500px",
-          margin: "auto",
-          marginTop: "3rem",
-          rowGap: "10px",
-        }}
-      >
-        <Typography variant="h5">Create New MenuCategories</Typography>
-        <TextField
-          id="name"
-          label="name"
-          variant="outlined"
-          onChange={(evt) =>
-            setMenuCategory({
-              name: evt.target.value,
-            })
-          }
-        />
-
-        <Button variant="contained" onClick={createMenuCategory}>
-          Add menuCategory
-        </Button>
+      <Box>
+        <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+          <Box
+            onClick={() => setOpen(true)}
+            sx={{
+              width: 150,
+              height: 150,
+              borderRadius: 2,
+              border: "2px solid #EBEBEB",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              cursor: "pointer",
+              textAlign: "center",
+            }}
+          >
+            <AddCircleOutlineIcon color="info" sx={{ fontSize: "50px" }} />
+          </Box>
+          {filteredMenuCategories.length > 0 &&
+            filteredMenuCategories.map((filteredMenuCategory) => (
+              <Link
+                href={`/backoffice/menuCategories/${filteredMenuCategory.id}`}
+                key={filteredMenuCategory.id}
+                style={{ textDecoration: "none", color: "#333333" }}
+              >
+                <Box sx={{ textAlign: "center" }}>
+                  <Box
+                    sx={{
+                      width: 150,
+                      height: 150,
+                      borderRadius: 2,
+                      border: "2px solid #EBEBEB",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      cursor: "pointer",
+                      textAlign: "center",
+                    }}
+                  >
+                    <Typography>
+                      {getMenuCount(filteredMenuCategory.id)} Menus
+                    </Typography>
+                  </Box>
+                  <Typography sx={{ mt: 1 }}>
+                    {filteredMenuCategory.name}
+                  </Typography>
+                </Box>
+              </Link>
+            ))}
+        </Box>
       </Box>
-      <Box
-        sx={{
-          maxWidth: "500px",
-          margin: "auto",
-          marginTop: "3rem",
-        }}
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        sx={{ textAlign: "center" }}
       >
-        {filteredMenuCategories.length > 0 &&
-          filteredMenuCategories.map((menu) => (
-            // <Link href={`/menu-categories/${menu.id}`} key={menu.id}>
-            <Chip
-              key={menu.id}
-              label={menu.name}
-              onClick={handleClick}
-              onDelete={() => handleDelete(menu.id)}
-            />
-            // </Link>
-          ))}
-      </Box>
+        <DialogTitle>Create new menu category</DialogTitle>
+        <DialogContent
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            minWidth: 300,
+            minHeight: 150,
+          }}
+        >
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Name"
+            type="text"
+            fullWidth
+            variant="outlined"
+            onChange={(evt) =>
+              setMenuCategory({ ...menuCategory, name: evt.target.value })
+            }
+            sx={{ my: 2 }}
+          />
+          <Button
+            variant="contained"
+            onClick={() => {
+              createMenuCategory();
+              setOpen(false);
+            }}
+            sx={{ width: "fit-content", alignSelf: "flex-end" }}
+          >
+            Create
+          </Button>
+        </DialogContent>
+      </Dialog>
     </Layout>
   );
 };

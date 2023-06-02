@@ -7,11 +7,9 @@ import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import { useRouter } from "next/router";
 
 const MenuDetail = () => {
-  const { menus, addonCategories } = useContext(BackOfficeContext);
   const router = useRouter();
   const menuId = router.query.id as string;
-
-  console.log(menuId);
+  const { menus, menuCategories } = useContext(BackOfficeContext);
 
   let menu: Menu | undefined;
   if (menuId) {
@@ -77,13 +75,13 @@ const MenuDetail = () => {
             <Autocomplete
               multiple
               limitTags={2}
-              id="multiple-limit-tags"
-              options={addonCategories}
+              id="addonCategories"
+              options={menuCategories}
               getOptionLabel={(option) => option.name}
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="menuCategories"
+                  label="AddonCategories"
                   placeholder="Favorites"
                 />
               )}

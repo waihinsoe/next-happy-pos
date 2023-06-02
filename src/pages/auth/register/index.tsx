@@ -7,38 +7,25 @@ import {
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useContext, useState } from "react";
-import { config } from "../config/config";
+import { useState } from "react";
+import { config } from "../../../config/config";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { BackOfficeContext } from "../contexts/BackOfficeContext";
-import Layout from "./Layout";
-import { getAccessToken } from "@/utils";
+import Layout from "../../../components/Layout";
 
-const Login = () => {
-  const { updateData, ...data } = useContext(BackOfficeContext);
-  const router = useRouter();
+const Register = () => {
   const [open, setOpen] = useState(false);
-  const [user, setUser] = useState({ email: "", password: "" });
+  const [user, setUser] = useState({ name: "", email: "", password: "" });
 
-  const SignIn = async () => {
-    const isValid = user.email.length > 0 && user.password.length > 0;
+  const Register = async () => {
+    const isValid =
+      user.name.length > 0 && user.email.length > 0 && user.password.length > 0;
     if (!isValid) return setOpen(true);
-    try {
-      const response = await fetch(`${config.apiBaseUrl}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(user),
-      });
-      if (response.ok) {
-        const responseData = await response.json();
-        updateData({ ...data, accessToken: responseData.accessToken });
-        localStorage.setItem("accessToken", responseData.accessToken);
-        return router.push("/");
-      }
-    } catch (err) {
-      console.log("Error here: ", err);
-    }
+    const response = await fetch(`${config.apiBaseUrl}/auth/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(user),
+    });
+    return response;
   };
 
   const handleClose = (
@@ -90,14 +77,15 @@ const Login = () => {
           }}
         >
           <TextField
+            label="Name"
+            variant="outlined"
+            sx={{ mb: 2 }}
+            onChange={(evt) => setUser({ ...user, name: evt.target.value })}
+          />
+          <TextField
             label="Email"
             variant="outlined"
             sx={{ mb: 2 }}
-            onKeyDown={(evt) => {
-              if (evt.key === "Enter") {
-                SignIn();
-              }
-            }}
             onChange={(evt) => setUser({ ...user, email: evt.target.value })}
           />
           <TextField
@@ -105,11 +93,6 @@ const Login = () => {
             variant="outlined"
             type="password"
             sx={{ mb: 2 }}
-            onKeyDown={(evt) => {
-              if (evt.key === "Enter") {
-                SignIn();
-              }
-            }}
             onChange={(evt) => setUser({ ...user, password: evt.target.value })}
           />
           <Box
@@ -121,12 +104,12 @@ const Login = () => {
               mt: 5,
             }}
           >
-            <Button variant="contained" onClick={SignIn}>
-              Log in
+            <Button variant="contained" onClick={Register}>
+              Register
             </Button>
-            <Link href="/register">
+            <Link href="/login">
               <Typography variant="body1" sx={{ mt: 2 }}>
-                Register
+                Login
               </Typography>
             </Link>
           </Box>
@@ -136,4 +119,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
