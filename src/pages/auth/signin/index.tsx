@@ -1,15 +1,25 @@
 import Layout from "@/components/Layout";
+import NavBar from "@/components/NavBar";
 import { Box, Button } from "@mui/material";
 import { signIn } from "next-auth/react";
 const Login = () => {
   return (
-    <Layout title="Happy POS -Sign in">
+    <Box>
+      <Box sx={{ position: "relative", zIndex: 999 }}>
+        <NavBar />
+      </Box>
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          mt: 3,
+          backgroundColor: "#E8F6EF",
+          left: 0,
+          right: 0,
+          top: 0,
+          bottom: 0,
+          position: "absolute",
+          zIndex: 1,
         }}
       >
         <Button
@@ -19,7 +29,7 @@ const Login = () => {
           Sign In with google
         </Button>
       </Box>
-    </Layout>
+    </Box>
   );
 };
 

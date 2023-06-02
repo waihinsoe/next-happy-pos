@@ -92,7 +92,7 @@ const Locations = () => {
 
   return (
     <Layout>
-      <Box sx={{ mt: 2, px: 2 }}>
+      <Box>
         {updatedLocations.length > 0 &&
           updatedLocations.map((location, index) => {
             return (

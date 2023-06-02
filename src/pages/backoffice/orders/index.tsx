@@ -28,10 +28,7 @@ const rows = [
 export default function BasicTable() {
   return (
     <Layout>
-      <TableContainer
-        component={Paper}
-        sx={{ margin: "0 auto", maxWidth: 950, mt: 5 }}
-      >
+      <TableContainer component={Paper} sx={{ margin: "0 auto" }}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>

@@ -3,7 +3,7 @@ import Layout from "@/components/Layout";
 const AddonCategories = () => {
   return (
     <Layout>
-      <h1>AddonCategories page</h1>
+      <span>AddonCategories page</span>
     </Layout>
   );
 };

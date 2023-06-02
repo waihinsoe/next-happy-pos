@@ -2,8 +2,8 @@ import { useContext, useEffect } from "react";
 import {
   BackOfficeContext,
   defaultBackOfficeContext,
-} from "../contexts/BackOfficeContext";
-import Layout from "./Layout";
+} from "../../../contexts/BackOfficeContext";
+import Layout from "../../../components/Layout";
 import { Box, Typography } from "@mui/material";
 
 const Logout = () => {

@@ -7,7 +7,7 @@ export interface Menu extends BaseType {
   asset_url?: string;
   price: number;
   description: string;
-  locationIds: number[];
+  menuCategoryIds: number[];
   isAvailable?: boolean;
 }
 
