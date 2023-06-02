@@ -21,29 +21,31 @@ export const sidebarMenuItems = [
     icon: <RamenDiningIcon />,
     route: "/backoffice/orders",
   },
+
   {
     id: 2,
-    label: "Menus",
-    icon: <RestaurantMenuIcon />,
-    route: "/backoffice/menus",
-  },
-  {
-    id: 3,
     label: "Menu Categories",
     icon: <CategoryIcon />,
     route: "/backoffice/menuCategories",
   },
   {
-    id: 4,
-    label: "Addons",
-    icon: <LunchDiningIcon />,
-    route: "/backoffice/addons",
+    id: 3,
+    label: "Menus",
+    icon: <RestaurantMenuIcon />,
+    route: "/backoffice/menus",
   },
+
   {
-    id: 5,
+    id: 4,
     label: "Addon Categories",
     icon: <ClassIcon />,
     route: "/backoffice/addonCategories",
+  },
+  {
+    id: 5,
+    label: "Addons",
+    icon: <LunchDiningIcon />,
+    route: "/backoffice/addons",
   },
   {
     id: 6,
