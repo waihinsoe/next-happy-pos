@@ -51,7 +51,7 @@ const OrderProvider = (props: any) => {
   }, [session]);
 
   const fetchData = async () => {
-    const response = await fetch(`${config.orderApiBaseUrl}/?locationId=25`);
+    const response = await fetch(`${config.orderApiBaseUrl}`);
     const responseJson = await response.json();
     updateData({ ...data, ...responseJson });
   };
