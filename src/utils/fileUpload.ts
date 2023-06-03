@@ -5,7 +5,7 @@ import { config } from "../config/config";
 
 //set s3 endpoint to digitalocean spaces
 const s3Config = new S3Client({
-  endpoint: "https://sgp1.digitaloceanspaces.com",
+  endpoint: config.spaceEndPoint,
   region: "sgp1",
   credentials: {
     accessKeyId: config.spaceAccessKeyId,
