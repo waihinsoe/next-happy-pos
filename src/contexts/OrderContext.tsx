@@ -1,14 +1,14 @@
 import { createContext, useEffect, useState } from "react";
-import {
-  Addon,
-  AddonCategory,
-  Company,
-  Location,
-  Menu,
-  MenuCategory,
-  MenuMenuCategoryLocation,
-  Order,
-} from "../typings/types";
+import { Order } from "../typings/types";
+import type {
+  addons as Addon,
+  addon_categories as AddonCategory,
+  companies as Company,
+  locations as Location,
+  menus as Menu,
+  menu_categories as MenuCategory,
+  menus_menu_categories_locations as MenuMenuCategoryLocation,
+} from "@prisma/client";
 import { config } from "../config/config";
 import { useSession } from "next-auth/react";
 
@@ -51,7 +51,7 @@ const OrderProvider = (props: any) => {
   }, [session]);
 
   const fetchData = async () => {
-    const response = await fetch(`${config.orderApiBaseUrl}`);
+    const response = await fetch(`${config.orderApiBaseUrl}/?locationId=1`);
     const responseJson = await response.json();
     updateData({ ...data, ...responseJson });
   };

@@ -1,12 +1,16 @@
 import {
   Box,
   Button,
-  Chip,
+  Checkbox,
   Dialog,
-  DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
+  FormControl,
+  InputLabel,
+  ListItemText,
+  MenuItem,
+  OutlinedInput,
+  Select,
   TextField,
   Typography,
 } from "@mui/material";
@@ -17,19 +21,53 @@ import Link from "next/link";
 
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import Layout from "@/components/Layout";
-import { MenuCategory } from "@/typings/types";
+// import { MenuCategory } from "@/typings/types";
+import type {
+  menu_categories as MenuCategory,
+  locations as Location,
+} from "@prisma/client";
 import { config } from "../../../config/config";
 import { getSelectedLocationId } from "@/utils";
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const names = [
+  "Oliver Hansen",
+  "Van Henry",
+  "April Tucker",
+  "Ralph Hubbard",
+  "Omar Alexander",
+  "Carlos Abbott",
+  "Miriam Wagner",
+  "Bradley Wilkerson",
+  "Virginia Andrews",
+  "Kelly Snyder",
+];
+
 const MenuCategories = () => {
-  const { menuCategories, menusMenuCategoriesLocations, fetchData } =
+  const { menuCategories, locations, menusMenuCategoriesLocations, fetchData } =
     useContext(BackOfficeContext);
-  const [menuCategory, setMenuCategory] = useState<MenuCategory | null>(null);
+  const [newMenuCategory, setNewMenuCategory] = useState({
+    name: "",
+    locationIds: [] as number[],
+  });
+
   const [open, setOpen] = useState(false);
   const selectedLocationId = getSelectedLocationId() as string;
 
   const validMenuCategoryIds = menusMenuCategoriesLocations
     .filter((item) => item.locations_id === parseInt(selectedLocationId, 10))
     .map((item) => item.menu_categories_id);
+
   const filteredMenuCategories = menuCategories.filter(
     (item) => item.id && validMenuCategoryIds.includes(item.id)
   );
@@ -43,12 +81,14 @@ const MenuCategories = () => {
   };
 
   const createMenuCategory = async () => {
-    if (!menuCategory?.name) return alert("name is required");
+    if (!newMenuCategory.name || !newMenuCategory.locationIds.length)
+      return alert("Please enter menu name and select locations");
+
     const response = await fetch(
-      `${config.backOfficeApiBaseUrl}/menuCategories/?locationId=${selectedLocationId}`,
+      `${config.backOfficeApiBaseUrl}/menuCategories/`,
       {
         method: "POST",
-        body: JSON.stringify(menuCategory),
+        body: JSON.stringify(newMenuCategory),
         headers: {
           "Content-Type": "application/json",
         },
@@ -57,6 +97,7 @@ const MenuCategories = () => {
 
     if (response.ok) {
       fetchData();
+      setOpen(false);
     }
   };
 
@@ -151,17 +192,59 @@ const MenuCategories = () => {
             fullWidth
             variant="outlined"
             onChange={(evt) =>
-              setMenuCategory({ ...menuCategory, name: evt.target.value })
+              setNewMenuCategory({ ...newMenuCategory, name: evt.target.value })
             }
             sx={{ my: 2 }}
           />
+
+          <FormControl>
+            <InputLabel id="select-locations">locations</InputLabel>
+            <Select
+              labelId="select-locations"
+              id="locations"
+              multiple
+              value={newMenuCategory.locationIds}
+              onChange={(evt) => {
+                const values = evt.target.value as number[];
+                setNewMenuCategory({ ...newMenuCategory, locationIds: values });
+              }}
+              input={<OutlinedInput label="locations" />}
+              renderValue={(values) => {
+                const selectedLocations = newMenuCategory.locationIds.map(
+                  (locationId) => {
+                    return locations.find(
+                      (location) => location.id === locationId
+                    ) as Location;
+                  }
+                );
+                return selectedLocations
+                  .map((selectedLocation) => selectedLocation.name)
+                  .join(", ");
+              }}
+              MenuProps={MenuProps}
+            >
+              {locations.map((location) => (
+                <MenuItem key={location.id} value={location.id}>
+                  <Checkbox
+                    checked={
+                      location.id &&
+                      newMenuCategory.locationIds.includes(location.id)
+                        ? true
+                        : false
+                    }
+                  />
+                  <ListItemText primary={location.name} />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
           <Button
             variant="contained"
             onClick={() => {
               createMenuCategory();
-              setOpen(false);
             }}
-            sx={{ width: "fit-content", alignSelf: "flex-end" }}
+            sx={{ width: "fit-content", alignSelf: "flex-end", mt: 2 }}
           >
             Create
           </Button>
