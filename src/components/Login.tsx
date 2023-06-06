@@ -13,7 +13,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { BackOfficeContext } from "../contexts/BackOfficeContext";
 import Layout from "./Layout";
-import { getAccessToken } from "@/utils";
 
 const Login = () => {
   const { updateData, ...data } = useContext(BackOfficeContext);

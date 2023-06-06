@@ -1,5 +1,5 @@
 import { OrderContext } from "@/contexts/OrderContext";
-import { MenuCategory } from "@/typings/types";
+import { menu_categories as MenuCategory } from "@prisma/client";
 import { Box, Button } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 
