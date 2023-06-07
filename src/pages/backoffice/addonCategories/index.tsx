@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 
 const AddonCategories = () => {
   return (
-    <Layout>
+    <Layout title="AddonCategories">
       <span>AddonCategories page</span>
     </Layout>
   );

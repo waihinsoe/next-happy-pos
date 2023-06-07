@@ -9,7 +9,10 @@ import {
   Button,
 } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import { Company, Location } from "../../../typings/types";
+import type {
+  companies as Company,
+  locations as Location,
+} from "@prisma/client";
 import Layout from "../../../components/Layout";
 import { config } from "../../../config/config";
 import { getAccessToken, getSelectedLocationId } from "@/utils";
@@ -21,10 +24,7 @@ const Settings = () => {
   const [selectedLocation, setSelectedLocation] = useState<
     Location | undefined
   >();
-  const [companyInfo, setCompanyInfo] = useState<Company>({
-    name: "",
-    address: "",
-  });
+  const [companyInfo, setCompanyInfo] = useState<Company | null>(company);
 
   useEffect(() => {
     if (locations.length) {
@@ -39,7 +39,7 @@ const Settings = () => {
         setSelectedLocation(selectedLocation);
       }
     }
-    if (company) return setCompanyInfo(company);
+    if (company) return company && setCompanyInfo(company);
   }, [locations, company]);
   const handleOnchange = (evt: SelectChangeEvent<number>) => {
     localStorage.setItem("selectedLocation", String(evt.target.value));
@@ -48,6 +48,8 @@ const Settings = () => {
     );
     setSelectedLocation(selectedLocation);
   };
+
+  if (!companyInfo) return null;
 
   const updateCompany = async () => {
     const response = await fetch(
@@ -65,7 +67,7 @@ const Settings = () => {
   };
 
   return (
-    <Layout>
+    <Layout title="Settings">
       <Box
         sx={{
           maxWidth: 400,

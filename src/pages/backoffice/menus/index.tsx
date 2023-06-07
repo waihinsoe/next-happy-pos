@@ -1,11 +1,20 @@
-import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
-import { useContext } from "react";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+} from "@mui/material";
+import { useContext, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import Link from "next/link";
 import { getSelectedLocationId } from "@/utils";
 import Layout from "@/components/Layout";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
+import NewMenu from "./NewMenu";
 const Menus = () => {
+  const [open, setOpen] = useState(false);
   const { menus, menusMenuCategoriesLocations } = useContext(BackOfficeContext);
   const selectedLocationId = getSelectedLocationId();
 
@@ -20,39 +29,41 @@ const Menus = () => {
   );
 
   return (
-    <Layout>
+    <Layout title="Menus">
+      <Box
+        sx={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "flex-end",
+          mb: 2,
+        }}
+      >
+        <Button
+          variant="contained"
+          onClick={() => setOpen(true)}
+          startIcon={<AddIcon />}
+          sx={{
+            backgroundColor: "#4C4C6D",
+            color: "#E8F6EF",
+            width: "fit-content",
+            ":hover": {
+              bgcolor: "#1B9C85", // theme.palette.primary.main
+              color: "white",
+            },
+          }}
+        >
+          NewMenu
+        </Button>
+      </Box>
       <Box
         sx={{
           display: "flex",
           gap: 2,
           alignItems: "center",
           justifyContent: "center",
-          marginTop: "2rem",
           flexWrap: "wrap",
         }}
       >
-        <Link
-          href={"/backoffice/menus/create"}
-          style={{ textDecoration: "none", color: "black" }}
-        >
-          <Box
-            sx={{
-              width: "200px",
-              height: "200px",
-              border: "2px dotted lightgray",
-              borderRadius: 2,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-              cursor: "pointer",
-              userSelect: "none",
-            }}
-          >
-            <AddIcon fontSize="large" />
-            <Typography>Add New Menu</Typography>
-          </Box>
-        </Link>
         {filteredMenus &&
           filteredMenus.map((menu) => (
             <Link
@@ -74,6 +85,7 @@ const Menus = () => {
             </Link>
           ))}
       </Box>
+      <NewMenu open={open} setOpen={setOpen} />
     </Layout>
   );
 };

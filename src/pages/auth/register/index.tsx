@@ -52,7 +52,7 @@ const Register = () => {
   );
 
   return (
-    <Layout>
+    <Layout title="Register">
       <Box
         sx={{
           display: "flex",

@@ -1,12 +1,12 @@
 import Layout from "@/components/Layout";
-import NavBar from "@/components/NavBar";
+import TopBar from "@/components/TopBar";
 import { Box, Button } from "@mui/material";
 import { signIn } from "next-auth/react";
 const Login = () => {
   return (
     <Box>
       <Box sx={{ position: "relative", zIndex: 999 }}>
-        <NavBar />
+        <TopBar />
       </Box>
       <Box
         sx={{

@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { BackOfficeContext } from "../contexts/BackOfficeContext";
 import Layout from "./Layout";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { Location } from "../typings/types";
+import type { locations as Location } from "@prisma/client";
 import { config } from "../config/config";
 import { getAccessToken } from "@/utils";
 
@@ -87,7 +87,7 @@ const Locations = () => {
     );
   };
   return (
-    <Layout>
+    <Layout title="Locations">
       <Box sx={{ mt: 2, px: 2 }}>
         {updatedLocations.length > 0 &&
           updatedLocations.map((location, index) => {

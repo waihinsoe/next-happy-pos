@@ -13,7 +13,7 @@ const Logout = () => {
     updateData(defaultBackOfficeContext);
   }, []);
   return (
-    <Layout>
+    <Layout title="Logout">
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Typography variant="h3">You are logged out.</Typography>
       </Box>
