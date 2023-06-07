@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from "react";
 
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import { config } from "@/config/config";
 
 const icon = (
   <CheckBoxOutlineBlankIcon fontSize="small" style={{ color: "lightblue" }} />
@@ -38,22 +39,40 @@ const EditMenuCategory = () => {
     locationIds.includes(location.id)
   );
 
+  const menuIds = menusMenuCategoriesLocations
+    .filter((item) => item.menu_categories_id === Number(menuCategoryId))
+    .map((item) => item.menus_id);
+
   const [newMenuCategory, setNewMenuCategory] = useState({
-    name: "",
+    id: menuCategory?.id,
+    name: menuCategory?.name,
     locations: selectedLocations,
+    menuIds,
   });
 
   useEffect(() => {
     if (menuCategory) {
       setNewMenuCategory({
         ...newMenuCategory,
+        id: menuCategory.id,
         name: menuCategory.name,
         locations: selectedLocations,
       });
     }
   }, [menuCategory]);
 
-  const updateMenuCategory = () => {};
+  const updateMenuCategory = async () => {
+    const response = await fetch(
+      `${config.backOfficeApiBaseUrl}/menuCategories`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newMenuCategory),
+      }
+    );
+  };
   if (!menuCategory) return null;
 
   return (

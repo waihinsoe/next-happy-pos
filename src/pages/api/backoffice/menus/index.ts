@@ -47,6 +47,40 @@ export default async function handler(
         },
       });
     }
+  } else if (req.method === "PUT") {
+    console.log(req.body);
+    const { id, name, price, menuCategoryIds, locationId } = req.body;
+
+    await prisma.menus.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+        price,
+      },
+    });
+
+    if (menuCategoryIds.length) {
+      await prisma.menus_menu_categories_locations.deleteMany({
+        where: {
+          menus_id: id,
+        },
+      });
+
+      const data = menuCategoryIds.map((menuCategoryId: number) => {
+        return {
+          menus_id: id,
+          locations_id: Number(locationId),
+          menu_categories_id: menuCategoryId,
+        };
+      });
+
+      await prisma.menus_menu_categories_locations.createMany({
+        data,
+      });
+    }
+    res.send(200);
   }
   res.send(200);
 }
