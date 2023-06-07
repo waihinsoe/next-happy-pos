@@ -1,6 +1,6 @@
 import { Box, Button, Chip, TextField, Typography } from "@mui/material";
 import { useContext, useState } from "react";
-import { MenuCategory } from "../typings/types";
+import type { menu_categories as MenuCategory } from "@prisma/client";
 import { config } from "../config/config";
 import { BackOfficeContext } from "../contexts/BackOfficeContext";
 import Link from "next/link";
@@ -9,7 +9,7 @@ import Layout from "./Layout";
 const MenuCategories = () => {
   const { menuCategories, fetchData } = useContext(BackOfficeContext);
   // const accessToken = getAccessToken();
-  const [menuCategory, setMenuCategory] = useState<MenuCategory | null>(null);
+  const [menuCategory, setMenuCategory] = useState({ name: "" });
 
   const createMenuCategory = async () => {
     if (!menuCategory?.name) throw new Error("hello");
@@ -45,7 +45,7 @@ const MenuCategories = () => {
     }
   };
   return (
-    <Layout>
+    <Layout title="MenuCategories">
       <Box
         sx={{
           display: "flex",

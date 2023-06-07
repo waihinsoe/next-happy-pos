@@ -64,7 +64,7 @@ const Login = () => {
   );
 
   return (
-    <Layout>
+    <Layout title="Login">
       <Box
         sx={{
           display: "flex",

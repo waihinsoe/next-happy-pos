@@ -5,7 +5,7 @@ import { getAccessToken } from "@/utils";
 import { config } from "@/config/config";
 import Layout from "@/components/Layout";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
-import { Location } from "@/typings/types";
+import type { locations as Location } from "@prisma/client";
 const Locations = () => {
   const { locations, company, fetchData } = useContext(BackOfficeContext);
   const [newLocation, setNewLocation] = useState({ name: "", address: "" });

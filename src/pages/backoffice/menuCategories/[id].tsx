@@ -76,7 +76,7 @@ const EditMenuCategory = () => {
   if (!menuCategory) return null;
 
   return (
-    <Layout>
+    <Layout title="EditMenuCategory">
       <Box
         sx={{
           display: "flex",

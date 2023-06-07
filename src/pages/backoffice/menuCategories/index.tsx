@@ -117,7 +117,7 @@ const MenuCategories = () => {
     }
   };
   return (
-    <Layout>
+    <Layout title="MenuCategories">
       <Box>
         <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
           <Box

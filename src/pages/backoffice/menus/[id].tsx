@@ -65,7 +65,7 @@ const MenuDetail = () => {
   };
   if (!menu) return;
   return (
-    <Layout>
+    <Layout title="MenuDetail">
       <Box>
         {menu ? (
           <Box

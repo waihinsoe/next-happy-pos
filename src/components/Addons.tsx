@@ -3,7 +3,7 @@ import Layout from "./Layout";
 
 const Addons = () => {
   return (
-    <Layout>
+    <Layout title="Addons">
       <Box
         sx={{
           display: "flex",

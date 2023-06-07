@@ -27,7 +27,7 @@ const rows = [
 
 export default function BasicTable() {
   return (
-    <Layout>
+    <Layout title="Orders">
       <TableContainer
         component={Paper}
         sx={{ margin: "0 auto", maxWidth: 950, mt: 5 }}
