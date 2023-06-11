@@ -19,7 +19,7 @@ const SideBar = () => {
   return (
     <Box
       sx={{
-        minWidth: 250,
+        minWidth: 230,
         backgroundColor: "#1B9C85",
         borderTopRightRadius: "20px",
       }}

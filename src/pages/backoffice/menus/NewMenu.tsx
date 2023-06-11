@@ -148,9 +148,7 @@ const NewMenu = ({ open, setOpen }: Props) => {
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            maxWidth: 400,
-            margin: "0 auto",
-
+            maxWidth: 300,
             rowGap: 1,
           }}
         >
@@ -232,6 +230,7 @@ const NewMenu = ({ open, setOpen }: Props) => {
             onClick={createMenu}
             disabled={isDisable}
             variant="contained"
+            sx={{ width: "fit-content", margin: "0 auto", mt: 2 }}
           >
             Create Menu
           </LoadingButton>
