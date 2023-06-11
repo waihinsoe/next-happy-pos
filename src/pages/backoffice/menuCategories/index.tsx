@@ -21,46 +21,19 @@ import Link from "next/link";
 
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import Layout from "@/components/Layout";
-// import { MenuCategory } from "@/typings/types";
+import AddIcon from "@mui/icons-material/Add";
+
 import type {
   menu_categories as MenuCategory,
   locations as Location,
 } from "@prisma/client";
 import { config } from "../../../config/config";
 import { getSelectedLocationId } from "@/utils";
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-
-const names = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
+import NewMenuCategory from "./NewMenuCategory";
 
 const MenuCategories = () => {
-  const { menuCategories, locations, menusMenuCategoriesLocations, fetchData } =
+  const { menuCategories, menusMenuCategoriesLocations, fetchData } =
     useContext(BackOfficeContext);
-  const [newMenuCategory, setNewMenuCategory] = useState({
-    name: "",
-    locationIds: [] as number[],
-  });
-
   const [open, setOpen] = useState(false);
   const selectedLocationId = getSelectedLocationId() as string;
 
@@ -78,27 +51,6 @@ const MenuCategories = () => {
       (item) =>
         item.menus_id !== null && item.menu_categories_id === menuCategoryId
     ).length;
-  };
-
-  const createMenuCategory = async () => {
-    if (!newMenuCategory.name || !newMenuCategory.locationIds.length)
-      return alert("Please enter menu name and select locations");
-
-    const response = await fetch(
-      `${config.backOfficeApiBaseUrl}/menuCategories/`,
-      {
-        method: "POST",
-        body: JSON.stringify(newMenuCategory),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (response.ok) {
-      fetchData();
-      setOpen(false);
-    }
   };
 
   const handleClick = () => {
@@ -119,23 +71,32 @@ const MenuCategories = () => {
   return (
     <Layout title="MenuCategories">
       <Box>
-        <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-          <Box
+        <Box
+          sx={{
+            display: "flex",
+            width: "100%",
+            justifyContent: "flex-end",
+            mb: 2,
+          }}
+        >
+          <Button
+            variant="contained"
             onClick={() => setOpen(true)}
+            startIcon={<AddIcon />}
             sx={{
-              width: 150,
-              height: 150,
-              borderRadius: 2,
-              border: "2px solid #EBEBEB",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              cursor: "pointer",
-              textAlign: "center",
+              backgroundColor: "#4C4C6D",
+              color: "#E8F6EF",
+              width: "fit-content",
+              ":hover": {
+                bgcolor: "#1B9C85", // theme.palette.primary.main
+                color: "white",
+              },
             }}
           >
-            <AddCircleOutlineIcon color="info" sx={{ fontSize: "50px" }} />
-          </Box>
+            NewMenu
+          </Button>
+        </Box>
+        <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
           {filteredMenuCategories.length > 0 &&
             filteredMenuCategories.map((filteredMenuCategory) => (
               <Link
@@ -169,87 +130,7 @@ const MenuCategories = () => {
             ))}
         </Box>
       </Box>
-      <Dialog
-        open={open}
-        onClose={() => setOpen(false)}
-        sx={{ textAlign: "center" }}
-      >
-        <DialogTitle>Create new menu category</DialogTitle>
-        <DialogContent
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            minWidth: 300,
-            minHeight: 150,
-          }}
-        >
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Name"
-            type="text"
-            fullWidth
-            variant="outlined"
-            onChange={(evt) =>
-              setNewMenuCategory({ ...newMenuCategory, name: evt.target.value })
-            }
-            sx={{ my: 2 }}
-          />
-
-          <FormControl>
-            <InputLabel id="select-locations">locations</InputLabel>
-            <Select
-              labelId="select-locations"
-              id="locations"
-              multiple
-              value={newMenuCategory.locationIds}
-              onChange={(evt) => {
-                const values = evt.target.value as number[];
-                setNewMenuCategory({ ...newMenuCategory, locationIds: values });
-              }}
-              input={<OutlinedInput label="locations" />}
-              renderValue={(values) => {
-                const selectedLocations = newMenuCategory.locationIds.map(
-                  (locationId) => {
-                    return locations.find(
-                      (location) => location.id === locationId
-                    ) as Location;
-                  }
-                );
-                return selectedLocations
-                  .map((selectedLocation) => selectedLocation.name)
-                  .join(", ");
-              }}
-              MenuProps={MenuProps}
-            >
-              {locations.map((location) => (
-                <MenuItem key={location.id} value={location.id}>
-                  <Checkbox
-                    checked={
-                      location.id &&
-                      newMenuCategory.locationIds.includes(location.id)
-                        ? true
-                        : false
-                    }
-                  />
-                  <ListItemText primary={location.name} />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <Button
-            variant="contained"
-            onClick={() => {
-              createMenuCategory();
-            }}
-            sx={{ width: "fit-content", alignSelf: "flex-end", mt: 2 }}
-          >
-            Create
-          </Button>
-        </DialogContent>
-      </Dialog>
+      <NewMenuCategory open={open} setOpen={setOpen} />
     </Layout>
   );
 };

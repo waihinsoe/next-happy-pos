@@ -39,5 +39,97 @@ export default async function handler(
 
     console.log(deletedMenuCategory);
     res.send(200);
+  } else if (req.method === "PUT") {
+    const { id, name, locations } = req.body;
+    const isValid = id && name && locations;
+    const menuCategoryId = Number(id);
+    const locationIds = locations.map((item: any) => item.id) as number[];
+
+    if (!isValid) return res.send(400);
+
+    //edit name
+    await prisma.menu_categories.update({
+      data: {
+        name,
+      },
+      where: {
+        id: menuCategoryId,
+      },
+    });
+
+    if (!locationIds.length) {
+      //null all locations
+      await prisma.menus_menu_categories_locations.updateMany({
+        data: {
+          locations_id: null,
+        },
+        where: {
+          menu_categories_id: menuCategoryId,
+        },
+      });
+      return res.send(200);
+    }
+
+    // get rows from database
+    const menusMenuCategoriesLocations =
+      await prisma.menus_menu_categories_locations.findMany({
+        where: {
+          menu_categories_id: menuCategoryId,
+        },
+      });
+
+    //get locations ids that already existed in database
+    const existingLocationIds = [
+      ...new Set(
+        menusMenuCategoriesLocations.map(
+          (item) => item.locations_id !== null && item.locations_id
+        )
+      ),
+    ];
+
+    //find added location Ids
+    const addedLocationIds = locationIds.filter(
+      (item) => !existingLocationIds.includes(item)
+    );
+
+    const removedLocationIds = existingLocationIds.filter(
+      (item) => !locationIds.includes(item as number)
+    ) as number[];
+
+    if (addedLocationIds.length) {
+      const newMenusMenuCategoriesLocations = addedLocationIds.map((item) => ({
+        locations_id: item,
+        menu_categories_id: menuCategoryId,
+      }));
+
+      await prisma.menus_menu_categories_locations.createMany({
+        data: newMenusMenuCategoriesLocations,
+      });
+    }
+
+    if (removedLocationIds.length) {
+      await prisma.menus_menu_categories_locations.updateMany({
+        data: {
+          locations_id: null,
+        },
+        where: {
+          menu_categories_id: menuCategoryId,
+          locations_id: {
+            in: removedLocationIds,
+          },
+        },
+      });
+    }
+
+    console.log(
+      "existinglocationIds: ",
+      existingLocationIds,
+      "addedLocationIds : ",
+      addedLocationIds,
+      "removedLocationIds : ",
+      removedLocationIds
+    );
+
+    return res.send(200);
   }
 }

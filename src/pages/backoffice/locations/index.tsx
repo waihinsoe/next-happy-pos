@@ -91,7 +91,7 @@ const Locations = () => {
   // if (locations.length === 0) return;
 
   return (
-    <Layout>
+    <Layout title="Locations">
       <Box>
         {updatedLocations.length > 0 &&
           updatedLocations.map((location, index) => {

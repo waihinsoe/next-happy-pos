@@ -18,7 +18,7 @@ const checkedIcon = (
 const EditMenuCategory = () => {
   const router = useRouter();
   const menuCategoryId = router.query.id as string;
-  const { menuCategories, menusMenuCategoriesLocations, isLoading, locations } =
+  const { menuCategories, menusMenuCategoriesLocations, locations } =
     useContext(BackOfficeContext);
 
   const menuCategory = menuCategories.find(
@@ -53,10 +53,10 @@ const EditMenuCategory = () => {
   useEffect(() => {
     if (menuCategory) {
       setNewMenuCategory({
-        ...newMenuCategory,
         id: menuCategory.id,
         name: menuCategory.name,
         locations: selectedLocations,
+        menuIds,
       });
     }
   }, [menuCategory]);
@@ -81,9 +81,16 @@ const EditMenuCategory = () => {
         sx={{
           display: "flex",
           flexDirection: "column",
+          maxWidth: 500,
         }}
       >
-        <TextField defaultValue={menuCategory?.name} sx={{ mb: 2 }} />
+        <TextField
+          defaultValue={menuCategory?.name}
+          sx={{ mb: 2 }}
+          onChange={(evt) =>
+            setNewMenuCategory({ ...newMenuCategory, name: evt.target.value })
+          }
+        />
         <Autocomplete
           multiple
           options={locations}

@@ -68,19 +68,17 @@ export default async function handler(
         },
       });
 
-      const data = menuCategoryIds.map((menuCategoryId: number) => {
-        return {
-          menus_id: id,
-          locations_id: Number(locationId),
-          menu_categories_id: menuCategoryId,
-        };
-      });
+      const data = menuCategoryIds.map((menuCategoryId: number) => ({
+        menus_id: id,
+        locations_id: Number(locationId),
+        menu_categories_id: menuCategoryId,
+      }));
 
       await prisma.menus_menu_categories_locations.createMany({
         data,
       });
     }
-    res.send(200);
+    return res.send(200);
   }
   res.send(200);
 }
