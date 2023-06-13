@@ -1,21 +1,5 @@
-import {
-  Box,
-  Button,
-  Checkbox,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  InputLabel,
-  ListItemText,
-  MenuItem,
-  OutlinedInput,
-  Select,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useContext, useState } from "react";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import Link from "next/link";
 
@@ -23,13 +7,9 @@ import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import Layout from "@/components/Layout";
 import AddIcon from "@mui/icons-material/Add";
 
-import type {
-  menu_categories as MenuCategory,
-  locations as Location,
-} from "@prisma/client";
-import { config } from "../../../config/config";
-import { getSelectedLocationId } from "@/utils";
 import NewMenuCategory from "./NewMenuCategory";
+import { getSelectedLocationId } from "@/utils";
+import { config } from "@/config/config";
 
 const MenuCategories = () => {
   const { menuCategories, menusMenuCategoriesLocations, fetchData } =
@@ -49,7 +29,9 @@ const MenuCategories = () => {
     if (!menuCategoryId) return 0;
     return menusMenuCategoriesLocations.filter(
       (item) =>
-        item.menus_id !== null && item.menu_categories_id === menuCategoryId
+        item.menus_id &&
+        item.locations_id === Number(selectedLocationId) &&
+        item.menu_categories_id === menuCategoryId
     ).length;
   };
 
@@ -93,7 +75,7 @@ const MenuCategories = () => {
               },
             }}
           >
-            NewMenu
+            New Menu Category
           </Button>
         </Box>
         <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>

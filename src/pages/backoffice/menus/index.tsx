@@ -13,6 +13,8 @@ import { getSelectedLocationId } from "@/utils";
 import Layout from "@/components/Layout";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import NewMenu from "./NewMenu";
+import defaultPhoto from "../../../assets/default-photo.jpg";
+
 const Menus = () => {
   const [open, setOpen] = useState(false);
   const { menus, menusMenuCategoriesLocations } = useContext(BackOfficeContext);
@@ -64,7 +66,7 @@ const Menus = () => {
           flexWrap: "wrap",
         }}
       >
-        {filteredMenus &&
+        {filteredMenus.length > 0 &&
           filteredMenus.map((menu) => (
             <Link
               href={`/backoffice/menus/${menu.id}`}
@@ -72,7 +74,11 @@ const Menus = () => {
               style={{ textDecoration: "none" }}
             >
               <Card sx={{ maxWidth: 200, height: 200 }}>
-                <CardMedia sx={{ height: 100 }} image={`${menu.asset_url}`} />
+                <CardMedia
+                  sx={{ height: 100 }}
+                  image={`${menu.asset_url}`}
+                  component={"img"}
+                />
                 <CardContent>
                   <Typography gutterBottom variant="h6" component="div">
                     {menu.name}

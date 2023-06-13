@@ -81,9 +81,9 @@ export default async function handler(
     //get locations ids that already existed in database
     const existingLocationIds = [
       ...new Set(
-        menusMenuCategoriesLocations.map(
-          (item) => item.locations_id !== null && item.locations_id
-        )
+        menusMenuCategoriesLocations
+          .map((item) => item.locations_id)
+          .filter((item) => item)
       ),
     ];
 
@@ -93,7 +93,7 @@ export default async function handler(
     );
 
     const removedLocationIds = existingLocationIds.filter(
-      (item) => !locationIds.includes(item as number)
+      (item: any) => !locationIds.includes(item as number)
     ) as number[];
 
     if (addedLocationIds.length) {
@@ -108,27 +108,35 @@ export default async function handler(
     }
 
     if (removedLocationIds.length) {
-      await prisma.menus_menu_categories_locations.updateMany({
-        data: {
-          locations_id: null,
-        },
-        where: {
-          menu_categories_id: menuCategoryId,
-          locations_id: {
-            in: removedLocationIds,
+      removedLocationIds.forEach(async (locationId) => {
+        const row = await prisma.menus_menu_categories_locations.findFirst({
+          where: {
+            locations_id: locationId,
+            menu_categories_id: menuCategoryId,
           },
-        },
-      });
-    }
+        });
 
-    console.log(
-      "existinglocationIds: ",
-      existingLocationIds,
-      "addedLocationIds : ",
-      addedLocationIds,
-      "removedLocationIds : ",
-      removedLocationIds
-    );
+        if (row) {
+          if (row.menus_id) {
+            await prisma.menus_menu_categories_locations.update({
+              data: {
+                locations_id: null,
+              },
+              where: {
+                id: row.id,
+              },
+            });
+          } else {
+            await prisma.menus_menu_categories_locations.delete({
+              where: {
+                id: row.id,
+              },
+            });
+          }
+        }
+      });
+      return res.send(200);
+    }
 
     return res.send(200);
   }
