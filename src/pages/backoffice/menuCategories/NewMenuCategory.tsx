@@ -14,7 +14,6 @@ import {
 } from "@mui/material";
 import { useContext, useState } from "react";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
-import { getSelectedLocationId } from "@/utils";
 import type { locations as Location } from "@prisma/client";
 import { config } from "@/config/config";
 
@@ -36,7 +35,6 @@ interface Props {
 
 const NewMenuCategory = ({ open, setOpen }: Props) => {
   const { locations, fetchData } = useContext(BackOfficeContext);
-  const selectedLocationId = getSelectedLocationId() as string;
 
   const [newMenuCategory, setNewMenuCategory] = useState({
     name: "",

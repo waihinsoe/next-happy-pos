@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import { Autocomplete, Box, Button, TextField } from "@mui/material";
-// import { Menu } from "../../../typings/types";
 import type {
   menus as Menu,
   menu_categories as MenuCategory,
@@ -10,12 +9,17 @@ import Layout from "../../../components/Layout";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import { useRouter } from "next/router";
 import { getSelectedLocationId } from "@/utils";
-
-const MenuDetail = () => {
+const EditMenu = () => {
   const router = useRouter();
   const menuId = router.query.id as string;
-  const { menus, menuCategories, menusMenuCategoriesLocations, fetchData } =
-    useContext(BackOfficeContext);
+  const {
+    menus,
+    menuCategories,
+    menusMenuCategoriesLocations,
+    menusAddonCategories,
+    addonCategories,
+    fetchData,
+  } = useContext(BackOfficeContext);
   const selectedLocationId = getSelectedLocationId() as string;
   const menuCategoryIds = menusMenuCategoriesLocations
     .filter((item) => item.menus_id == parseInt(menuId, 10))
@@ -28,13 +32,27 @@ const MenuDetail = () => {
   const selectedMenuCategories: MenuCategory[] = menuCategories.filter(
     (menuCategory) => menuCategoryIds.includes(menuCategory.id)
   );
-  const [selected, setSelected] = useState(selectedMenuCategories);
+  const [connectedMenuCategories, setConnectedMenuCategories] = useState(
+    selectedMenuCategories
+  );
+
+  const validAddonCategoryIds = menusAddonCategories
+    .filter((item) => item.menus_id === Number(menuId))
+    .map((item) => item.addon_categories_id);
+  const selectedAddonCategories = addonCategories.filter((item) =>
+    validAddonCategoryIds.includes(item.id)
+  );
+
+  const [connectedAddonCategories, setConnectedAddonCategories] = useState(
+    selectedAddonCategories
+  );
 
   const [newMenu, setNewMenu] = useState({
     id: menu?.id,
     name: menu?.name,
     price: menu?.price,
     menuCategoryIds,
+    addonCategoryIds: validAddonCategoryIds,
     locationId: selectedLocationId,
   });
 
@@ -45,13 +63,21 @@ const MenuDetail = () => {
         name: menu.name,
         price: menu.price,
         menuCategoryIds,
+        addonCategoryIds: validAddonCategoryIds,
         locationId: selectedLocationId,
       });
-      setSelected(selectedMenuCategories);
+      setConnectedMenuCategories(selectedMenuCategories);
+      setConnectedAddonCategories(selectedAddonCategories);
     }
   }, [menu]);
 
   const updateMenu = async () => {
+    const { id, name, locationId } = newMenu;
+    console.log(newMenu);
+    const isValid = id && name && locationId;
+
+    if (!isValid) return alert("Please fill required input fields");
+
     const response = await fetch(`${config.backOfficeApiBaseUrl}/menus`, {
       method: "PUT",
       headers: {
@@ -63,9 +89,9 @@ const MenuDetail = () => {
       fetchData();
     }
   };
-  if (!menu) return;
+  if (!menu) return null;
   return (
-    <Layout title="MenuDetail">
+    <Layout title="EditMenu">
       <Box>
         {menu ? (
           <Box
@@ -101,14 +127,36 @@ const MenuDetail = () => {
               multiple
               limitTags={2}
               id="menuCategories"
-              value={selected}
+              value={connectedMenuCategories}
               options={menuCategories}
               isOptionEqualToValue={(options, value) => options.id == value.id}
               getOptionLabel={(option) => option.name}
               onChange={(evt, values) => {
                 const menuCategoryIds = values.map((item) => item.id);
                 setNewMenu({ ...newMenu, menuCategoryIds });
-                setSelected(values);
+                setConnectedMenuCategories(values);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="MenuCategories"
+                  placeholder="Favorites"
+                />
+              )}
+            />
+
+            <Autocomplete
+              multiple
+              limitTags={2}
+              id="menuCategories"
+              value={connectedAddonCategories}
+              options={addonCategories}
+              isOptionEqualToValue={(options, value) => options.id == value.id}
+              getOptionLabel={(option) => option.name}
+              onChange={(evt, values) => {
+                const addonCategoryIds = values.map((item) => item.id);
+                setNewMenu({ ...newMenu, addonCategoryIds });
+                setConnectedAddonCategories(values);
               }}
               renderInput={(params) => (
                 <TextField
@@ -118,6 +166,7 @@ const MenuDetail = () => {
                 />
               )}
             />
+
             <Button variant="contained" onClick={updateMenu}>
               Update
             </Button>
@@ -130,4 +179,4 @@ const MenuDetail = () => {
   );
 };
 
-export default MenuDetail;
+export default EditMenu;

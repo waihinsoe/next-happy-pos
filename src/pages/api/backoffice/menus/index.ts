@@ -49,11 +49,18 @@ export default async function handler(
     }
   } else if (req.method === "PUT") {
     console.log(req.body);
-    const { id, name, price, menuCategoryIds, locationId } = req.body;
+    const {
+      id: menuId,
+      name,
+      price,
+      menuCategoryIds,
+      locationId,
+      addonCategoryIds,
+    } = req.body;
 
     await prisma.menus.update({
       where: {
-        id,
+        id: menuId,
       },
       data: {
         name,
@@ -64,12 +71,12 @@ export default async function handler(
     if (menuCategoryIds.length) {
       await prisma.menus_menu_categories_locations.deleteMany({
         where: {
-          menus_id: id,
+          menus_id: menuId,
         },
       });
 
       const data = menuCategoryIds.map((menuCategoryId: number) => ({
-        menus_id: id,
+        menus_id: menuId,
         locations_id: Number(locationId),
         menu_categories_id: menuCategoryId,
       }));
@@ -78,7 +85,52 @@ export default async function handler(
         data,
       });
     }
-    return res.send(200);
+
+    if (addonCategoryIds.length) {
+      const menusAddonCategories = await prisma.menus_addon_categories.findMany(
+        {
+          where: {
+            menus_id: menuId,
+          },
+        }
+      );
+
+      const existingAddonCategoryIds = menusAddonCategories.map(
+        (item) => item.addon_categories_id
+      );
+
+      const addedAddonCategoryIds = addonCategoryIds.filter(
+        (item: number) => !existingAddonCategoryIds.includes(item)
+      ) as number[];
+
+      const removedAddonCategoryIds = existingAddonCategoryIds.filter(
+        (item) => !addonCategoryIds.includes(item)
+      ) as number[];
+
+      if (addedAddonCategoryIds.length) {
+        const newMenusAddonCategoriesData = addedAddonCategoryIds.map(
+          (item: number) => ({
+            menus_id: menuId,
+            addon_categories_id: item,
+          })
+        );
+        await prisma.menus_addon_categories.createMany({
+          data: newMenusAddonCategoriesData,
+        });
+      }
+
+      if (removedAddonCategoryIds.length) {
+        await prisma.menus_addon_categories.deleteMany({
+          where: {
+            menus_id: menuId,
+            addon_categories_id: {
+              in: removedAddonCategoryIds,
+            },
+          },
+        });
+      }
+      return res.send(200);
+    }
   }
   res.send(200);
 }

@@ -230,6 +230,7 @@ export default async function handler(
       addons,
       addonCategories,
       locations,
+      menusAddonCategories,
       menusMenuCategoriesLocations,
       company,
     });

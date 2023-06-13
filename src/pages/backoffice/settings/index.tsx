@@ -53,7 +53,7 @@ const Settings = () => {
 
   const updateCompany = async () => {
     const response = await fetch(
-      `${config.apiBaseUrl}/settings/companies/${companyInfo.id}`,
+      `${config.backOfficeApiBaseUrl}/settings/companies/${companyInfo.id}`,
       {
         method: "PUT",
         headers: {

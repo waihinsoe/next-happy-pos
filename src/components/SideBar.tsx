@@ -1,7 +1,6 @@
 import {
   Box,
   Divider,
-  Link,
   List,
   ListItem,
   ListItemButton,
@@ -15,6 +14,7 @@ import ClassIcon from "@mui/icons-material/Class";
 import SettingsIcon from "@mui/icons-material/Settings";
 import RamenDiningIcon from "@mui/icons-material/RamenDining";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import Link from "next/link";
 const SideBar = () => {
   return (
     <Box
@@ -27,8 +27,8 @@ const SideBar = () => {
       <List sx={{ p: 0 }}>
         {sidebarMenuItems.slice(0, 6).map((item) => (
           <Link
-            href={item.route}
             key={item.id}
+            href={item.route}
             style={{ textDecoration: "none", color: "#313131" }}
           >
             <ListItem disablePadding>
@@ -46,8 +46,8 @@ const SideBar = () => {
       <List>
         {sidebarMenuItems.slice(-1).map((item) => (
           <Link
-            href={item.route}
             key={item.id}
+            href={item.route}
             style={{ textDecoration: "none", color: "#313131" }}
           >
             <ListItem disablePadding>

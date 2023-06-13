@@ -4,9 +4,7 @@ import {
   Checkbox,
   Chip,
   Dialog,
-  DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   FormControl,
   InputLabel,
@@ -112,6 +110,15 @@ const NewMenu = ({ open, setOpen }: Props) => {
       );
 
       if (response.ok) {
+        setMenu({
+          name: "",
+          price: 0,
+          description: "",
+          menuCategoryIds: [] as number[],
+          asset_url: "",
+          isAvailable: true,
+        });
+        setSelectedMenuCategoryIds([]);
         fetchData();
       }
 
@@ -154,6 +161,7 @@ const NewMenu = ({ open, setOpen }: Props) => {
         >
           <TextField
             label="Name"
+            margin="dense"
             variant="outlined"
             onChange={(evt) => setMenu({ ...menu, name: evt.target.value })}
           />

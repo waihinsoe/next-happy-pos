@@ -18,7 +18,7 @@ const checkedIcon = (
 const EditMenuCategory = () => {
   const router = useRouter();
   const menuCategoryId = router.query.id as string;
-  const { menuCategories, menusMenuCategoriesLocations, locations } =
+  const { fetchData, menuCategories, menusMenuCategoriesLocations, locations } =
     useContext(BackOfficeContext);
 
   const menuCategory = menuCategories.find(
@@ -72,6 +72,9 @@ const EditMenuCategory = () => {
         body: JSON.stringify(newMenuCategory),
       }
     );
+    if (response.ok) {
+      fetchData();
+    }
   };
   if (!menuCategory) return null;
 

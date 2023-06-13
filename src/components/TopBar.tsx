@@ -10,13 +10,13 @@ import logo from "../assets/main-logo.png";
 interface Props {
   title?: string;
 }
-const TopBar = (props: Props) => {
-  const { data: session } = useSession();
+const TopBar = ({ title = "" }: Props) => {
+  const { data } = useSession();
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar sx={{ backgroundColor: "#1B9C85" }}>
-          {session ? (
+          {data ? (
             <Box
               sx={{
                 display: "flex",
@@ -30,10 +30,11 @@ const TopBar = (props: Props) => {
                   src={logo}
                   alt="main-logo"
                   style={{ width: "100%", height: "100%" }}
+                  priority
                 />
               </Box>
               <Box>
-                <Typography>{props.title}</Typography>
+                <Typography variant="h6">{title}</Typography>
               </Box>
 
               <Button variant="text" color="inherit" onClick={() => signOut()}>

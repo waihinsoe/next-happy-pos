@@ -1,13 +1,4 @@
 import { createContext, useEffect, useState } from "react";
-// import {
-//   Addon,
-//   AddonCategory,
-//   Company,
-//   Location,
-//   Menu,
-//   MenuCategory,
-//   MenuMenuCategoryLocation,
-// } from "../typings/types";
 import type {
   addons as Addon,
   addon_categories as AddonCategory,
@@ -16,6 +7,7 @@ import type {
   menus as Menu,
   menu_categories as MenuCategory,
   menus_menu_categories_locations as MenuMenuCategoryLocation,
+  menus_addon_categories as MenuAddonCategory,
 } from "@prisma/client";
 import { config } from "../config/config";
 import { useSession } from "next-auth/react";
@@ -26,6 +18,7 @@ interface BackOfficeContextType {
   addons: Addon[];
   addonCategories: AddonCategory[];
   locations: Location[];
+  menusAddonCategories: MenuAddonCategory[];
   menusMenuCategoriesLocations: MenuMenuCategoryLocation[];
   isLoading: boolean;
   company: Company | null;
@@ -39,6 +32,7 @@ export const defaultBackOfficeContext: BackOfficeContextType = {
   addons: [],
   addonCategories: [],
   locations: [],
+  menusAddonCategories: [],
   menusMenuCategoriesLocations: [],
   company: null,
   isLoading: false,
