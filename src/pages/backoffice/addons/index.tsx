@@ -5,11 +5,25 @@ import { Box, Button, Typography } from "@mui/material";
 import Link from "next/link";
 import { useContext, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
+import NewAddon from "./NewAddon";
 
 const Addons = () => {
   const [open, setOpen] = useState(false);
-  const { addons } = useContext(BackOfficeContext);
+  const { addons, menusMenuCategoriesLocations, menusAddonCategories } =
+    useContext(BackOfficeContext);
+  const selectedLocationId = getSelectedLocationId() as string;
 
+  const validMenuIds = menusMenuCategoriesLocations
+    .filter((item) => item.locations_id === Number(selectedLocationId))
+    .map((item) => item.menus_id);
+
+  const validAddonCategoryIds = menusAddonCategories
+    .filter((item) => validMenuIds.includes(item.menus_id))
+    .map((item) => item.addon_categories_id) as number[];
+
+  const validAddons = addons.filter((item) =>
+    validAddonCategoryIds.includes(item.addon_categories_id as number)
+  );
   return (
     <Layout title="Addons">
       <Box
@@ -39,7 +53,7 @@ const Addons = () => {
         </Button>
       </Box>
       <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-        {addons.map((addon) => (
+        {validAddons.map((addon) => (
           <Link
             href={`/backoffice/addons/${addon.id}`}
             key={addon.id}
@@ -66,6 +80,7 @@ const Addons = () => {
           </Link>
         ))}
       </Box>
+      <NewAddon open={open} setOpen={setOpen} />
     </Layout>
   );
 };

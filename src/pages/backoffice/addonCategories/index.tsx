@@ -25,13 +25,13 @@ const AddonCategories = () => {
     )
     .map((item) => item.menus_id) as number[];
 
-  // const addonCategoryIds = menusAddonCategories
-  //   .filter((item) => menuIds.includes(item.menus_id as number))
-  //   .map((item) => item.addon_categories_id);
+  const addonCategoryIds = menusAddonCategories
+    .filter((item) => menuIds.includes(item.menus_id as number))
+    .map((item) => item.addon_categories_id);
 
-  // const filteredAddonCategories = addonCategories.filter((item) =>
-  //   addonCategoryIds.includes(item.id)
-  // );
+  const filteredAddonCategories = addonCategories.filter((item) =>
+    addonCategoryIds.includes(item.id)
+  );
 
   console.log(addonCategories);
 
@@ -70,7 +70,7 @@ const AddonCategories = () => {
         </Button>
       </Box>
       <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-        {addonCategories.map((addonCategory) => (
+        {filteredAddonCategories.map((addonCategory) => (
           <Link
             href={`/backoffice/addonCategories/${addonCategory.id}`}
             key={addonCategory.id}
