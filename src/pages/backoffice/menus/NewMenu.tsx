@@ -26,7 +26,6 @@ import FileDropZone from "@/components/FileDropZone";
 import { config } from "@/config/config";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useRouter } from "next/router";
 import { getSelectedLocationId } from "@/utils";
 
 const ITEM_HEIGHT = 48;
@@ -46,7 +45,6 @@ interface Props {
 }
 
 const NewMenu = ({ open, setOpen }: Props) => {
-  const router = useRouter();
   const selectedLocationId = getSelectedLocationId() as string;
   const { fetchData, menusMenuCategoriesLocations, menuCategories } =
     useContext(BackOfficeContext);

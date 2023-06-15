@@ -13,7 +13,7 @@ import { getSelectedLocationId } from "@/utils";
 import Layout from "@/components/Layout";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import NewMenu from "./NewMenu";
-import defaultPhoto from "../../../assets/default-photo.jpg";
+import MenuCard from "@/components/MenuCard";
 
 const Menus = () => {
   const [open, setOpen] = useState(false);
@@ -67,29 +67,7 @@ const Menus = () => {
         }}
       >
         {filteredMenus.length > 0 &&
-          filteredMenus.map((menu) => (
-            <Link
-              href={`/backoffice/menus/${menu.id}`}
-              key={menu.id}
-              style={{ textDecoration: "none" }}
-            >
-              <Card sx={{ maxWidth: 200, height: 200 }}>
-                <CardMedia
-                  sx={{ height: 100 }}
-                  image={`${menu.asset_url}`}
-                  component={"img"}
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h6" component="div">
-                    {menu.name}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Lizards are a widespread group of squamate reptiles, with
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
+          filteredMenus.map((menu) => <MenuCard key={menu.id} menu={menu} />)}
       </Box>
       <NewMenu open={open} setOpen={setOpen} />
     </Layout>

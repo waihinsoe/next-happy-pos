@@ -1,13 +1,23 @@
 import Layout from "@/components/Layout";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
-import { Autocomplete, Box, Button, Checkbox, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Checkbox,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
-
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { config } from "@/config/config";
-
+import MenuCard from "@/components/MenuCard";
+import { getSelectedLocationId } from "@/utils";
+import DeleteIcon from "@mui/icons-material/Delete";
+import RemoveMenuFromMenuCategory from "./RemoveMenuFromMenuCategory";
+import { menus as Menu } from "@prisma/client";
 const icon = (
   <CheckBoxOutlineBlankIcon fontSize="small" style={{ color: "lightblue" }} />
 );
@@ -15,12 +25,23 @@ const checkedIcon = (
   <CheckBoxIcon fontSize="small" style={{ color: "green" }} />
 );
 
+interface AutocompleteProps {
+  id: number;
+  label: string;
+}
+
 const EditMenuCategory = () => {
   const router = useRouter();
   const menuCategoryId = router.query.id as string;
-  const { fetchData, menuCategories, menusMenuCategoriesLocations, locations } =
-    useContext(BackOfficeContext);
-
+  const selectedLocationId = getSelectedLocationId() as string;
+  const {
+    menus,
+    fetchData,
+    menuCategories,
+    menusMenuCategoriesLocations,
+    locations,
+  } = useContext(BackOfficeContext);
+  const [open, setOpen] = useState(false);
   const menuCategory = menuCategories.find(
     (item) => item.id === Number(menuCategoryId)
   );
@@ -39,16 +60,21 @@ const EditMenuCategory = () => {
     locationIds.includes(location.id)
   );
 
-  const menuIds = menusMenuCategoriesLocations
+  const validMenuIds = menusMenuCategoriesLocations
     .filter((item) => item.menu_categories_id === Number(menuCategoryId))
     .map((item) => item.menus_id);
+  const validMenus = menus.filter((item) => validMenuIds.includes(item.id));
 
   const [newMenuCategory, setNewMenuCategory] = useState({
     id: menuCategory?.id,
     name: menuCategory?.name,
     locations: selectedLocations,
-    menuIds,
   });
+
+  const [selectedMenu, setSelectedMenu] = useState<AutocompleteProps | null>(
+    null
+  );
+  const [selectedMenuToRemove, setSelectedMenuToRemove] = useState<Menu>();
 
   useEffect(() => {
     if (menuCategory) {
@@ -56,7 +82,6 @@ const EditMenuCategory = () => {
         id: menuCategory.id,
         name: menuCategory.name,
         locations: selectedLocations,
-        menuIds,
       });
     }
   }, [menuCategory]);
@@ -76,6 +101,30 @@ const EditMenuCategory = () => {
       fetchData();
     }
   };
+
+  const addMenuToMenuCategory = async () => {
+    const response = await fetch(
+      `${config.backOfficeApiBaseUrl}/menuCategories/addMenu`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          menuCategoryId,
+          menuId: selectedMenu && selectedMenu.id,
+          locationId: selectedLocationId,
+        }),
+      }
+    );
+    if (response.ok) {
+      fetchData();
+      setSelectedMenu(null);
+    }
+  };
+
+  const handleRemoveMenu = (menu: Menu) => {
+    setSelectedMenuToRemove(menu);
+    setOpen(true);
+  };
   if (!menuCategory) return null;
 
   return (
@@ -84,7 +133,6 @@ const EditMenuCategory = () => {
         sx={{
           display: "flex",
           flexDirection: "column",
-          maxWidth: 500,
         }}
       >
         <TextField
@@ -121,7 +169,6 @@ const EditMenuCategory = () => {
               {option.name}
             </li>
           )}
-          style={{ width: 500 }}
           renderInput={(params) => <TextField {...params} label="Locations" />}
         />
         <Button
@@ -132,6 +179,85 @@ const EditMenuCategory = () => {
           Update
         </Button>
       </Box>
+      <Box>
+        <Typography variant="h4" sx={{ mt: 2 }}>
+          Menus
+        </Typography>
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-start",
+            mt: 2,
+          }}
+        >
+          <Autocomplete
+            sx={{ minWidth: 300, mr: 3 }}
+            value={selectedMenu}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            onChange={(evt, value) => {
+              setSelectedMenu(value);
+            }}
+            clearOnBlur
+            options={menus
+              .filter((item) => !validMenuIds.includes(item.id))
+              .map((item) => ({ id: item.id, label: item.name }))}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Add menu to this category"
+                InputProps={{
+                  ...params.InputProps,
+                }}
+              />
+            )}
+          />
+          <Button
+            variant="contained"
+            sx={{ width: 100 }}
+            onClick={addMenuToMenuCategory}
+          >
+            add
+          </Button>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            rowGap: 3,
+            columnGap: 2,
+            mt: 5,
+          }}
+        >
+          {validMenus.map((menu) => (
+            <Box
+              key={menu.id}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 1,
+              }}
+            >
+              <MenuCard menu={menu} />
+              <Button
+                variant="outlined"
+                startIcon={<DeleteIcon />}
+                onClick={() => handleRemoveMenu(menu)}
+              >
+                Delete
+              </Button>
+            </Box>
+          ))}
+        </Box>
+      </Box>
+      <RemoveMenuFromMenuCategory
+        open={open}
+        setOpen={setOpen}
+        menu={selectedMenuToRemove}
+      />
     </Layout>
   );
 };

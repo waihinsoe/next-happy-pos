@@ -35,7 +35,7 @@ export const defaultBackOfficeContext: BackOfficeContextType = {
   menusAddonCategories: [],
   menusMenuCategoriesLocations: [],
   company: null,
-  isLoading: false,
+  isLoading: true,
   updateData: () => {},
   fetchData: () => {},
 };
@@ -56,7 +56,10 @@ const BackOfficeProvider = (props: any) => {
   const fetchData = async () => {
     const response = await fetch(`${config.backOfficeApiBaseUrl}`);
     const responseJson = await response.json();
-    updateData({ ...data, ...responseJson });
+
+    if (response.ok) {
+      updateData({ ...data, ...responseJson, isLoading: false });
+    }
   };
   return (
     <BackOfficeContext.Provider value={{ ...data, updateData, fetchData }}>

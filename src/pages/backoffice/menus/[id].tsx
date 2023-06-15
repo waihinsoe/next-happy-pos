@@ -12,29 +12,14 @@ import { getSelectedLocationId } from "@/utils";
 const EditMenu = () => {
   const router = useRouter();
   const menuId = router.query.id as string;
-  const {
-    menus,
-    menuCategories,
-    menusMenuCategoriesLocations,
-    menusAddonCategories,
-    addonCategories,
-    fetchData,
-  } = useContext(BackOfficeContext);
+  const { menus, menusAddonCategories, addonCategories, fetchData } =
+    useContext(BackOfficeContext);
   const selectedLocationId = getSelectedLocationId() as string;
-  const menuCategoryIds = menusMenuCategoriesLocations
-    .filter((item) => item.menus_id == parseInt(menuId, 10))
-    .map((item) => item.menu_categories_id);
 
   let menu: Menu | undefined;
   if (menuId) {
     menu = menus.find((menu) => menu.id === parseInt(menuId, 10));
   }
-  const selectedMenuCategories: MenuCategory[] = menuCategories.filter(
-    (menuCategory) => menuCategoryIds.includes(menuCategory.id)
-  );
-  const [connectedMenuCategories, setConnectedMenuCategories] = useState(
-    selectedMenuCategories
-  );
 
   const validAddonCategoryIds = menusAddonCategories
     .filter((item) => item.menus_id === Number(menuId))
@@ -51,7 +36,6 @@ const EditMenu = () => {
     id: menu?.id,
     name: menu?.name,
     price: menu?.price,
-    menuCategoryIds,
     addonCategoryIds: validAddonCategoryIds,
     locationId: selectedLocationId,
   });
@@ -62,11 +46,10 @@ const EditMenu = () => {
         id: menu.id,
         name: menu.name,
         price: menu.price,
-        menuCategoryIds,
         addonCategoryIds: validAddonCategoryIds,
         locationId: selectedLocationId,
       });
-      setConnectedMenuCategories(selectedMenuCategories);
+
       setConnectedAddonCategories(selectedAddonCategories);
     }
   }, [menu]);
@@ -122,27 +105,6 @@ const EditMenu = () => {
               onChange={(evt) => {
                 setNewMenu({ ...newMenu, price: parseInt(evt.target.value) });
               }}
-            />
-            <Autocomplete
-              multiple
-              limitTags={2}
-              id="menuCategories"
-              value={connectedMenuCategories}
-              options={menuCategories}
-              isOptionEqualToValue={(options, value) => options.id == value.id}
-              getOptionLabel={(option) => option.name}
-              onChange={(evt, values) => {
-                const menuCategoryIds = values.map((item) => item.id);
-                setNewMenu({ ...newMenu, menuCategoryIds });
-                setConnectedMenuCategories(values);
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="MenuCategories"
-                  placeholder="Favorites"
-                />
-              )}
             />
 
             <Autocomplete

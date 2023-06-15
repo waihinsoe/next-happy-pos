@@ -68,23 +68,23 @@ export default async function handler(
       },
     });
 
-    if (menuCategoryIds.length) {
-      await prisma.menus_menu_categories_locations.deleteMany({
-        where: {
-          menus_id: menuId,
-        },
-      });
+    // if (menuCategoryIds.length) {
+    //   await prisma.menus_menu_categories_locations.deleteMany({
+    //     where: {
+    //       menus_id: menuId,
+    //     },
+    //   });
 
-      const data = menuCategoryIds.map((menuCategoryId: number) => ({
-        menus_id: menuId,
-        locations_id: Number(locationId),
-        menu_categories_id: menuCategoryId,
-      }));
+    //   const data = menuCategoryIds.map((menuCategoryId: number) => ({
+    //     menus_id: menuId,
+    //     locations_id: Number(locationId),
+    //     menu_categories_id: menuCategoryId,
+    //   }));
 
-      await prisma.menus_menu_categories_locations.createMany({
-        data,
-      });
-    }
+    //   await prisma.menus_menu_categories_locations.createMany({
+    //     data,
+    //   });
+    // }
 
     if (addonCategoryIds.length) {
       const menusAddonCategories = await prisma.menus_addon_categories.findMany(
