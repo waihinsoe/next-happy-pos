@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { getAccessToken } from "@/utils";
 import { config } from "@/config/config";
 import Layout from "@/components/Layout";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
@@ -15,6 +14,7 @@ const Locations = () => {
   useEffect(() => {
     setUpdatedLocations(locations);
   }, [locations]);
+
   const updateLocation = async (location: Location) => {
     const locationId = location.id;
     const oldLocation = locations.find(
