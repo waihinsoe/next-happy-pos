@@ -61,7 +61,12 @@ const EditMenuCategory = () => {
   );
 
   const validMenuIds = menusMenuCategoriesLocations
-    .filter((item) => item.menu_categories_id === Number(menuCategoryId))
+    .filter(
+      (item) =>
+        item.menus_id &&
+        item.locations_id === Number(selectedLocationId) &&
+        item.menu_categories_id === Number(menuCategoryId)
+    )
     .map((item) => item.menus_id);
   const validMenus = menus.filter((item) => validMenuIds.includes(item.id));
 
@@ -188,6 +193,7 @@ const EditMenuCategory = () => {
           sx={{
             display: "flex",
             justifyContent: "flex-start",
+            alignItems: "center",
             mt: 2,
           }}
         >
@@ -214,7 +220,7 @@ const EditMenuCategory = () => {
           />
           <Button
             variant="contained"
-            sx={{ width: 100 }}
+            sx={{ width: "fit-content" }}
             onClick={addMenuToMenuCategory}
           >
             add
@@ -247,7 +253,7 @@ const EditMenuCategory = () => {
                 startIcon={<DeleteIcon />}
                 onClick={() => handleRemoveMenu(menu)}
               >
-                Delete
+                Remove
               </Button>
             </Box>
           ))}
