@@ -4,7 +4,7 @@ import { Box, Button } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 
 const Order = () => {
-  const { menuCategories, menus } = useContext(OrderContext);
+  const { menuCategories } = useContext(OrderContext);
   const [selectedMenuCategory, setSelectedMenuCategory] =
     useState<MenuCategory>();
   console.log("menuCategories", menuCategories);

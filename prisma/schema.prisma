@@ -38,6 +38,7 @@ model locations {
   address                         String
   companies                       companies?                        @relation(fields: [companies_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   menus_menu_categories_locations menus_menu_categories_locations[]
+  tables                          tables[]
 }
 
 model menu_categories {
@@ -65,20 +66,16 @@ model menus_addon_categories {
 }
 
 model menus_menu_categories_locations {
-  id                 Int              @id @default(autoincrement())
+  id                 Int             @id @default(autoincrement())
   menus_id           Int?
   locations_id       Int?
-  menu_categories_id Int              
-  is_available       Boolean?         @default(true)
-  locations          locations ?      @relation(fields: [locations_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  menu_categories_id Int
+  is_available       Boolean?        @default(true)
+  locations          locations?      @relation(fields: [locations_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   menu_categories    menu_categories @relation(fields: [menu_categories_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   menus              menus?          @relation(fields: [menus_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  @@unique([menus_id,menu_categories_id,locations_id])
-}
 
-model test {
-  id          Int     @id @default(autoincrement())
-  is_availabe Boolean
+  @@unique([menus_id, menu_categories_id, locations_id])
 }
 
 model users {
@@ -89,6 +86,13 @@ model users {
   companies_id Int?
   role         Role
   companies    companies? @relation(fields: [companies_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model tables {
+  id           Int       @id @default(autoincrement())
+  name         String
+  locations_id Int
+  locations    locations @relation(fields: [locations_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 enum Role {

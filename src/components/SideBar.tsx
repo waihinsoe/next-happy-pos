@@ -14,6 +14,7 @@ import ClassIcon from "@mui/icons-material/Class";
 import SettingsIcon from "@mui/icons-material/Settings";
 import RamenDiningIcon from "@mui/icons-material/RamenDining";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import TableBarIcon from "@mui/icons-material/TableBar";
 import Link from "next/link";
 const SideBar = () => {
   return (
@@ -25,7 +26,7 @@ const SideBar = () => {
       }}
     >
       <List sx={{ p: 0 }}>
-        {sidebarMenuItems.slice(0, 6).map((item) => (
+        {sidebarMenuItems.slice(0, 7).map((item) => (
           <Link
             key={item.id}
             href={item.route}
@@ -108,6 +109,12 @@ export const sidebarMenuItems = [
   },
   {
     id: 7,
+    label: "Tables",
+    icon: <TableBarIcon />,
+    route: "/backoffice/tables",
+  },
+  {
+    id: 8,
     label: "Settings",
     icon: <SettingsIcon />,
     route: "/backoffice/settings",

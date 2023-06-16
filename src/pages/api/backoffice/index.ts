@@ -163,6 +163,14 @@ export default async function handler(
 
     const locationIds = locations.map((location) => location.id);
 
+    const tables = await prisma.tables.findMany({
+      where: {
+        locations_id: {
+          in: locationIds,
+        },
+      },
+    });
+
     const menusMenuCategoriesLocations =
       await prisma.menus_menu_categories_locations.findMany({
         where: {
@@ -233,6 +241,7 @@ export default async function handler(
       menusAddonCategories,
       menusMenuCategoriesLocations,
       company,
+      tables,
     });
   }
 }
