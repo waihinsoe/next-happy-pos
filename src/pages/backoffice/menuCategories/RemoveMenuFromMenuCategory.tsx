@@ -17,6 +17,7 @@ interface Props {
   open: boolean;
   setOpen: (value: boolean) => void;
   menu: Menu | undefined;
+  handleRemoveMenu: (value: Menu) => void;
 }
 
 const Transition = React.forwardRef(function Transition(
@@ -28,7 +29,13 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const RemoveMenuFromMenuCategory = ({ open, setOpen, menu }: Props) => {
+const RemoveMenuFromMenuCategory = ({
+  open,
+  setOpen,
+  menu,
+  handleRemoveMenu,
+}: Props) => {
+  if (!menu) return null;
   return (
     <Dialog
       open={open}
@@ -55,7 +62,9 @@ const RemoveMenuFromMenuCategory = ({ open, setOpen, menu }: Props) => {
         <Button onClick={() => setOpen(false)} variant="text">
           cancel
         </Button>
-        <Button variant="contained">Yes</Button>
+        <Button variant="contained" onClick={() => handleRemoveMenu(menu)}>
+          Yes
+        </Button>
       </DialogActions>
     </Dialog>
   );

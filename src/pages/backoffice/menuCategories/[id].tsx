@@ -61,7 +61,12 @@ const EditMenuCategory = () => {
   );
 
   const validMenuIds = menusMenuCategoriesLocations
-    .filter((item) => item.menu_categories_id === Number(menuCategoryId))
+    .filter(
+      (item) =>
+        item.menus_id &&
+        item.locations_id === Number(selectedLocationId) &&
+        item.menu_categories_id === Number(menuCategoryId)
+    )
     .map((item) => item.menus_id);
   const validMenus = menus.filter((item) => validMenuIds.includes(item.id));
 
@@ -121,9 +126,29 @@ const EditMenuCategory = () => {
     }
   };
 
-  const handleRemoveMenu = (menu: Menu) => {
-    setSelectedMenuToRemove(menu);
-    setOpen(true);
+  const handleRemoveMenu = async (menu: Menu) => {
+    if (!menu) return;
+    console.log({
+      menuId: menu.id,
+      menuCategoryId,
+      locationId: selectedLocationId,
+    });
+    const response = await fetch(
+      `${config.backOfficeApiBaseUrl}/menuCategories/removeMenu`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          menuId: menu.id,
+          menuCategoryId,
+          locationId: selectedLocationId,
+        }),
+      }
+    );
+    if (response.ok) {
+      fetchData();
+      setOpen(false);
+    }
   };
   if (!menuCategory) return null;
 
@@ -188,6 +213,7 @@ const EditMenuCategory = () => {
           sx={{
             display: "flex",
             justifyContent: "flex-start",
+            alignItems: "center",
             mt: 2,
           }}
         >
@@ -214,7 +240,7 @@ const EditMenuCategory = () => {
           />
           <Button
             variant="contained"
-            sx={{ width: 100 }}
+            sx={{ width: "fit-content" }}
             onClick={addMenuToMenuCategory}
           >
             add
@@ -245,9 +271,12 @@ const EditMenuCategory = () => {
               <Button
                 variant="outlined"
                 startIcon={<DeleteIcon />}
-                onClick={() => handleRemoveMenu(menu)}
+                onClick={() => {
+                  setSelectedMenuToRemove(menu);
+                  setOpen(true);
+                }}
               >
-                Delete
+                Remove
               </Button>
             </Box>
           ))}
@@ -257,6 +286,7 @@ const EditMenuCategory = () => {
         open={open}
         setOpen={setOpen}
         menu={selectedMenuToRemove}
+        handleRemoveMenu={handleRemoveMenu}
       />
     </Layout>
   );

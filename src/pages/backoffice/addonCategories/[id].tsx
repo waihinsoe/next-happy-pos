@@ -30,46 +30,46 @@ const EditAddonCategory = () => {
     menus,
   } = useContext(BackOfficeContext);
   const addonCategoryId = router.query.id as string;
-  const selectedLocationId = getSelectedLocationId() as string;
+  // const selectedLocationId = getSelectedLocationId() as string;
 
-  const validMenuIds = menusMenuCategoriesLocations
-    .filter((item) => item.locations_id === Number(selectedLocationId))
-    .map((item) => item.menus_id);
-  const validMenus = menus.filter((item) => validMenuIds.includes(item.id));
+  // const validMenuIds = menusMenuCategoriesLocations
+  //   .filter((item) => item.locations_id === Number(selectedLocationId))
+  //   .map((item) => item.menus_id);
+  // const validMenus = menus.filter((item) => validMenuIds.includes(item.id));
 
-  const selectedMenuIds = menusAddonCategories
-    .filter((item) => item.addon_categories_id === Number(addonCategoryId))
-    .map((item) => item.menus_id);
-  const selectedMenus = menus.filter((item) =>
-    selectedMenuIds.includes(item.id)
-  );
+  // const selectedMenuIds = menusAddonCategories
+  //   .filter((item) => item.addon_categories_id === Number(addonCategoryId))
+  //   .map((item) => item.menus_id);
+  // const selectedMenus = menus.filter((item) =>
+  //   selectedMenuIds.includes(item.id)
+  // );
 
   const selectedAddonCategory = addonCategories.find(
     (item) => item.id === Number(addonCategoryId)
   );
 
   const [newAddonCategory, setNewAddonCategory] = useState({
-    name: "",
+    name: selectedAddonCategory?.name,
     isRequired: false,
-    menuIds: [] as number[],
+    // menuIds: [] as number[],
   });
 
-  const [connectedMenus, setConnectedMenus] = useState(selectedMenus);
+  // const [connectedMenus, setConnectedMenus] = useState(selectedMenus);
   useEffect(() => {
-    if (selectedAddonCategory && selectedMenus) {
+    if (selectedAddonCategory /* && selectedMenus*/) {
       setNewAddonCategory({
         name: selectedAddonCategory.name,
         isRequired: selectedAddonCategory.is_required,
-        menuIds: selectedMenuIds as number[],
+        // menuIds: selectedMenuIds as number[],
       });
 
-      setConnectedMenus(selectedMenus);
+      // setConnectedMenus(selectedMenus);
     }
   }, [selectedAddonCategory]);
 
   const updateAddonCategory = () => {
-    const { name, isRequired, menuIds } = newAddonCategory;
-    const isValid = name.length > 0 && menuIds.length > 0;
+    const { name, isRequired } = newAddonCategory;
+    const isValid = name ? true : false;
     if (!isValid) return alert("name and menuIds are required");
 
     console.log(newAddonCategory);
@@ -96,7 +96,7 @@ const EditAddonCategory = () => {
             setNewAddonCategory({ ...newAddonCategory, name: evt.target.value })
           }
         />
-        <Autocomplete
+        {/* <Autocomplete
           multiple
           options={validMenus}
           value={connectedMenus}
@@ -124,7 +124,7 @@ const EditAddonCategory = () => {
             </li>
           )}
           renderInput={(params) => <TextField {...params} label="menus" />}
-        />
+        /> */}
         <FormControlLabel
           control={
             <Switch

@@ -15,7 +15,7 @@ const Layout = (props: Props) => {
   return (
     <Box>
       <TopBar title={props.title} />
-      <Box sx={{ display: "flex", height: "88.5vh" }}>
+      <Box sx={{ display: "flex", height: "100vh" }}>
         <SideBar />
         <Box
           sx={{
