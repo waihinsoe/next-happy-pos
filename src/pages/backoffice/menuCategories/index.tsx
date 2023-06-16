@@ -1,12 +1,9 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useContext, useState } from "react";
-
 import Link from "next/link";
-
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import Layout from "@/components/Layout";
 import AddIcon from "@mui/icons-material/Add";
-
 import NewMenuCategory from "./NewMenuCategory";
 import { getSelectedLocationId } from "@/utils";
 import { config } from "@/config/config";

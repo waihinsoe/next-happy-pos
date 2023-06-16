@@ -3,6 +3,7 @@ import multer from "multer";
 import multerS3 from "multer-s3";
 import { config } from "../config/config";
 import QRCode from "qrcode";
+import { generateLinkForQRCode } from ".";
 
 //set s3 endpoint to digitalocean spaces
 const s3Client = new S3Client({
@@ -14,24 +15,25 @@ const s3Client = new S3Client({
   },
 });
 
-export const qrCodeImageUpload = async () => {
-  const data = {
-    Bucket: "msquarefdc",
-    Key: "happy-pos/qrcode/wai-hin-soe/qrcode.png",
-    ACL: "public-read",
-    body: Buffer.from(""),
-  };
-
+export const qrCodeImageUpload = async (
+  locationId: number,
+  tableId: number
+) => {
   try {
-    const qrCodeImageData = await QRCode.toDataURL("https://google.com");
-    const buf = Buffer.from(
-      qrCodeImageData.replace(/^data:image\/\w+;base64,/, ""),
-      "base64"
+    const qrCodeImageData = await QRCode.toDataURL(
+      generateLinkForQRCode(locationId, tableId)
     );
-    data.body = buf;
-    const command = new PutObjectCommand(data);
-    const response = await s3Client.send(command);
-    console.log(response);
+    const input = {
+      Bucket: "msquarefdc",
+      Key: `happy-pos/qrcode/wai-hin-soe/locationId-${locationId}-tableId-${tableId}.png`,
+      ACL: "public-read",
+      body: Buffer.from(
+        qrCodeImageData.replace(/^data:image\/\w+;base64,/, ""),
+        "base64"
+      ),
+    };
+    const command = new PutObjectCommand(input);
+    await s3Client.send(command);
   } catch (err) {
     console.log("##################error ##################");
     console.log(err);
