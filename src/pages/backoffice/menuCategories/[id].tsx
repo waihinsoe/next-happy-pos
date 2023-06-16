@@ -126,9 +126,29 @@ const EditMenuCategory = () => {
     }
   };
 
-  const handleRemoveMenu = (menu: Menu) => {
-    setSelectedMenuToRemove(menu);
-    setOpen(true);
+  const handleRemoveMenu = async (menu: Menu) => {
+    if (!menu) return;
+    console.log({
+      menuId: menu.id,
+      menuCategoryId,
+      locationId: selectedLocationId,
+    });
+    const response = await fetch(
+      `${config.backOfficeApiBaseUrl}/menuCategories/removeMenu`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          menuId: menu.id,
+          menuCategoryId,
+          locationId: selectedLocationId,
+        }),
+      }
+    );
+    if (response.ok) {
+      fetchData();
+      setOpen(false);
+    }
   };
   if (!menuCategory) return null;
 
@@ -251,7 +271,10 @@ const EditMenuCategory = () => {
               <Button
                 variant="outlined"
                 startIcon={<DeleteIcon />}
-                onClick={() => handleRemoveMenu(menu)}
+                onClick={() => {
+                  setSelectedMenuToRemove(menu);
+                  setOpen(true);
+                }}
               >
                 Remove
               </Button>
@@ -263,6 +286,7 @@ const EditMenuCategory = () => {
         open={open}
         setOpen={setOpen}
         menu={selectedMenuToRemove}
+        handleRemoveMenu={handleRemoveMenu}
       />
     </Layout>
   );
