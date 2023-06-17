@@ -1,4 +1,6 @@
+import { getQrCodeUrl } from "@/utils";
 import { prisma } from "@/utils/db";
+import { qrCodeImageUpload } from "@/utils/fileUpload";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -10,10 +12,23 @@ export default async function handler(
     const isValid = name && locationId;
     if (!isValid) return res.send(400);
 
-    await prisma.tables.create({
+    const table = await prisma.tables.create({
       data: {
         name,
         locations_id: Number(locationId),
+      },
+    });
+
+    await qrCodeImageUpload(Number(locationId), table.id);
+
+    const qrcodeUrl = getQrCodeUrl(Number(locationId), table.id);
+
+    await prisma.tables.update({
+      data: {
+        asset_url: qrcodeUrl,
+      },
+      where: {
+        id: table.id,
       },
     });
 

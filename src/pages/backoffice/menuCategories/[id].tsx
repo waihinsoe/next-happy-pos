@@ -14,7 +14,11 @@ import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { config } from "@/config/config";
 import MenuCard from "@/components/MenuCard";
-import { getSelectedLocationId } from "@/utils";
+import {
+  getLocationsByMenuCategoryId,
+  getMenusByMenuCategoryId,
+  getSelectedLocationId,
+} from "@/utils";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveMenuFromMenuCategory from "./RemoveMenuFromMenuCategory";
 import { menus as Menu } from "@prisma/client";
@@ -46,29 +50,18 @@ const EditMenuCategory = () => {
     (item) => item.id === Number(menuCategoryId)
   );
 
-  const locationIds = [
-    ...new Set(
-      menusMenuCategoriesLocations
-        .filter(
-          (item) => menuCategory && item.menu_categories_id === menuCategory.id
-        )
-        .map((item) => item.locations_id)
-    ),
-  ];
-
-  const selectedLocations = locations.filter((location) =>
-    locationIds.includes(location.id)
+  const validMenus = getMenusByMenuCategoryId(
+    menus,
+    menusMenuCategoriesLocations,
+    menuCategoryId
   );
+  const validMenuIds = validMenus.map((item) => item.id);
 
-  const validMenuIds = menusMenuCategoriesLocations
-    .filter(
-      (item) =>
-        item.menus_id &&
-        item.locations_id === Number(selectedLocationId) &&
-        item.menu_categories_id === Number(menuCategoryId)
-    )
-    .map((item) => item.menus_id);
-  const validMenus = menus.filter((item) => validMenuIds.includes(item.id));
+  const selectedLocations = getLocationsByMenuCategoryId(
+    locations,
+    menusMenuCategoriesLocations,
+    menuCategoryId
+  );
 
   const [newMenuCategory, setNewMenuCategory] = useState({
     id: menuCategory?.id,

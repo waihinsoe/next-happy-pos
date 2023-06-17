@@ -63,9 +63,8 @@ const Tables = () => {
                       cursor: "pointer",
                       textAlign: "center",
                     }}
-                  >
-                    <Typography>{table.name}</Typography>
-                  </Box>
+                  ></Box>
+                  <Typography sx={{ mt: 2 }}>{table.name}</Typography>
                 </Box>
               </Link>
             ))}

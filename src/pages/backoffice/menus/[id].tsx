@@ -1,14 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { Autocomplete, Box, Button, TextField } from "@mui/material";
-import type {
-  menus as Menu,
-  menu_categories as MenuCategory,
-} from "@prisma/client";
+
 import { config } from "../../../config/config";
 import Layout from "../../../components/Layout";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import { useRouter } from "next/router";
-import { getSelectedLocationId } from "@/utils";
+import { getAddonCategoriesByMenuId, getSelectedLocationId } from "@/utils";
 const EditMenu = () => {
   const router = useRouter();
   const menuId = router.query.id as string;
@@ -16,18 +13,13 @@ const EditMenu = () => {
     useContext(BackOfficeContext);
   const selectedLocationId = getSelectedLocationId() as string;
 
-  let menu: Menu | undefined;
-  if (menuId) {
-    menu = menus.find((menu) => menu.id === parseInt(menuId, 10));
-  }
+  const menu = menus.find((menu) => menu.id === parseInt(menuId, 10));
 
-  const validAddonCategoryIds = menusAddonCategories
-    .filter((item) => item.menus_id === Number(menuId))
-    .map((item) => item.addon_categories_id);
-  const selectedAddonCategories = addonCategories.filter((item) =>
-    validAddonCategoryIds.includes(item.id)
+  const selectedAddonCategories = getAddonCategoriesByMenuId(
+    menusAddonCategories,
+    menuId,
+    addonCategories
   );
-
   const [connectedAddonCategories, setConnectedAddonCategories] = useState(
     selectedAddonCategories
   );
@@ -36,7 +28,7 @@ const EditMenu = () => {
     id: menu?.id,
     name: menu?.name,
     price: menu?.price,
-    addonCategoryIds: validAddonCategoryIds,
+    addonCategoryIds: [] as number[],
     locationId: selectedLocationId,
   });
 
@@ -46,7 +38,7 @@ const EditMenu = () => {
         id: menu.id,
         name: menu.name,
         price: menu.price,
-        addonCategoryIds: validAddonCategoryIds,
+        addonCategoryIds: [] as number[],
         locationId: selectedLocationId,
       });
 
