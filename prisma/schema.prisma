@@ -92,6 +92,7 @@ model tables {
   id           Int       @id @default(autoincrement())
   name         String
   locations_id Int
+  asset_url     String?
   locations    locations @relation(fields: [locations_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 

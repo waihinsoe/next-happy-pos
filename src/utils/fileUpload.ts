@@ -27,7 +27,7 @@ export const qrCodeImageUpload = async (
       Bucket: "msquarefdc",
       Key: `happy-pos/qrcode/wai-hin-soe/locationId-${locationId}-tableId-${tableId}.png`,
       ACL: "public-read",
-      body: Buffer.from(
+      Body: Buffer.from(
         qrCodeImageData.replace(/^data:image\/\w+;base64,/, ""),
         "base64"
       ),

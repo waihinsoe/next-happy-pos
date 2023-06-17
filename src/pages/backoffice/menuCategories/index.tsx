@@ -83,26 +83,23 @@ const MenuCategories = () => {
                 key={filteredMenuCategory.id}
                 style={{ textDecoration: "none", color: "#333333" }}
               >
-                <Box sx={{ textAlign: "center" }}>
-                  <Box
-                    sx={{
-                      width: 150,
-                      height: 150,
-                      borderRadius: 2,
-                      border: "2px solid #EBEBEB",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      cursor: "pointer",
-                      textAlign: "center",
-                    }}
-                  >
-                    <Typography>
-                      {getMenuCount(filteredMenuCategory.id)} Menus
-                    </Typography>
-                  </Box>
-                  <Typography sx={{ mt: 1 }}>
-                    {filteredMenuCategory.name}
+                <Box
+                  sx={{
+                    width: 150,
+                    height: 150,
+                    borderRadius: 2,
+                    border: "2px solid #EBEBEB",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "flex-end",
+                    alignItems: "flex-start",
+                    cursor: "pointer",
+                    p: 1,
+                  }}
+                >
+                  <Typography>{filteredMenuCategory.name}</Typography>
+                  <Typography>
+                    {getMenuCount(filteredMenuCategory.id)} menus
                   </Typography>
                 </Box>
               </Link>

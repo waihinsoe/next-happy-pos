@@ -1,5 +1,11 @@
 import { config } from "@/config/config";
-
+import type {
+  menus as Menu,
+  locations as Location,
+  menus_menu_categories_locations as MenuMenuCategoryLocation,
+  menus_addon_categories as MenuAddonCategory,
+  addon_categories as AddonCategory,
+} from "@prisma/client";
 export const getAccessToken = () => {
   if (typeof window === "undefined") return "";
   const accessToken = localStorage.getItem("accessToken");
@@ -13,4 +19,54 @@ export const getSelectedLocationId = () => {
 
 export const generateLinkForQRCode = (locationId: number, tableId: number) => {
   return `${config.orderApiBaseUrl}/?locationId=${locationId}&tableId=${tableId}`;
+};
+
+export const getMenusByMenuCategoryId = (
+  menus: Menu[],
+  menusMenuCategoriesLocations: MenuMenuCategoryLocation[],
+  menuCategoryId: string
+) => {
+  const selectedLocationId = getSelectedLocationId();
+  const validMenuIds = menusMenuCategoriesLocations
+    .filter(
+      (item) =>
+        item.menus_id &&
+        item.locations_id === Number(selectedLocationId) &&
+        item.menu_categories_id === Number(menuCategoryId)
+    )
+    .map((item) => item.menus_id);
+  return menus.filter((item) => validMenuIds.includes(item.id));
+};
+
+export const getLocationsByMenuCategoryId = (
+  locations: Location[],
+  menusMenuCategoriesLocations: MenuMenuCategoryLocation[],
+  menuCategoryId: string
+) => {
+  const locationIds = [
+    ...new Set(
+      menusMenuCategoriesLocations
+        .filter((item) => item.menu_categories_id === Number(menuCategoryId))
+        .map((item) => item.locations_id)
+    ),
+  ];
+  return locations.filter((item) => locationIds.includes(item.id));
+};
+
+export const getAddonCategoriesByMenuId = (
+  menusAddonCategories: MenuAddonCategory[],
+  menuId: string,
+  addonCategories: AddonCategory[]
+) => {
+  const validAddonCategoryIds = menusAddonCategories
+    .filter((item) => item.menus_id === Number(menuId))
+    .map((item) => item.addon_categories_id);
+
+  return addonCategories.filter((item) =>
+    validAddonCategoryIds.includes(item.id)
+  );
+};
+
+export const getQrCodeUrl = (locationId: number, tableId: number) => {
+  return `https://msquarefdc.sgp1.cdn.digitaloceanspaces.com/happy-pos/qrcode/wai-hin-soe/locationId-${locationId}-tableId-${tableId}.png`;
 };
