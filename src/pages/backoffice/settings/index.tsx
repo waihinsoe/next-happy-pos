@@ -15,12 +15,11 @@ import type {
 } from "@prisma/client";
 import Layout from "../../../components/Layout";
 import { config } from "../../../config/config";
-import { getAccessToken, getSelectedLocationId } from "@/utils";
+import { getSelectedLocationId } from "@/utils";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 
 const Settings = () => {
   const { locations, company } = useContext(BackOfficeContext);
-  const accessToken = getAccessToken();
   const [selectedLocation, setSelectedLocation] = useState<
     Location | undefined
   >();
@@ -52,17 +51,13 @@ const Settings = () => {
   if (!companyInfo) return null;
 
   const updateCompany = async () => {
-    const response = await fetch(
-      `${config.backOfficeApiBaseUrl}/settings/companies/${companyInfo.id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(companyInfo),
-      }
-    );
+    const response = await fetch(`${config.backOfficeApiBaseUrl}/companies`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(companyInfo),
+    });
     return response;
   };
 

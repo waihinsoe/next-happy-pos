@@ -14,7 +14,7 @@ const MenuCard = ({ menu }: Props) => {
       <Card sx={{ Width: 200, height: 200 }}>
         <CardMedia
           sx={{ height: 100, width: 200 }}
-          image={`${menu.asset_url}`}
+          image={menu.asset_url || ""}
           component={"img"}
         />
         <CardContent>
