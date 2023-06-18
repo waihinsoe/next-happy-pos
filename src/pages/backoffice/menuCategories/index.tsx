@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Paper, Typography } from "@mui/material";
 import { useContext, useState } from "react";
 import Link from "next/link";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
@@ -83,25 +83,28 @@ const MenuCategories = () => {
                 key={filteredMenuCategory.id}
                 style={{ textDecoration: "none", color: "#333333" }}
               >
-                <Box
-                  sx={{
-                    width: 150,
-                    height: 150,
-                    borderRadius: 2,
-                    border: "2px solid #EBEBEB",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "flex-end",
-                    alignItems: "flex-start",
-                    cursor: "pointer",
-                    p: 1,
-                  }}
-                >
-                  <Typography>{filteredMenuCategory.name}</Typography>
-                  <Typography>
-                    {getMenuCount(filteredMenuCategory.id)} menus
-                  </Typography>
-                </Box>
+                <Paper elevation={2}>
+                  <Box
+                    sx={{
+                      width: 150,
+                      height: 150,
+                      borderRadius: 2,
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "flex-end",
+                      alignItems: "flex-start",
+                      cursor: "pointer",
+                      p: 1,
+                    }}
+                  >
+                    <Typography sx={{ color: "#4C4C6D", fontWeight: "700" }}>
+                      {filteredMenuCategory.name}
+                    </Typography>
+                    <Typography sx={{ color: "#4C4C6D", fontSize: 14 }}>
+                      {getMenuCount(filteredMenuCategory.id)} menus
+                    </Typography>
+                  </Box>
+                </Paper>
               </Link>
             ))}
         </Box>
