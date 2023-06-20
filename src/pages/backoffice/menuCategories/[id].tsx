@@ -22,6 +22,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveMenuFromMenuCategory from "./RemoveMenuFromMenuCategory";
 import { menus as Menu } from "@prisma/client";
+import DeleteDialog from "./DeleteDialog";
 const icon = (
   <CheckBoxOutlineBlankIcon fontSize="small" style={{ color: "lightblue" }} />
 );
@@ -46,6 +47,7 @@ const EditMenuCategory = () => {
     locations,
   } = useContext(BackOfficeContext);
   const [open, setOpen] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const menuCategory = menuCategories.find(
     (item) => item.id === Number(menuCategoryId)
   );
@@ -143,10 +145,33 @@ const EditMenuCategory = () => {
       setOpen(false);
     }
   };
+
+  const handleDeleteMenuCategory = async () => {
+    const response = await fetch(
+      `${config.backOfficeApiBaseUrl}/menuCategories?menuCategoryId=${menuCategoryId}`,
+      {
+        method: "DELETE",
+      }
+    );
+    if (response.ok) {
+      fetchData();
+      router.push("/backoffice/menuCategories");
+    }
+  };
   if (!menuCategory) return null;
 
   return (
     <Layout title="EditMenuCategory">
+      <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
+        <Button
+          variant="contained"
+          color="error"
+          startIcon={<DeleteIcon />}
+          onClick={() => setOpenDialog(true)}
+        >
+          Delete
+        </Button>
+      </Box>
       <Box
         sx={{
           display: "flex",
@@ -280,6 +305,12 @@ const EditMenuCategory = () => {
         setOpen={setOpen}
         menu={selectedMenuToRemove}
         handleRemoveMenu={handleRemoveMenu}
+      />
+      <DeleteDialog
+        title="Are you sure you want to delete this menu Category?"
+        open={openDialog}
+        setOpen={setOpenDialog}
+        callback={handleDeleteMenuCategory}
       />
     </Layout>
   );

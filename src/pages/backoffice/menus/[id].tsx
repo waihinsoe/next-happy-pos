@@ -6,9 +6,13 @@ import Layout from "../../../components/Layout";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import { useRouter } from "next/router";
 import { getAddonCategoriesByMenuId, getSelectedLocationId } from "@/utils";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteDialog from "../menuCategories/DeleteDialog";
+
 const EditMenu = () => {
   const router = useRouter();
   const menuId = router.query.id as string;
+  const [open, setOpen] = useState(false);
   const { menus, menusAddonCategories, addonCategories, fetchData } =
     useContext(BackOfficeContext);
   const selectedLocationId = getSelectedLocationId() as string;
@@ -64,9 +68,33 @@ const EditMenu = () => {
       fetchData();
     }
   };
+
+  const handleDeleteMenu = async () => {
+    if (!menuId) return alert("MenuId is required");
+    const response = await fetch(
+      `${config.backOfficeApiBaseUrl}/menus?menuId=${menuId}`,
+      {
+        method: "DELETE",
+      }
+    );
+    if (response.ok) {
+      fetchData();
+      router.push("/backoffice/menus");
+    }
+  };
   if (!menu) return null;
   return (
     <Layout title="EditMenu">
+      <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
+        <Button
+          variant="contained"
+          color="error"
+          startIcon={<DeleteIcon />}
+          onClick={() => setOpen(true)}
+        >
+          Delete
+        </Button>
+      </Box>
       <Box>
         {menu ? (
           <Box
@@ -75,7 +103,6 @@ const EditMenu = () => {
               flexDirection: "column",
               rowGap: 2,
               margin: "auto",
-              maxWidth: "400px",
               mt: 2,
             }}
           >
@@ -121,7 +148,11 @@ const EditMenu = () => {
               )}
             />
 
-            <Button variant="contained" onClick={updateMenu}>
+            <Button
+              variant="contained"
+              onClick={updateMenu}
+              sx={{ width: "fit-content" }}
+            >
               Update
             </Button>
           </Box>
@@ -129,6 +160,12 @@ const EditMenu = () => {
           <h1>menu not found</h1>
         )}
       </Box>
+      <DeleteDialog
+        title="Are you sure you want to delete this menu?"
+        open={open}
+        setOpen={setOpen}
+        callback={handleDeleteMenu}
+      />
     </Layout>
   );
 };
