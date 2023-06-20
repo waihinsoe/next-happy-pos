@@ -68,24 +68,6 @@ export default async function handler(
       },
     });
 
-    // if (menuCategoryIds.length) {
-    //   await prisma.menus_menu_categories_locations.deleteMany({
-    //     where: {
-    //       menus_id: menuId,
-    //     },
-    //   });
-
-    //   const data = menuCategoryIds.map((menuCategoryId: number) => ({
-    //     menus_id: menuId,
-    //     locations_id: Number(locationId),
-    //     menu_categories_id: menuCategoryId,
-    //   }));
-
-    //   await prisma.menus_menu_categories_locations.createMany({
-    //     data,
-    //   });
-    // }
-
     if (addonCategoryIds.length) {
       const menusAddonCategories = await prisma.menus_addon_categories.findMany(
         {
@@ -131,6 +113,20 @@ export default async function handler(
       }
       return res.send(200);
     }
+  } else if (req.method === "DELETE") {
+    const menuId = req.query.menuId as string;
+    if (!menuId) return res.send(400);
+
+    await prisma.menus.update({
+      data: {
+        is_archived: true,
+      },
+      where: {
+        id: Number(menuId),
+      },
+    });
+    return res.send(200);
+  } else {
+    return res.send(405);
   }
-  res.send(200);
 }

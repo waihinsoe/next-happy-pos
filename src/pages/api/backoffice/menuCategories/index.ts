@@ -31,9 +31,12 @@ export default async function handler(
   } else if (req.method === "DELETE") {
     const menuCategoryId = req.query.menuCategoryId as string;
 
-    const deletedMenuCategory = await prisma.menu_categories.delete({
+    const deletedMenuCategory = await prisma.menu_categories.update({
       where: {
         id: Number(menuCategoryId),
+      },
+      data: {
+        is_archived: true,
       },
     });
 

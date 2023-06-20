@@ -190,6 +190,7 @@ export default async function handler(
         id: {
           in: menuIds,
         },
+        is_archived: false,
       },
     });
 
@@ -202,6 +203,7 @@ export default async function handler(
         id: {
           in: menuCategoryIds,
         },
+        is_archived: false,
       },
     });
 
