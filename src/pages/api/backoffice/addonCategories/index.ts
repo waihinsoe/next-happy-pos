@@ -27,9 +27,32 @@ export default async function handler(
     });
     res.send(200);
   } else if (req.method === "PUT") {
-    res.send("this put ");
+    const { id, name, is_required } = req.body;
+    const isValid = id && name;
+    if (!isValid) return res.send(400);
+
+    await prisma.addon_categories.update({
+      data: {
+        name,
+        is_required,
+      },
+      where: {
+        id,
+      },
+    });
+    res.send(200);
   } else if (req.method === "DELETE") {
-    res.send("this is delete");
+    const addonCategoryId = req.query.id as string;
+
+    await prisma.addon_categories.update({
+      where: {
+        id: Number(addonCategoryId),
+      },
+      data: {
+        is_archived: true,
+      },
+    });
+    res.send(200);
   } else {
     res.send(405);
   }

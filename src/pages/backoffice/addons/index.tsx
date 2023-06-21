@@ -1,7 +1,7 @@
 import Layout from "@/components/Layout";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import { getSelectedLocationId } from "@/utils";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Paper, Typography } from "@mui/material";
 import Link from "next/link";
 import { useContext, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
@@ -59,24 +59,28 @@ const Addons = () => {
             key={addon.id}
             style={{ textDecoration: "none", color: "black  " }}
           >
-            <Box sx={{ textAlign: "center" }}>
+            <Paper elevation={2}>
               <Box
                 sx={{
                   width: 150,
                   height: 150,
                   borderRadius: 2,
-                  border: "2px solid #EBEBEB",
                   display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
+                  flexDirection: "column",
+                  justifyContent: "flex-end",
+                  alignItems: "flex-start",
                   cursor: "pointer",
-                  textAlign: "center",
+                  p: 1,
                 }}
               >
-                <Typography>{addon.price}</Typography>
+                <Typography sx={{ color: "#4C4C6D", fontWeight: "700" }}>
+                  {addon.name}
+                </Typography>
+                <Typography sx={{ color: "#4C4C6D", fontSize: 14 }}>
+                  {addon.price} kyat
+                </Typography>
               </Box>
-              <Typography sx={{ mt: 1 }}>{addon.name}</Typography>
-            </Box>
+            </Paper>
           </Link>
         ))}
       </Box>

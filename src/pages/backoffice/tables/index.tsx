@@ -1,7 +1,7 @@
 import Layout from "@/components/Layout";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import { getSelectedLocationId } from "@/utils";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Paper, Typography } from "@mui/material";
 import Link from "next/link";
 import { useContext, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
@@ -50,22 +50,21 @@ const Tables = () => {
                 key={table.id}
                 style={{ textDecoration: "none", color: "#333333" }}
               >
-                <Box sx={{ textAlign: "center" }}>
-                  <Box
-                    sx={{
-                      width: 150,
-                      height: 150,
-                      borderRadius: 2,
-                      border: "2px solid #EBEBEB",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      cursor: "pointer",
-                      textAlign: "center",
-                    }}
-                  ></Box>
+                <Paper
+                  sx={{
+                    width: 150,
+                    height: 150,
+                    borderRadius: 2,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    cursor: "pointer",
+                    textAlign: "center",
+                  }}
+                  elevation={2}
+                >
                   <Typography sx={{ mt: 2 }}>{table.name}</Typography>
-                </Box>
+                </Paper>
               </Link>
             ))}
         </Box>

@@ -48,15 +48,7 @@ export default async function handler(
       });
     }
   } else if (req.method === "PUT") {
-    console.log(req.body);
-    const {
-      id: menuId,
-      name,
-      price,
-      menuCategoryIds,
-      locationId,
-      addonCategoryIds,
-    } = req.body;
+    const { id: menuId, name, price, addonCategoryIds } = req.body;
 
     await prisma.menus.update({
       where: {

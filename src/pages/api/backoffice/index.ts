@@ -224,6 +224,7 @@ export default async function handler(
         addon_categories_id: {
           in: addonCategoryIds,
         },
+        is_archived: false,
       },
     });
     const addonCategories = await prisma.addon_categories.findMany({
@@ -231,6 +232,7 @@ export default async function handler(
         id: {
           in: addonCategoryIds,
         },
+        is_archived: false,
       },
     });
 

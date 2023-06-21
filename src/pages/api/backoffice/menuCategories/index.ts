@@ -44,9 +44,9 @@ export default async function handler(
     res.send(200);
   } else if (req.method === "PUT") {
     const { id, name, locations } = req.body;
-    const isValid = id && name && locations;
     const menuCategoryId = Number(id);
     const locationIds = locations.map((item: any) => item.id) as number[];
+    const isValid = id && name && locations.length && locationIds.length;
 
     if (!isValid) return res.send(400);
 
@@ -60,18 +60,18 @@ export default async function handler(
       },
     });
 
-    if (!locationIds.length) {
-      //null all locations
-      await prisma.menus_menu_categories_locations.updateMany({
-        data: {
-          locations_id: null,
-        },
-        where: {
-          menu_categories_id: menuCategoryId,
-        },
-      });
-      return res.send(200);
-    }
+    // if (!locationIds.length) {
+    //   //null all locations
+    //   await prisma.menus_menu_categories_locations.updateMany({
+    //     data: {
+    //       locations_id: null,
+    //     },
+    //     where: {
+    //       menu_categories_id: menuCategoryId,
+    //     },
+    //   });
+    //   return res.send(200);
+    // }
 
     // get rows from database
     const menusMenuCategoriesLocations =

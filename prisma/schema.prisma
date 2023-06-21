@@ -13,7 +13,7 @@ model addon_categories {
   is_required            Boolean
   addons                 addons[]
   menus_addon_categories menus_addon_categories[]
-  is_archived Boolean @default(false)
+  is_archived            Boolean                  @default(false)
 }
 
 model addons {
@@ -22,18 +22,16 @@ model addons {
   price               Int
   addon_categories_id Int?
   addon_categories    addon_categories? @relation(fields: [addon_categories_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    is_archived Boolean @default(false)
-
+  is_archived         Boolean           @default(false)
 }
 
 model companies {
-  id        Int         @id @default(autoincrement())
-  name      String
-  address   String?
-  locations locations[]
-  users     users[]
-    is_archived Boolean @default(false)
-
+  id          Int         @id @default(autoincrement())
+  name        String
+  address     String?
+  locations   locations[]
+  users       users[]
+  is_archived Boolean     @default(false)
 }
 
 model locations {
@@ -44,16 +42,14 @@ model locations {
   companies                       companies?                        @relation(fields: [companies_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   menus_menu_categories_locations menus_menu_categories_locations[]
   tables                          tables[]
-    is_archived Boolean @default(false)
-
+  is_archived                     Boolean                           @default(false)
 }
 
 model menu_categories {
   id                              Int                               @id @default(autoincrement())
   name                            String
   menus_menu_categories_locations menus_menu_categories_locations[]
-    is_archived Boolean @default(false)
-
+  is_archived                     Boolean                           @default(false)
 }
 
 model menus {
@@ -64,8 +60,7 @@ model menus {
   description                     String?
   menus_addon_categories          menus_addon_categories[]
   menus_menu_categories_locations menus_menu_categories_locations[]
-    is_archived Boolean @default(false)
-
+  is_archived                     Boolean                           @default(false)
 }
 
 model menus_addon_categories {
@@ -85,6 +80,7 @@ model menus_menu_categories_locations {
   locations          locations?      @relation(fields: [locations_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   menu_categories    menu_categories @relation(fields: [menu_categories_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   menus              menus?          @relation(fields: [menus_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  is_archived        Boolean         @default(false)
 
   @@unique([menus_id, menu_categories_id, locations_id])
 }
@@ -103,10 +99,9 @@ model tables {
   id           Int       @id @default(autoincrement())
   name         String
   locations_id Int
-  asset_url     String?
+  asset_url    String?
   locations    locations @relation(fields: [locations_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    is_archived Boolean @default(false)
-
+  is_archived  Boolean   @default(false)
 }
 
 enum Role {

@@ -2,7 +2,6 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   DialogActions,
   Button,
   Slide,
@@ -11,7 +10,6 @@ import {
 } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
 import React from "react";
-import { menus as Menu } from "@prisma/client";
 
 interface Props {
   title: string;
@@ -49,7 +47,7 @@ const DeleteDialog = ({ title, open, setOpen, callback }: Props) => {
           cancel
         </Button>
         <Button variant="contained" onClick={() => callback()} color="error">
-          Yes
+          confirm
         </Button>
       </DialogActions>
     </Dialog>
