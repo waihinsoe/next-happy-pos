@@ -127,23 +127,6 @@ const NewMenu = ({ open, setOpen }: Props) => {
     }
   };
 
-  // const deleteMenu = async (menuId?: number) => {
-  //   if (!menuId) return;
-  //   const response = await fetch(`${config.apiBaseUrl}/menus/${menuId}`, {
-  //     method: "DELETE",
-  //   });
-  // };
-
-  //   const getValues = () => {
-  //     return menuCategories
-  //       .filter((menuCategory) => {
-  //         return (
-  //           menuCategory.id && selectedMenuCategoryIds.includes(menuCategory.id)
-  //         );
-  //       })
-  //       .map((menuCategory) => menuCategory.name);
-  //   };
-
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
       <DialogTitle sx={{ textAlign: "center" }}>Create New Menu</DialogTitle>

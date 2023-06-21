@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
-import { getSelectedLocationId } from "@/utils";
+import { getAddonsByLocationId, getSelectedLocationId } from "@/utils";
 import { Box, Button, Paper, Typography } from "@mui/material";
 import Link from "next/link";
 import { useContext, useState } from "react";
@@ -11,18 +11,11 @@ const Addons = () => {
   const [open, setOpen] = useState(false);
   const { addons, menusMenuCategoriesLocations, menusAddonCategories } =
     useContext(BackOfficeContext);
-  const selectedLocationId = getSelectedLocationId() as string;
 
-  const validMenuIds = menusMenuCategoriesLocations
-    .filter((item) => item.locations_id === Number(selectedLocationId))
-    .map((item) => item.menus_id);
-
-  const validAddonCategoryIds = menusAddonCategories
-    .filter((item) => validMenuIds.includes(item.menus_id))
-    .map((item) => item.addon_categories_id) as number[];
-
-  const validAddons = addons.filter((item) =>
-    validAddonCategoryIds.includes(item.addon_categories_id as number)
+  const validAddons = getAddonsByLocationId(
+    menusMenuCategoriesLocations,
+    menusAddonCategories,
+    addons
   );
   return (
     <Layout title="Addons">

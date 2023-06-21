@@ -47,6 +47,7 @@ export default async function handler(
         },
       });
     }
+    return res.send(200);
   } else if (req.method === "PUT") {
     const { id: menuId, name, price, addonCategoryIds } = req.body;
 
