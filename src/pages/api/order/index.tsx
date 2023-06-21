@@ -19,6 +19,7 @@ export default async function handler(
       await prisma.menus_menu_categories_locations.findMany({
         where: {
           locations_id: Number(locationId),
+          is_archived: false,
         },
       });
 
@@ -32,6 +33,7 @@ export default async function handler(
         id: {
           in: menuIds,
         },
+        is_archived: false,
       },
     });
 
@@ -44,6 +46,7 @@ export default async function handler(
         id: {
           in: menuCategoryIds,
         },
+        is_archived: false,
       },
     });
 
