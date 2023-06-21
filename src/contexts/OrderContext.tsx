@@ -11,6 +11,7 @@ import type {
 } from "@prisma/client";
 import { config } from "../config/config";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 interface OrderContextType {
   menus: Menu[];
@@ -42,18 +43,25 @@ export const OrderContext =
   createContext<OrderContextType>(defaultOrderContext);
 
 const OrderProvider = (props: any) => {
+  const router = useRouter();
+  const query = router.query;
+  const locationId = query.locationId;
   const [data, updateData] = useState(defaultOrderContext);
-  const { data: session } = useSession();
   useEffect(() => {
-    if (session) {
+    if (locationId) {
       fetchData();
     }
-  }, [session]);
+  }, [locationId]);
 
   const fetchData = async () => {
-    const response = await fetch(`${config.orderApiBaseUrl}/?locationId=1`);
-    const responseJson = await response.json();
-    updateData({ ...data, ...responseJson });
+    if (!locationId) return;
+    const response = await fetch(
+      `${config.orderApiBaseUrl}/?locationId=${locationId}`
+    );
+    if (response.ok) {
+      const responseJson = await response.json();
+      updateData({ ...data, ...responseJson });
+    }
   };
   return (
     <OrderContext.Provider value={{ ...data, updateData, fetchData }}>
