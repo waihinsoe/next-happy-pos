@@ -34,7 +34,7 @@ export default async function handler(
 
     return res.send(200);
   } else if (req.method === "PUT") {
-    const { tableId, name } = req.body;
+    const { id: tableId, name } = req.body;
     const isValid = tableId && name;
     if (!isValid) return res.send(400);
 
@@ -47,6 +47,19 @@ export default async function handler(
       },
     });
     res.send(200);
+  } else if (req.method === "DELETE") {
+    const tableId = req.query.tableId as string;
+    if (!tableId) return res.send(400);
+    await prisma.tables.update({
+      data: {
+        is_archived: true,
+      },
+      where: {
+        id: Number(tableId),
+      },
+    });
+
+    return res.send(200);
   } else {
     res.send(405);
   }

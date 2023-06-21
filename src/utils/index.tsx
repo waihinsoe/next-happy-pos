@@ -5,6 +5,7 @@ import type {
   menus_menu_categories_locations as MenuMenuCategoryLocation,
   menus_addon_categories as MenuAddonCategory,
   addon_categories as AddonCategory,
+  addons as Addon,
 } from "@prisma/client";
 export const getAccessToken = () => {
   if (typeof window === "undefined") return "";
@@ -18,7 +19,7 @@ export const getSelectedLocationId = () => {
 };
 
 export const generateLinkForQRCode = (locationId: number, tableId: number) => {
-  return `${config.orderApiBaseUrl}/?locationId=${locationId}&tableId=${tableId}`;
+  return `${config.orderAppUrl}/?locationId=${locationId}&tableId=${tableId}`;
 };
 
 export const getMenusByMenuCategoryId = (
@@ -64,6 +65,26 @@ export const getAddonCategoriesByMenuId = (
 
   return addonCategories.filter((item) =>
     validAddonCategoryIds.includes(item.id)
+  );
+};
+
+export const getAddonsByLocationId = (
+  menusMenuCategoriesLocations: MenuMenuCategoryLocation[],
+  menusAddonCategories: MenuAddonCategory[],
+  addons: Addon[]
+) => {
+  const selectedLocationId = getSelectedLocationId() as string;
+
+  const validMenuIds = menusMenuCategoriesLocations
+    .filter((item) => item.locations_id === Number(selectedLocationId))
+    .map((item) => item.menus_id);
+
+  const validAddonCategoryIds = menusAddonCategories
+    .filter((item) => validMenuIds.includes(item.menus_id))
+    .map((item) => item.addon_categories_id) as number[];
+
+  return addons.filter((item) =>
+    validAddonCategoryIds.includes(item.addon_categories_id as number)
   );
 };
 

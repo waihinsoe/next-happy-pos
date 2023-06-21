@@ -1,4 +1,5 @@
 interface Config {
+  orderAppUrl: string;
   apiBaseUrl: string;
   backOfficeApiBaseUrl: string;
   orderApiBaseUrl: string;
@@ -15,6 +16,7 @@ interface Config {
 }
 
 export const config: Config = {
+  orderAppUrl: process.env.NEXT_PUBLIC_ORDER_APP_URL || "",
   apiBaseUrl: process.env.NEXT_PUBLIC_API_BASE_URL || "",
   backOfficeApiBaseUrl: process.env.NEXT_PUBLIC_BACKOFFICE_API_BASE_URL || "",
   orderApiBaseUrl: process.env.NEXT_PUBLIC_ORDER_API_BASE_URL || "",
