@@ -1,13 +1,18 @@
 import { useContext, useEffect, useState } from "react";
 import { Autocomplete, Box, Button, TextField } from "@mui/material";
-
+import type { menus as Menu } from "@prisma/client";
 import { config } from "../../../config/config";
 import Layout from "../../../components/Layout";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import { useRouter } from "next/router";
 import { getAddonCategoriesByMenuId, getSelectedLocationId } from "@/utils";
 import DeleteIcon from "@mui/icons-material/Delete";
-import DeleteDialog from "../menuCategories/DeleteDialog";
+import DeleteDialog from "../../../components/DeleteDialog";
+
+interface AutocompleteProps {
+  id: number;
+  label: string;
+}
 
 const EditMenu = () => {
   const router = useRouter();
@@ -15,9 +20,7 @@ const EditMenu = () => {
   const [open, setOpen] = useState(false);
   const { menus, menusAddonCategories, addonCategories, fetchData } =
     useContext(BackOfficeContext);
-  const selectedLocationId = getSelectedLocationId() as string;
-
-  const menu = menus.find((menu) => menu.id === parseInt(menuId, 10));
+  const [menu, setMenu] = useState<Menu>();
 
   const selectedAddonCategories = getAddonCategoriesByMenuId(
     menusAddonCategories,
@@ -27,42 +30,24 @@ const EditMenu = () => {
   const [connectedAddonCategories, setConnectedAddonCategories] = useState(
     selectedAddonCategories
   );
-
-  const [newMenu, setNewMenu] = useState({
-    id: menu?.id,
-    name: menu?.name,
-    price: menu?.price,
-    addonCategoryIds: [] as number[],
-    locationId: selectedLocationId,
-  });
+  const [addonCategoryIds, setAddonCategoryIds] = useState<Number[]>();
 
   useEffect(() => {
-    if (menu) {
-      setNewMenu({
-        id: menu.id,
-        name: menu.name,
-        price: menu.price,
-        addonCategoryIds: [] as number[],
-        locationId: selectedLocationId,
-      });
-
+    if (menus.length) {
+      const validMenu = menus.find((menu) => menu.id === parseInt(menuId, 10));
+      setMenu(validMenu);
       setConnectedAddonCategories(selectedAddonCategories);
     }
-  }, [menu]);
+  }, [menus]);
 
   const updateMenu = async () => {
-    const { id, name, locationId } = newMenu;
-    console.log(newMenu);
-    const isValid = id && name && locationId;
-
-    if (!isValid) return alert("Please fill required input fields");
-
+    const payload = { ...menu, addonCategoryIds };
     const response = await fetch(`${config.backOfficeApiBaseUrl}/menus`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newMenu),
+      body: JSON.stringify(payload),
     });
     if (response.ok) {
       fetchData();
@@ -112,7 +97,7 @@ const EditMenu = () => {
               variant="outlined"
               defaultValue={menu.name}
               onChange={(evt) => {
-                setNewMenu({ ...newMenu, name: evt.target.value });
+                setMenu({ ...menu, name: evt.target.value });
               }}
             />
             <TextField
@@ -122,7 +107,7 @@ const EditMenu = () => {
               defaultValue={menu.price}
               type="number"
               onChange={(evt) => {
-                setNewMenu({ ...newMenu, price: parseInt(evt.target.value) });
+                setMenu({ ...menu, price: parseInt(evt.target.value) });
               }}
             />
 
@@ -136,7 +121,7 @@ const EditMenu = () => {
               getOptionLabel={(option) => option.name}
               onChange={(evt, values) => {
                 const addonCategoryIds = values.map((item) => item.id);
-                setNewMenu({ ...newMenu, addonCategoryIds });
+                setAddonCategoryIds(addonCategoryIds);
                 setConnectedAddonCategories(values);
               }}
               renderInput={(params) => (

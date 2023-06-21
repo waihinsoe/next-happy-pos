@@ -22,7 +22,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveMenuFromMenuCategory from "./RemoveMenuFromMenuCategory";
 import { menus as Menu } from "@prisma/client";
-import DeleteDialog from "./DeleteDialog";
+import DeleteDialog from "../../../components/DeleteDialog";
 const icon = (
   <CheckBoxOutlineBlankIcon fontSize="small" style={{ color: "lightblue" }} />
 );
@@ -287,6 +287,7 @@ const EditMenuCategory = () => {
             >
               <MenuCard menu={menu} />
               <Button
+                color="error"
                 variant="outlined"
                 startIcon={<DeleteIcon />}
                 onClick={() => {

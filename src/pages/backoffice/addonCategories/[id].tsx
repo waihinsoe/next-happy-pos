@@ -1,65 +1,80 @@
 import Layout from "@/components/Layout";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
-import { getSelectedLocationId } from "@/utils";
+import DeleteIcon from "@mui/icons-material/Delete";
 import {
-  Autocomplete,
   Box,
   Button,
-  Checkbox,
   FormControlLabel,
   Switch,
   TextField,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
-const icon = (
-  <CheckBoxOutlineBlankIcon fontSize="small" style={{ color: "lightblue" }} />
-);
-const checkedIcon = (
-  <CheckBoxIcon fontSize="small" style={{ color: "green" }} />
-);
+
+import type { addon_categories as AddonCategory } from "@prisma/client";
+import { config } from "@/config/config";
+import DeleteDialog from "@/components/DeleteDialog";
+
 const EditAddonCategory = () => {
   const router = useRouter();
-  const {
-    fetchData,
-    addonCategories,
-    menusMenuCategoriesLocations,
-    menusAddonCategories,
-    menus,
-  } = useContext(BackOfficeContext);
+  const { fetchData, addonCategories } = useContext(BackOfficeContext);
   const addonCategoryId = router.query.id as string;
+  const [openDialog, setOpenDialog] = useState(false);
+  const [newAddonCategory, setNewAddonCategory] =
+    useState<Partial<AddonCategory>>();
 
-  const selectedAddonCategory = addonCategories.find(
-    (item) => item.id === Number(addonCategoryId)
-  );
+  const updateAddonCategory = async () => {
+    const isValid = newAddonCategory && newAddonCategory.name;
+    if (!isValid) return alert("name is required");
 
-  const [newAddonCategory, setNewAddonCategory] = useState({
-    name: "",
-    isRequired: false,
-  });
+    const response = await fetch(
+      `${config.backOfficeApiBaseUrl}/addonCategories`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newAddonCategory),
+      }
+    );
 
-  useEffect(() => {
-    if (selectedAddonCategory) {
-      setNewAddonCategory({
-        name: selectedAddonCategory.name,
-        isRequired: selectedAddonCategory.is_required,
-      });
+    if (response.ok) {
+      fetchData();
     }
-  }, [selectedAddonCategory]);
-  if (!selectedAddonCategory) return null;
-  const updateAddonCategory = () => {
-    const { name, isRequired } = newAddonCategory;
-    const isValid = name ? true : false;
-    if (!isValid) return alert("name and menuIds are required");
-
-    console.log(newAddonCategory);
   };
 
-  if (!selectedAddonCategory) return null;
+  const handleDeleteAddonCategory = async () => {
+    const response = await fetch(
+      `${config.backOfficeApiBaseUrl}/addonCategories?id=${addonCategoryId}`,
+      {
+        method: "DELETE",
+      }
+    );
+    if (response.ok) {
+      fetchData();
+      router.push("/backoffice/addonCategories");
+    }
+  };
+  useEffect(() => {
+    if (addonCategories.length) {
+      const validAddonCategory = addonCategories.find(
+        (item) => item.id === Number(addonCategoryId)
+      );
+      setNewAddonCategory(validAddonCategory);
+    }
+  }, [addonCategories]);
+
+  if (!newAddonCategory) return null;
   return (
     <Layout title="EditAddonCategory">
+      <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
+        <Button
+          variant="contained"
+          color="error"
+          startIcon={<DeleteIcon />}
+          onClick={() => setOpenDialog(true)}
+        >
+          Delete
+        </Button>
+      </Box>
       <Box
         sx={{
           display: "flex",
@@ -82,11 +97,11 @@ const EditAddonCategory = () => {
         <FormControlLabel
           control={
             <Switch
-              checked={newAddonCategory.isRequired}
+              checked={newAddonCategory.is_required}
               onChange={() =>
                 setNewAddonCategory({
                   ...newAddonCategory,
-                  isRequired: !newAddonCategory.isRequired,
+                  is_required: !newAddonCategory.is_required,
                 })
               }
             />
@@ -97,6 +112,12 @@ const EditAddonCategory = () => {
           Update
         </Button>
       </Box>
+      <DeleteDialog
+        title="Are you sure you want to delete this addon Category?"
+        open={openDialog}
+        setOpen={setOpenDialog}
+        callback={handleDeleteAddonCategory}
+      />
     </Layout>
   );
 };

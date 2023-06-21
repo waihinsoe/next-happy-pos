@@ -1,7 +1,7 @@
 import Layout from "@/components/Layout";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import { getSelectedLocationId } from "@/utils";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Paper, Typography } from "@mui/material";
 import Link from "next/link";
 import { useContext, useState } from "react";
 import NewAddonCategory from "./NewAddonCategory";
@@ -32,8 +32,6 @@ const AddonCategories = () => {
   const filteredAddonCategories = addonCategories.filter((item) =>
     addonCategoryIds.includes(item.id)
   );
-
-  console.log(addonCategories);
 
   const getAddonCount = (addonCategoryId?: number) => {
     if (!addonCategoryId) return;
@@ -76,24 +74,28 @@ const AddonCategories = () => {
             key={addonCategory.id}
             style={{ textDecoration: "none", color: "black  " }}
           >
-            <Box sx={{ textAlign: "center" }}>
+            <Paper elevation={2}>
               <Box
                 sx={{
                   width: 150,
                   height: 150,
                   borderRadius: 2,
-                  border: "2px solid #EBEBEB",
                   display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
+                  flexDirection: "column",
+                  justifyContent: "flex-end",
+                  alignItems: "flex-start",
                   cursor: "pointer",
-                  textAlign: "center",
+                  p: 1,
                 }}
               >
-                {getAddonCount(addonCategory.id)} Addons
+                <Typography sx={{ color: "#4C4C6D", fontWeight: "700" }}>
+                  {addonCategory.name}
+                </Typography>
+                <Typography sx={{ color: "#4C4C6D", fontSize: 14 }}>
+                  {getAddonCount(addonCategory.id)} addon
+                </Typography>
               </Box>
-              <Typography sx={{ mt: 1 }}>{addonCategory.name}</Typography>
-            </Box>
+            </Paper>
           </Link>
         ))}
       </Box>
