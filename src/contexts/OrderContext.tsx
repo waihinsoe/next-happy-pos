@@ -8,9 +8,9 @@ import type {
   menus as Menu,
   menu_categories as MenuCategory,
   menus_menu_categories_locations as MenuMenuCategoryLocation,
+  menus_addon_categories as MenuAddonCategory,
 } from "@prisma/client";
 import { config } from "../config/config";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 interface OrderContextType {
@@ -18,6 +18,7 @@ interface OrderContextType {
   menuCategories: MenuCategory[];
   addons: Addon[];
   addonCategories: AddonCategory[];
+  menusAddonCategories: MenuAddonCategory[];
   locations: Location[];
   menusMenuCategoriesLocations: MenuMenuCategoryLocation[];
   company: Company | null;
@@ -31,6 +32,7 @@ export const defaultOrderContext: OrderContextType = {
   menuCategories: [],
   addons: [],
   addonCategories: [],
+  menusAddonCategories: [],
   locations: [],
   menusMenuCategoriesLocations: [],
   company: null,

@@ -18,6 +18,7 @@ const EditMenu = () => {
   const router = useRouter();
   const menuId = router.query.id as string;
   const [open, setOpen] = useState(false);
+  const selectedLocationId = getSelectedLocationId() as string;
   const { menus, menusAddonCategories, addonCategories, fetchData } =
     useContext(BackOfficeContext);
   const [menu, setMenu] = useState<Menu>();

@@ -55,7 +55,8 @@ const EditMenuCategory = () => {
   const validMenus = getMenusByMenuCategoryId(
     menus,
     menusMenuCategoriesLocations,
-    menuCategoryId
+    menuCategoryId,
+    selectedLocationId
   );
   const validMenuIds = validMenus.map((item) => item.id);
 
@@ -285,7 +286,7 @@ const EditMenuCategory = () => {
                 gap: 1,
               }}
             >
-              <MenuCard menu={menu} />
+              <MenuCard menu={menu} href={`/backoffice/menus/${menu.id}`} />
               <Button
                 color="error"
                 variant="outlined"

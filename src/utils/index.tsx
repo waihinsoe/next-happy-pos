@@ -25,9 +25,9 @@ export const generateLinkForQRCode = (locationId: number, tableId: number) => {
 export const getMenusByMenuCategoryId = (
   menus: Menu[],
   menusMenuCategoriesLocations: MenuMenuCategoryLocation[],
-  menuCategoryId: string
+  menuCategoryId: string,
+  selectedLocationId: string
 ) => {
-  const selectedLocationId = getSelectedLocationId();
   const validMenuIds = menusMenuCategoriesLocations
     .filter(
       (item) =>
