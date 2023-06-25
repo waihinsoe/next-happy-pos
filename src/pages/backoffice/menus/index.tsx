@@ -67,7 +67,13 @@ const Menus = () => {
         }}
       >
         {filteredMenus.length > 0 &&
-          filteredMenus.map((menu) => <MenuCard key={menu.id} menu={menu} />)}
+          filteredMenus.map((menu) => (
+            <MenuCard
+              key={menu.id}
+              menu={menu}
+              href={`/backoffice/menus/${menu.id}`}
+            />
+          ))}
       </Box>
       <NewMenu open={open} setOpen={setOpen} />
     </Layout>

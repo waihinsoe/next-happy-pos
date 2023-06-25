@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { prisma } from "@/utils/db";
+import { FormatListBulleted } from "@mui/icons-material";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -12,6 +13,7 @@ export default async function handler(
     const location = await prisma.locations.findFirst({
       where: {
         id: Number(locationId),
+        is_archived: false,
       },
     });
 
@@ -67,6 +69,7 @@ export default async function handler(
         id: {
           in: addonCategoryIds,
         },
+        is_archived: false,
       },
     });
 
@@ -75,9 +78,18 @@ export default async function handler(
         addon_categories_id: {
           in: addonCategoryIds,
         },
+        is_archived: false,
       },
     });
 
-    return res.send({ locations: location, menus, menuCategories });
+    return res.send({
+      locations: [location],
+      menus,
+      menuCategories,
+      addons,
+      menusAddonCategories,
+      addonCategories,
+      menusMenuCategoriesLocations,
+    });
   }
 }
