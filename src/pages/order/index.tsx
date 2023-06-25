@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { getMenusByMenuCategoryId } from "@/utils";
 import { useRouter } from "next/router";
 import MenuCard from "@/components/MenuCard";
+import ViewCardBar from "@/components/ViewCardBar";
 
 const Order = () => {
   const router = useRouter();
@@ -67,6 +68,7 @@ const Order = () => {
         </Tabs>
       </Box>
       {renderMenus()}
+      <ViewCardBar />
     </Box>
   );
 };

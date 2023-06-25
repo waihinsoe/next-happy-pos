@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { Order } from "../typings/types";
+import { OrderLine } from "../typings/types";
 import type {
   addons as Addon,
   addon_categories as AddonCategory,
@@ -22,9 +22,10 @@ interface OrderContextType {
   locations: Location[];
   menusMenuCategoriesLocations: MenuMenuCategoryLocation[];
   company: Company | null;
+  isLoading: boolean;
   updateData: (value: any) => void;
   fetchData: () => void;
-  cart: Order | null;
+  orderLines: OrderLine[];
 }
 
 export const defaultOrderContext: OrderContextType = {
@@ -36,9 +37,10 @@ export const defaultOrderContext: OrderContextType = {
   locations: [],
   menusMenuCategoriesLocations: [],
   company: null,
+  isLoading: true,
   updateData: () => {},
   fetchData: () => {},
-  cart: null,
+  orderLines: [],
 };
 
 export const OrderContext =
@@ -57,12 +59,13 @@ const OrderProvider = (props: any) => {
 
   const fetchData = async () => {
     if (!locationId) return;
+    updateData({ ...data, isLoading: true });
     const response = await fetch(
       `${config.orderApiBaseUrl}/?locationId=${locationId}`
     );
     if (response.ok) {
       const responseJson = await response.json();
-      updateData({ ...data, ...responseJson });
+      updateData({ ...data, ...responseJson, isLoading: false });
     }
   };
   return (

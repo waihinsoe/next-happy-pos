@@ -4,6 +4,7 @@ import type {
   addons as Addon,
 } from "@prisma/client";
 import { getAddonCategoriesByMenuId } from "@/utils";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import {
   Box,
   Button,
@@ -11,28 +12,32 @@ import {
   Chip,
   FormControl,
   FormControlLabel,
-  FormLabel,
+  IconButton,
   Radio,
   RadioGroup,
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
+import QuantitySelector from "@/components/QuantitySelector";
 
 const MenuDetail = () => {
-  const { menusAddonCategories, addonCategories, menus, addons } =
+  const { menusAddonCategories, addonCategories, menus, addons, updateData } =
     useContext(OrderContext);
+  const { ...data } = useContext(OrderContext);
   const router = useRouter();
   const query = router.query;
   const menuId = query.id as string;
+  const [selectedAddons, setSelectedAddons] = useState<Addon[]>([]);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+
   const validMenu = menus.find((item) => item.id === Number(menuId));
   const validAddonCategories = getAddonCategoriesByMenuId(
     menusAddonCategories,
     menuId,
     addonCategories
   );
-  const [selectedAddons, setSelectedAddons] = useState<Addon[]>([]);
-  const [isDisabled, setIsDisabled] = useState(false);
 
   const renderAddons = (addonCategory: AddonCategory) => {
     const validAddons = addons.filter(
@@ -69,6 +74,22 @@ const MenuDetail = () => {
     ));
   };
 
+  const addToCart = () => {
+    updateData({
+      ...data,
+      orderLines: [
+        ...data.orderLines,
+        { menu: validMenu, addons: selectedAddons, quantity },
+      ],
+    });
+
+    router.push({ pathname: "/order", query });
+  };
+
+  useEffect(() => {
+    console.log("orderLines", data.orderLines);
+  });
+
   const handleAddonSelect = (selected: boolean, addon: Addon) => {
     if (selected) {
       const addonCategory_of_current_addon = validAddonCategories.find(
@@ -104,9 +125,19 @@ const MenuDetail = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("selectedAddons :", selectedAddons);
-  }, [selectedAddons]);
+  const handleQuantityIncrease = () => {
+    const newValue = quantity + 1;
+    setQuantity(newValue);
+  };
+
+  const handleQuantityDecrease = () => {
+    const newValue = quantity - 1 === 0 ? 1 : quantity - 1;
+    setQuantity(newValue);
+  };
+
+  // useEffect(() => {
+  //   console.log("selectedAddons :", selectedAddons);
+  // }, [selectedAddons]);
 
   useEffect(() => {
     const requiredAddonCategories = validAddonCategories.filter(
@@ -185,12 +216,19 @@ const MenuDetail = () => {
             );
           })
         : ""}
+      <QuantitySelector
+        value={quantity}
+        onIncrease={handleQuantityIncrease}
+        onDecrease={handleQuantityDecrease}
+      />
       <Button
         variant="contained"
         sx={{ width: "fit-content", margin: "0 auto", mt: 2 }}
         disabled={isDisabled}
+        onClick={addToCart}
+        startIcon={<AddShoppingCartIcon />}
       >
-        Add to card
+        Add to cart
       </Button>
     </Box>
   );
