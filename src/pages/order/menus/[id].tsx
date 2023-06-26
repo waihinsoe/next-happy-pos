@@ -22,8 +22,14 @@ import { useContext, useEffect, useState } from "react";
 import QuantitySelector from "@/components/QuantitySelector";
 
 const MenuDetail = () => {
-  const { menusAddonCategories, addonCategories, menus, addons, updateData } =
-    useContext(OrderContext);
+  const {
+    menusAddonCategories,
+    addonCategories,
+    menus,
+    addons,
+    updateData,
+    orderLines,
+  } = useContext(OrderContext);
   const { ...data } = useContext(OrderContext);
   const router = useRouter();
   const query = router.query;
@@ -57,10 +63,20 @@ const MenuDetail = () => {
           control={
             addonCategory.is_required ? (
               <Radio
+                checked={
+                  selectedAddons.find((item) => item.id === addon.id)
+                    ? true
+                    : false
+                }
                 onChange={(evt, value) => handleAddonSelect(value, addon)}
               />
             ) : (
               <Checkbox
+                checked={
+                  selectedAddons.find((item) => item.id === addon.id)
+                    ? true
+                    : false
+                }
                 onChange={(evt, value) => handleAddonSelect(value, addon)}
               />
             )
@@ -73,6 +89,17 @@ const MenuDetail = () => {
       </Box>
     ));
   };
+  const updateOrderLine = orderLines.find(
+    (item) => item.menu.id === Number(menuId)
+  );
+
+  useEffect(() => {
+    if (updateOrderLine) {
+      const alreadySelectedAddons = updateOrderLine.addons;
+      setSelectedAddons(alreadySelectedAddons);
+      setQuantity(updateOrderLine.quantity);
+    }
+  }, [updateOrderLine]);
 
   const addToCart = () => {
     updateData({
@@ -86,9 +113,21 @@ const MenuDetail = () => {
     router.push({ pathname: "/order", query });
   };
 
-  useEffect(() => {
-    console.log("orderLines", data.orderLines);
-  });
+  const updateCart = () => {
+    if (updateOrderLine) {
+      const otherOrderLines = orderLines.filter(
+        (item) => item.menu.id !== Number(menuId)
+      );
+
+      const newOrderLines = [
+        ...otherOrderLines,
+        { ...updateOrderLine, addons: selectedAddons, quantity },
+      ];
+
+      updateData({ ...data, orderLines: newOrderLines });
+      router.push({ pathname: "/order/cart", query });
+    }
+  };
 
   const handleAddonSelect = (selected: boolean, addon: Addon) => {
     if (selected) {
@@ -225,10 +264,10 @@ const MenuDetail = () => {
         variant="contained"
         sx={{ width: "fit-content", margin: "0 auto", mt: 2 }}
         disabled={isDisabled}
-        onClick={addToCart}
+        onClick={updateOrderLine ? updateCart : addToCart}
         startIcon={<AddShoppingCartIcon />}
       >
-        Add to cart
+        {updateOrderLine ? "update" : "Add to cart"}
       </Button>
     </Box>
   );

@@ -54,6 +54,7 @@ const Order = () => {
           value={value}
           onChange={(evt, value) => setValue(value)}
           aria-label="menuCategories"
+          variant="scrollable"
         >
           {menuCategories.length &&
             menuCategories.map((item) => {
