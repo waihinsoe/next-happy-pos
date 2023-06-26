@@ -21,6 +21,8 @@ import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import QuantitySelector from "@/components/QuantitySelector";
 
+import AddonCategories from "@/components/AddonCategories";
+
 const MenuDetail = () => {
   const {
     menusAddonCategories,
@@ -45,50 +47,6 @@ const MenuDetail = () => {
     addonCategories
   );
 
-  const renderAddons = (addonCategory: AddonCategory) => {
-    const validAddons = addons.filter(
-      (item) => item.addon_categories_id === addonCategory.id
-    );
-    return validAddons.map((addon) => (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-        key={addon.id}
-      >
-        <FormControlLabel
-          value={addon.name}
-          control={
-            addonCategory.is_required ? (
-              <Radio
-                checked={
-                  selectedAddons.find((item) => item.id === addon.id)
-                    ? true
-                    : false
-                }
-                onChange={(evt, value) => handleAddonSelect(value, addon)}
-              />
-            ) : (
-              <Checkbox
-                checked={
-                  selectedAddons.find((item) => item.id === addon.id)
-                    ? true
-                    : false
-                }
-                onChange={(evt, value) => handleAddonSelect(value, addon)}
-              />
-            )
-          }
-          label={addon.name}
-        />
-        <Typography>
-          {addon.price} {addon.price ? "kyats" : "kyat"}
-        </Typography>
-      </Box>
-    ));
-  };
   const updateOrderLine = orderLines.find(
     (item) => item.menu.id === Number(menuId)
   );
@@ -174,10 +132,6 @@ const MenuDetail = () => {
     setQuantity(newValue);
   };
 
-  // useEffect(() => {
-  //   console.log("selectedAddons :", selectedAddons);
-  // }, [selectedAddons]);
-
   useEffect(() => {
     const requiredAddonCategories = validAddonCategories.filter(
       (item) => item.is_required
@@ -219,42 +173,12 @@ const MenuDetail = () => {
         {validMenu?.name}
       </Typography>
 
-      {validAddonCategories.length
-        ? validAddonCategories.map((item) => {
-            return (
-              <Box
-                key={item.id}
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 1,
-                }}
-              >
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography variant="h6" sx={{ textTransform: "capitalize" }}>
-                    {item.name}
-                  </Typography>
-                  <Chip label={item.is_required ? "required" : "optional"} />
-                </Box>
-                <FormControl sx={{ px: 2 }}>
-                  <RadioGroup
-                    aria-labelledby="demo-radio-buttons-group-label"
-                    defaultValue="female"
-                    name="radio-buttons-group"
-                  >
-                    {renderAddons(item)}
-                  </RadioGroup>
-                </FormControl>
-              </Box>
-            );
-          })
-        : ""}
+      <AddonCategories
+        validAddonCategories={validAddonCategories}
+        addons={addons}
+        selectedAddons={selectedAddons}
+        handleAddonSelect={handleAddonSelect}
+      />
       <QuantitySelector
         value={quantity}
         onIncrease={handleQuantityIncrease}
