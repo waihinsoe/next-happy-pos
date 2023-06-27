@@ -6,8 +6,10 @@ import { useRouter } from "next/router";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { OrderLine } from "@/typings/types";
+import { config } from "@/config/config";
 const Review = () => {
-  const { orderLines, isLoading, updateData } = useContext(OrderContext);
+  const { orderLines, isLoading, updateData, fetchData } =
+    useContext(OrderContext);
   const router = useRouter();
   const query = router.query;
   const { ...data } = useContext(OrderContext);
@@ -27,6 +29,7 @@ const Review = () => {
         {addons.map((addon) => {
           return (
             <Box
+              key={addon.id}
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -48,9 +51,30 @@ const Review = () => {
     });
     updateData({ ...data, orderLines: removingOrderLines });
   };
+
+  const comfirmOrder = async () => {
+    const { locationId, tableId } = query;
+    const isValid = locationId && tableId && orderLines.length;
+    if (!isValid) return alert("locationId and tableId are required.");
+    const response = await fetch(
+      `${config.orderApiBaseUrl}?locationId=${locationId}&tableId=${tableId}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderLines }),
+      }
+    );
+
+    if (response.ok) {
+      const responseJson = await response.json();
+      const order = responseJson.order;
+      fetchData();
+      router.push({ pathname: `/order/activeOrder/${order.id}`, query });
+    }
+  };
   if (!orderLines.length) return null;
   return (
-    <Box sx={{ display: "flex", justifyContent: "center" }}>
+    <Box sx={{ display: "flex", justifyContent: "center", p: 2 }}>
       <Box sx={{ width: { xs: "100%", md: "500px" } }}>
         <Typography variant="h5" sx={{ textAlign: "center", mb: 3 }}>
           Review Card
@@ -110,7 +134,9 @@ const Review = () => {
           );
         })}
         <Box sx={{ textAlign: "center" }}>
-          <Button variant="contained">Comfirm Order</Button>
+          <Button variant="contained" onClick={comfirmOrder}>
+            Comfirm Order
+          </Button>
         </Box>
       </Box>
     </Box>

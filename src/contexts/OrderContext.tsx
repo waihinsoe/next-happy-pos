@@ -9,6 +9,8 @@ import type {
   menu_categories as MenuCategory,
   menus_menu_categories_locations as MenuMenuCategoryLocation,
   menus_addon_categories as MenuAddonCategory,
+  orders as Order,
+  orderLines as DbOrderLine,
 } from "@prisma/client";
 import { config } from "../config/config";
 import { useRouter } from "next/router";
@@ -25,6 +27,8 @@ interface OrderContextType {
   isLoading: boolean;
   updateData: (value: any) => void;
   fetchData: () => void;
+  dbOrders: Order[];
+  dbOrderLines: DbOrderLine[];
   orderLines: OrderLine[];
 }
 
@@ -40,6 +44,8 @@ export const defaultOrderContext: OrderContextType = {
   isLoading: true,
   updateData: () => {},
   fetchData: () => {},
+  dbOrders: [],
+  dbOrderLines: [],
   orderLines: [],
 };
 

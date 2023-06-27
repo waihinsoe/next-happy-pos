@@ -1,11 +1,11 @@
-import { OrderContext } from "@/contexts/OrderContext";
-import { menu_categories as MenuCategory } from "@prisma/client";
-import { Box, Button, Tab, Tabs } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
-import { getMenusByMenuCategoryId } from "@/utils";
-import { useRouter } from "next/router";
 import MenuCard from "@/components/MenuCard";
 import ViewCardBar from "@/components/ViewCardBar";
+import { OrderContext } from "@/contexts/OrderContext";
+import { getMenusByMenuCategoryId } from "@/utils";
+import { Box, Tab, Tabs } from "@mui/material";
+import { menu_categories as MenuCategory } from "@prisma/client";
+import { useRouter } from "next/router";
+import { useContext, useEffect, useState } from "react";
 
 const Order = () => {
   const router = useRouter();
@@ -27,7 +27,7 @@ const Order = () => {
       selectedLocationId
     );
     return (
-      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, mt: 2 }}>
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, mt: 2, px: 2 }}>
         {validMenus.length ? (
           validMenus.map((menu) => {
             const href = { pathname: `/order/menus/${menu.id}`, query };

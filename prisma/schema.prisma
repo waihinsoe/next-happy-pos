@@ -123,10 +123,10 @@ model orderLines {
   id        Int    @id @default(autoincrement())
   orders_id Int
   menus_id  Int
-  addons_id Int
+  addons_id Int?
   orders    orders @relation(fields: [orders_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   menus     menus  @relation(fields: [menus_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  addons    addons @relation(fields: [addons_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  addons    addons? @relation(fields: [addons_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 enum OrderStatus {
