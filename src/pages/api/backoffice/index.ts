@@ -236,7 +236,23 @@ export default async function handler(
         is_archived: false,
       },
     });
+    const orders = await prisma.orders.findMany({
+      where: {
+        locations_id: {
+          in: locationIds,
+        },
+      },
+    });
 
+    const orderIds = orders.map((order) => order.id);
+
+    const orderLines = await prisma.orderLines.findMany({
+      where: {
+        orders_id: {
+          in: orderIds,
+        },
+      },
+    });
     res.send({
       menus,
       menuCategories,
@@ -245,6 +261,8 @@ export default async function handler(
       locations,
       menusAddonCategories,
       menusMenuCategoriesLocations,
+      orders,
+      orderLines,
       company,
       tables,
     });

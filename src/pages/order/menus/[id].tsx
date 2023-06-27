@@ -1,25 +1,11 @@
+import QuantitySelector from "@/components/QuantitySelector";
 import { OrderContext } from "@/contexts/OrderContext";
-import type {
-  addon_categories as AddonCategory,
-  addons as Addon,
-} from "@prisma/client";
 import { getAddonCategoriesByMenuId } from "@/utils";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import {
-  Box,
-  Button,
-  Checkbox,
-  Chip,
-  FormControl,
-  FormControlLabel,
-  IconButton,
-  Radio,
-  RadioGroup,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
+import type { addons as Addon } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
-import QuantitySelector from "@/components/QuantitySelector";
 
 import AddonCategories from "@/components/AddonCategories";
 
@@ -160,39 +146,41 @@ const MenuDetail = () => {
   }, [selectedAddons, validAddonCategories]);
 
   return (
-    <Box
-      sx={{
-        p: 3,
-        display: "flex",
-        flexDirection: "column",
-        gap: 2,
-        width: 400,
-      }}
-    >
-      <Typography variant="h5" sx={{ textTransform: "capitalize" }}>
-        {validMenu?.name}
-      </Typography>
-
-      <AddonCategories
-        validAddonCategories={validAddonCategories}
-        addons={addons}
-        selectedAddons={selectedAddons}
-        handleAddonSelect={handleAddonSelect}
-      />
-      <QuantitySelector
-        value={quantity}
-        onIncrease={handleQuantityIncrease}
-        onDecrease={handleQuantityDecrease}
-      />
-      <Button
-        variant="contained"
-        sx={{ width: "fit-content", margin: "0 auto", mt: 2 }}
-        disabled={isDisabled}
-        onClick={updateOrderLine ? updateCart : addToCart}
-        startIcon={<AddShoppingCartIcon />}
+    <Box sx={{ display: "flex", justifyContent: "center" }}>
+      <Box
+        sx={{
+          p: 3,
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          width: { xs: "100%", md: "500px" },
+        }}
       >
-        {updateOrderLine ? "update" : "Add to cart"}
-      </Button>
+        <Typography variant="h5" sx={{ textTransform: "capitalize" }}>
+          {validMenu?.name}
+        </Typography>
+
+        <AddonCategories
+          validAddonCategories={validAddonCategories}
+          addons={addons}
+          selectedAddons={selectedAddons}
+          handleAddonSelect={handleAddonSelect}
+        />
+        <QuantitySelector
+          value={quantity}
+          onIncrease={handleQuantityIncrease}
+          onDecrease={handleQuantityDecrease}
+        />
+        <Button
+          variant="contained"
+          sx={{ width: "fit-content", margin: "0 auto", mt: 2 }}
+          disabled={isDisabled}
+          onClick={updateOrderLine ? updateCart : addToCart}
+          startIcon={<AddShoppingCartIcon />}
+        >
+          {updateOrderLine ? "update" : "Add to cart"}
+        </Button>
+      </Box>
     </Box>
   );
 };

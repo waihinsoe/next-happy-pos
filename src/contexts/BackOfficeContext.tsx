@@ -9,6 +9,8 @@ import type {
   menus_menu_categories_locations as MenuMenuCategoryLocation,
   menus_addon_categories as MenuAddonCategory,
   tables as Table,
+  orders as Order,
+  orderLines as OrderLine,
 } from "@prisma/client";
 import { config } from "../config/config";
 import { useSession } from "next-auth/react";
@@ -24,6 +26,8 @@ interface BackOfficeContextType {
   isLoading: boolean;
   company: Company | null;
   tables: Table[];
+  orders: Order[];
+  orderLines: OrderLine[];
   updateData: (value: any) => void;
   fetchData: () => void;
 }
@@ -39,6 +43,8 @@ export const defaultBackOfficeContext: BackOfficeContextType = {
   company: null,
   isLoading: true,
   tables: [],
+  orders: [],
+  orderLines: [],
   updateData: () => {},
   fetchData: () => {},
 };
