@@ -6,8 +6,8 @@ import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 const ViewCardBar = () => {
   const router = useRouter();
   const query = router.query;
-  const { orderLines } = useContext(OrderContext);
-  const cartText = `You have ${orderLines.length} item in cart.`;
+  const { cart } = useContext(OrderContext);
+  const cartText = `You have ${cart.length} item in cart.`;
   return (
     <Box
       sx={{

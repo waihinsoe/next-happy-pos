@@ -4,12 +4,12 @@ import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 
 const activeOrder = () => {
-  const { dbOrders, dbOrderLines } = useContext(OrderContext);
+  const { orders, orderLines } = useContext(OrderContext);
   const router = useRouter();
   const query = router.query;
   const orderId = query.id;
 
-  const order = dbOrders.find((item) => item.id === Number(orderId));
+  const order = orders.find((item) => item.id === Number(orderId));
 
   useEffect(() => {
     if (!order) {
@@ -22,6 +22,7 @@ const activeOrder = () => {
   return (
     <Box>
       <Typography>orderId :{order.id}</Typography>
+      <Typography>orderPrice :{order.price}</Typography>
     </Box>
   );
 };

@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { OrderLine } from "../typings/types";
+import { CartItem } from "../typings/types";
 import type {
   addons as Addon,
   addon_categories as AddonCategory,
@@ -27,9 +27,9 @@ interface OrderContextType {
   isLoading: boolean;
   updateData: (value: any) => void;
   fetchData: () => void;
-  dbOrders: Order[];
-  dbOrderLines: DbOrderLine[];
-  orderLines: OrderLine[];
+  orders: Order[];
+  orderLines: DbOrderLine[];
+  cart: CartItem[];
 }
 
 export const defaultOrderContext: OrderContextType = {
@@ -44,9 +44,9 @@ export const defaultOrderContext: OrderContextType = {
   isLoading: true,
   updateData: () => {},
   fetchData: () => {},
-  dbOrders: [],
-  dbOrderLines: [],
+  orders: [],
   orderLines: [],
+  cart: [],
 };
 
 export const OrderContext =

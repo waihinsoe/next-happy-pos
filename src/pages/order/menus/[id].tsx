@@ -16,7 +16,7 @@ const MenuDetail = () => {
     menus,
     addons,
     updateData,
-    orderLines,
+    cart,
   } = useContext(OrderContext);
   const { ...data } = useContext(OrderContext);
   const router = useRouter();
@@ -33,9 +33,7 @@ const MenuDetail = () => {
     addonCategories
   );
 
-  const updateOrderLine = orderLines.find(
-    (item) => item.menu.id === Number(menuId)
-  );
+  const updateOrderLine = cart.find((item) => item.menu.id === Number(menuId));
 
   useEffect(() => {
     if (updateOrderLine) {
@@ -48,8 +46,8 @@ const MenuDetail = () => {
   const addToCart = () => {
     updateData({
       ...data,
-      orderLines: [
-        ...data.orderLines,
+      cart: [
+        ...data.cart,
         { menu: validMenu, addons: selectedAddons, quantity },
       ],
     });
@@ -59,16 +57,16 @@ const MenuDetail = () => {
 
   const updateCart = () => {
     if (updateOrderLine) {
-      const otherOrderLines = orderLines.filter(
+      const otherCartItems = cart.filter(
         (item) => item.menu.id !== Number(menuId)
       );
 
-      const newOrderLines = [
-        ...otherOrderLines,
-        { ...updateOrderLine, addons: selectedAddons, quantity },
+      const newCartItems = [
+        ...otherCartItems,
+        { menu: updateOrderLine.menu, addons: selectedAddons, quantity },
       ];
 
-      updateData({ ...data, orderLines: newOrderLines });
+      updateData({ ...data, cart: newCartItems });
       router.push({ pathname: "/order/cart", query });
     }
   };

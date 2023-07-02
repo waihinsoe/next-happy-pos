@@ -1,7 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { prisma } from "@/utils/db";
-import { OrderLine } from "@/typings/types";
+import { CartItem } from "@/typings/types";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getCartTotalPrice } from "@/utils";
 
 export default async function handler(
   req: NextApiRequest,
@@ -106,24 +107,25 @@ export default async function handler(
       menusAddonCategories,
       addonCategories,
       menusMenuCategoriesLocations,
-      dbOrders: orders,
-      dbOrderLines: orderLines,
+      orders,
+      orderLines,
     });
   } else if (req.method === "POST") {
     const { locationId, tableId } = req.query;
-    const orderLines: OrderLine[] = req.body.orderLines;
+    const cart: CartItem[] = req.body.cart;
 
-    const isValid = locationId && tableId && orderLines.length;
+    const isValid = locationId && tableId && cart.length;
     if (!isValid) return res.send(400);
 
     const newOrder = await prisma.orders.create({
       data: {
         locations_id: Number(locationId),
         tables_id: Number(tableId),
+        price: getCartTotalPrice(cart),
       },
     });
 
-    orderLines.forEach(async (orderLine) => {
+    cart.forEach(async (orderLine) => {
       const menu = orderLine.menu;
       const hasAddons = orderLine.addons.length;
       if (hasAddons) {

@@ -1,4 +1,5 @@
 import { config } from "@/config/config";
+import { CartItem } from "@/typings/types";
 import type {
   menus as Menu,
   locations as Location,
@@ -6,6 +7,7 @@ import type {
   menus_addon_categories as MenuAddonCategory,
   addon_categories as AddonCategory,
   addons as Addon,
+  orderLines as OrderLine,
 } from "@prisma/client";
 export const getAccessToken = () => {
   if (typeof window === "undefined") return "";
@@ -90,4 +92,34 @@ export const getAddonsByLocationId = (
 
 export const getQrCodeUrl = (locationId: number, tableId: number) => {
   return `https://msquarefdc.sgp1.cdn.digitaloceanspaces.com/happy-pos/qrcode/wai-hin-soe/locationId-${locationId}-tableId-${tableId}.png`;
+};
+
+export const getNumberOfMenusByOrderId = (
+  orderId: number,
+  orderLines: OrderLine[]
+) => {
+  const validOrderLines = orderLines.filter(
+    (orderLine) => orderLine.orders_id === orderId
+  );
+
+  let menuIds: number[] = [];
+  validOrderLines.forEach((item) => {
+    const hasAdded = menuIds.find((menuId) => menuId === item.menus_id);
+    if (!hasAdded) return menuIds.push(item.menus_id);
+  });
+
+  return menuIds.length;
+};
+
+export const getCartTotalPrice = (cart: CartItem[]) => {
+  const totalPrice = cart.reduce((totalPrice, cartItem) => {
+    const menuPrice = cartItem.menu.price;
+    const addonPrice = cartItem.addons.reduce(
+      (addonTotal, addon) => addonTotal + addon.price,
+      0
+    );
+    totalPrice += (menuPrice + addonPrice) * cartItem.quantity;
+    return totalPrice;
+  }, 0);
+  return totalPrice;
 };

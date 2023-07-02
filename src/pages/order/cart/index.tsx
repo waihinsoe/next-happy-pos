@@ -5,22 +5,22 @@ import type { addons as Addon } from "@prisma/client";
 import { useRouter } from "next/router";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { OrderLine } from "@/typings/types";
+import { CartItem } from "@/typings/types";
 import { config } from "@/config/config";
+import { getCartTotalPrice } from "@/utils";
 const Review = () => {
-  const { orderLines, isLoading, updateData, fetchData } =
-    useContext(OrderContext);
+  const { cart, isLoading, updateData, fetchData } = useContext(OrderContext);
   const router = useRouter();
   const query = router.query;
   const { ...data } = useContext(OrderContext);
 
   useEffect(() => {
-    if (!isLoading && !orderLines.length) {
+    if (!isLoading && !cart.length) {
       const isValid = query.locationId && query.tableId;
 
       isValid && router.push({ pathname: "/order", query });
     }
-  }, [orderLines, query]);
+  }, [cart, query]);
 
   const renderAddons = (addons: Addon[]) => {
     if (!addons.length) return;
@@ -45,23 +45,23 @@ const Review = () => {
     );
   };
 
-  const removeOrderLineFromCart = (orderLine: OrderLine) => {
-    const removingOrderLines = orderLines.filter((item) => {
-      return item.menu.id !== orderLine.menu.id;
+  const removeCartItem = (cartItem: CartItem) => {
+    const removingCartItem = cart.filter((item) => {
+      return item.menu.id !== cartItem.menu.id;
     });
-    updateData({ ...data, orderLines: removingOrderLines });
+    updateData({ ...data, cart: removingCartItem });
   };
 
   const comfirmOrder = async () => {
     const { locationId, tableId } = query;
-    const isValid = locationId && tableId && orderLines.length;
+    const isValid = locationId && tableId && cart.length;
     if (!isValid) return alert("locationId and tableId are required.");
     const response = await fetch(
       `${config.orderApiBaseUrl}?locationId=${locationId}&tableId=${tableId}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orderLines }),
+        body: JSON.stringify({ cart }),
       }
     );
 
@@ -72,15 +72,15 @@ const Review = () => {
       router.push({ pathname: `/order/activeOrder/${order.id}`, query });
     }
   };
-  if (!orderLines.length) return null;
+  if (!cart.length) return null;
   return (
     <Box sx={{ display: "flex", justifyContent: "center", p: 2 }}>
       <Box sx={{ width: { xs: "100%", md: "500px" } }}>
         <Typography variant="h5" sx={{ textAlign: "center", mb: 3 }}>
           Review Card
         </Typography>
-        {orderLines.map((orderLine, index) => {
-          const { menu, addons, quantity } = orderLine;
+        {cart.map((cartItem, index) => {
+          const { menu, addons, quantity } = cartItem;
           return (
             <Box key={index}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -117,13 +117,13 @@ const Review = () => {
               >
                 <DeleteIcon
                   sx={{ mr: 2, cursor: "pointer" }}
-                  onClick={() => removeOrderLineFromCart(orderLine)}
+                  onClick={() => removeCartItem(cartItem)}
                 />
                 <EditIcon
                   sx={{ cursor: "pointer" }}
                   onClick={() => {
                     router.push({
-                      pathname: `menus/${orderLine.menu.id}`,
+                      pathname: `menus/${cartItem.menu.id}`,
                       query,
                     });
                   }}
@@ -133,6 +133,10 @@ const Review = () => {
             </Box>
           );
         })}
+
+        <Box sx={{ textAlign: "right", mb: 2 }}>
+          <Typography>Total : {getCartTotalPrice(cart)}</Typography>
+        </Box>
         <Box sx={{ textAlign: "center" }}>
           <Button variant="contained" onClick={comfirmOrder}>
             Comfirm Order
