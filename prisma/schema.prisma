@@ -135,6 +135,7 @@ enum OrderStatus {
   PENDING
   PREPARING
   COMPLETE
+  REJECTED
 }
 
 enum Role {
