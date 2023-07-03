@@ -47,7 +47,7 @@ const Review = () => {
 
   const removeCartItem = (cartItem: CartItem) => {
     const removingCartItem = cart.filter((item) => {
-      return item.menu.id !== cartItem.menu.id;
+      return item.id !== cartItem.id;
     });
     updateData({ ...data, cart: removingCartItem });
   };
@@ -123,7 +123,7 @@ const Review = () => {
                   sx={{ cursor: "pointer" }}
                   onClick={() => {
                     router.push({
-                      pathname: `menus/${cartItem.menu.id}`,
+                      pathname: `updateMenu/${cartItem.id}`,
                       query,
                     });
                   }}
