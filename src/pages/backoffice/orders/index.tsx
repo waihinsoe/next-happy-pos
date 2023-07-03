@@ -27,65 +27,28 @@ interface Props {
 
 const Row = ({ order, orderLines, menus, addons }: Props) => {
   const [open, setOpen] = useState(false);
-  const renderMenusForOrder = (orderId: number, orderLines: OrderLine[]) => {
-    const validOrderLines = orderLines.filter(
-      (item) => item.orders_id === orderId
-    );
-    const validMenuIds = [
-      ...new Set(validOrderLines.map((orderLine) => orderLine.menus_id)),
-    ];
-    const validMenusAndAddons = validMenuIds.map((menuId) => {
-      const menu = menus.find((item) => item.id === menuId);
-      if (menu) {
-        const validAddonIds = orderLines
-          .filter((orderLine) => orderLine.menus_id === menu.id)
-          .map((item) => item.addons_id);
-        const validAddons = addons.filter((item) =>
-          validAddonIds.includes(item.id)
-        );
-        return { menu, validAddons };
-      }
-    }) as {
-      menu: Menu;
-      validAddons: Addon[];
-    }[]; //for type
-    return (
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        {validMenusAndAddons.length &&
-          validMenusAndAddons.map((item) => {
-            const { menu, validAddons } = item;
-            return (
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: 4,
-                  alignItems: "center",
-                }}
-              >
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "start",
-                  }}
-                >
-                  <Avatar
-                    alt="menu"
-                    src={menu.asset_url || ""}
-                    sx={{ width: 56, height: 56 }}
-                  />
-                  <Typography variant="body2">{menu.name}</Typography>
-                </Box>
-                {validAddons.length
-                  ? validAddons.map((addon) => {
-                      return <Box>{addon.name}</Box>;
-                    })
-                  : "empty addons"}
-              </Box>
-            );
-          })}
-      </Box>
-    );
+  const getMenusAddonsFromOrder = () => {
+    const orderLineMenuIds = orderLines.map((item) => item.menus_id);
+    const menuIds: number[] = [];
+    orderLineMenuIds.map((item) => {
+      const hasAdded = menuIds.includes(item);
+      if (!hasAdded) menuIds.push(item);
+    });
+
+    const orderLineMenus = menuIds.map((menuId) => {
+      const orderLineAddonIds = orderLines
+        .filter((item) => item.menus_id === menuId)
+        .map((item) => item.addons_id) as number[];
+      const orderLineAddons = addons.filter((addon) =>
+        orderLineAddonIds.includes(addon.id)
+      );
+      const orderLineMenu = menus.find((menu) => menu.id === menuId);
+      return { menu: orderLineMenu, addons: orderLineAddons };
+    });
+
+    console.log("orderLineMenus :", orderLineMenus);
+
+    return <Box>Hello</Box>;
   };
   return (
     <>
@@ -97,7 +60,7 @@ const Row = ({ order, orderLines, menus, addons }: Props) => {
         </TableCell>
         <TableCell align="right">{order.id}</TableCell>
         <TableCell align="right">
-          {getNumberOfMenusByOrderId(Number(order.id), orderLines)}
+          {getNumberOfMenusByOrderId(order.id, orderLines)}
         </TableCell>
         <TableCell align="right">{order.tables_id}</TableCell>
         <TableCell align="right">{order.is_paid ? "Yes" : "No"}</TableCell>
@@ -105,8 +68,8 @@ const Row = ({ order, orderLines, menus, addons }: Props) => {
       </TableRow>
       <TableRow>
         <TableCell sx={{ py: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit sx={{ py: 2 }}>
-            {renderMenusForOrder(order.id, orderLines)}
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            {getMenusAddonsFromOrder()}
           </Collapse>
         </TableCell>
       </TableRow>
@@ -121,6 +84,10 @@ const Orders = () => {
   const currentLocationOrders = orders.filter(
     (order) => order.locations_id === Number(selectedLocationId)
   );
+
+  const getOrderLinesByOrderId = (orderId: number) => {
+    return orderLines.filter((orderLine) => orderLine.orders_id === orderId);
+  };
 
   return (
     <Layout title="Orders">
@@ -141,7 +108,7 @@ const Orders = () => {
               <Row
                 order={order}
                 key={order.id}
-                orderLines={orderLines}
+                orderLines={getOrderLinesByOrderId(order.id)}
                 menus={menus}
                 addons={addons}
               />
