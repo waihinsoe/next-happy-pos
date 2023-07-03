@@ -126,3 +126,9 @@ export const getCartTotalPrice = (cart: CartItem[]) => {
 
 export const generateRandomId = () =>
   (Math.random() + 1).toString(36).substring(7);
+
+export const getMenuByMenuId = (menus: Menu[], menuId: number) =>
+  menus.find((menu) => menu.id === menuId);
+
+export const getAddonByAddonId = (addons: Addon[], addonId: number) =>
+  addons.find((addon) => addon.id === addonId);
