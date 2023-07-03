@@ -112,14 +112,14 @@ export const getNumberOfMenusByOrderId = (
 };
 
 export const getCartTotalPrice = (cart: CartItem[]) => {
-  const totalPrice = cart.reduce((totalPrice, cartItem) => {
-    const menuPrice = cartItem.menu.price;
-    const addonPrice = cartItem.addons.reduce(
-      (addonTotal, addon) => addonTotal + addon.price,
+  const totalPrice = cart.reduce((prev, curr) => {
+    const menuPrice = curr.menu.price;
+    const totalAddonPrice = curr.addons.reduce(
+      (addonPrice, addon) => addonPrice + addon.price,
       0
     );
-    totalPrice += (menuPrice + addonPrice) * cartItem.quantity;
-    return totalPrice;
+    prev += (menuPrice + totalAddonPrice) * curr.quantity;
+    return prev;
   }, 0);
   return totalPrice;
 };

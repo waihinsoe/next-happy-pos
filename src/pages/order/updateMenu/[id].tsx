@@ -26,16 +26,15 @@ const UpdateMenu = () => {
   const [quantity, setQuantity] = useState(1);
   const [isDisabled, setIsDisabled] = useState(true);
   const cartItem = cart.find((item) => item.id === cartItemId);
-  const menu = menus.find((item) => item.id === cartItem?.menu.id);
-  const validAddonCategories = menu
+  const validAddonCategories = cartItem
     ? getAddonCategoriesByMenuId(
         menusAddonCategories,
-        String(menu.id),
+        String(cartItem.menu.id),
         addonCategories
       )
     : [];
   const updateCart = () => {
-    if (!cartItem || !menu) return;
+    if (!cartItem) return;
     const otherCartItems = cart.filter((item) => item.id !== cartItem.id);
 
     const newCartItems = [
@@ -138,7 +137,7 @@ const UpdateMenu = () => {
         }}
       >
         <Typography variant="h5" sx={{ textTransform: "capitalize" }}>
-          {menu?.name}
+          {cartItem?.menu?.name}
         </Typography>
 
         <AddonCategories
