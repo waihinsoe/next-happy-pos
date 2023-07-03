@@ -1,5 +1,7 @@
 import Layout from "@/components/Layout";
+import { config } from "@/config/config";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
+import { OrderContext } from "@/contexts/OrderContext";
 import { getNumberOfMenusByOrderId, getSelectedLocationId } from "@/utils";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -12,6 +14,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  SelectChangeEvent,
   Typography,
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
@@ -29,6 +32,7 @@ import {
   type addon_categories as AddonCategory,
   OrderStatus,
 } from "@prisma/client";
+import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 interface Props {
   order: Order;
@@ -39,6 +43,8 @@ interface Props {
 }
 
 const Row = ({ order, orderLines, menus, addons, addonCategories }: Props) => {
+  const { fetchData } = useContext(BackOfficeContext);
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const renderMenusAddonsFromOrder = () => {
     const orderLineMenuIds = orderLines.map((item) => item.menus_id);
@@ -102,11 +108,10 @@ const Row = ({ order, orderLines, menus, addons, addonCategories }: Props) => {
 
       return { menu: orderLineMenu, status, addonsWithCategories, quantity };
     });
-    console.log(orderLineMenus);
     return (
-      <Box sx={{ display: "flex", flexWrap: "warp", gap: 2 }}>
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
         {orderLineMenus.map((item) => (
-          <Box>
+          <Box key={item.menu?.id}>
             <Paper sx={{ width: 250, height: 300, p: 2 }} elevation={3}>
               <Box
                 sx={{
@@ -143,7 +148,20 @@ const Row = ({ order, orderLines, menus, addons, addonCategories }: Props) => {
                     </Typography>
                   </Box>
                   <Divider sx={{ my: 1 }} />
-                  <Box sx={{ maxHeight: "180px", overflow: "scroll" }}>
+                  <Box
+                    sx={{
+                      height: "150px",
+                      overflowY: "scroll",
+                      "&::-webkit-scrollbar": {
+                        width: 7,
+                      },
+                      "&::-webkit-scrollbar-track": {},
+                      "&::-webkit-scrollbar-thumb": {
+                        backgroundColor: "#1B9C85",
+                        borderRadius: 2,
+                      },
+                    }}
+                  >
                     {Object.keys(item.addonsWithCategories).map(
                       (addonCategoryId) => {
                         const addonCategory = addonCategories.find(
@@ -187,7 +205,13 @@ const Row = ({ order, orderLines, menus, addons, addonCategories }: Props) => {
                   >
                     <FormControl sx={{ width: "100%" }}>
                       <InputLabel id="status">Status</InputLabel>
-                      <Select value={item.status} label="Status">
+                      <Select
+                        value={item.status}
+                        label="Status"
+                        onChange={(evt) =>
+                          handleUpdateOrderStatus(evt, item.menu?.id)
+                        }
+                      >
                         <MenuItem value={OrderStatus.PENDING}>Pending</MenuItem>
                         <MenuItem value={OrderStatus.PREPARING}>
                           Preparing
@@ -206,6 +230,25 @@ const Row = ({ order, orderLines, menus, addons, addonCategories }: Props) => {
         ))}
       </Box>
     );
+  };
+
+  const handleUpdateOrderStatus = async (
+    evt: SelectChangeEvent<"PENDING" | "PREPARING" | "COMPLETE" | "REJECTED">,
+    menuId: number | undefined
+  ) => {
+    const orderId = order.id;
+    const isValid = orderId && menuId;
+
+    if (!isValid) return;
+
+    const response = await fetch(`${config.backOfficeApiBaseUrl}/orderLines`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ orderId, menuId, status: evt.target.value }),
+    });
+    if (response.ok) {
+      fetchData();
+    }
   };
   return (
     <>
