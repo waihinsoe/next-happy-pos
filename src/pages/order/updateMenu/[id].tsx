@@ -1,53 +1,50 @@
+import AddonCategories from "@/components/AddonCategories";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+
 import QuantitySelector from "@/components/QuantitySelector";
 import { OrderContext } from "@/contexts/OrderContext";
-import { generateRandomId, getAddonCategoriesByMenuId } from "@/utils";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import { Box, Button, Typography } from "@mui/material";
 import type { addons as Addon } from "@prisma/client";
+import { getAddonCategoriesByMenuId } from "@/utils";
+import { Box, Button, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 
-import AddonCategories from "@/components/AddonCategories";
-
-const MenuDetail = () => {
-  const {
-    menusAddonCategories,
-    addonCategories,
-    menus,
-    addons,
-    updateData,
-    cart,
-  } = useContext(OrderContext);
-  const { ...data } = useContext(OrderContext);
+const UpdateMenu = () => {
   const router = useRouter();
   const query = router.query;
-  const menuId = query.id as string;
-  const [selectedAddons, setSelectedAddons] = useState<Addon[]>([]);
-  const [isDisabled, setIsDisabled] = useState(false);
-  const [quantity, setQuantity] = useState(1);
-
-  const validMenu = menus.find((item) => item.id === Number(menuId));
-  const validAddonCategories = getAddonCategoriesByMenuId(
+  const cartItemId = query.id as string;
+  const {
+    cart,
+    menus,
+    addonCategories,
     menusAddonCategories,
-    menuId,
-    addonCategories
-  );
+    addons,
+    updateData,
+  } = useContext(OrderContext);
+  const { ...data } = useContext(OrderContext);
+  const [selectedAddons, setSelectedAddons] = useState<Addon[]>([]);
+  const [quantity, setQuantity] = useState(1);
+  const [isDisabled, setIsDisabled] = useState(true);
+  const cartItem = cart.find((item) => item.id === cartItemId);
+  const menu = menus.find((item) => item.id === cartItem?.menu.id);
+  const validAddonCategories = menu
+    ? getAddonCategoriesByMenuId(
+        menusAddonCategories,
+        String(menu.id),
+        addonCategories
+      )
+    : [];
+  const updateCart = () => {
+    if (!cartItem || !menu) return;
+    const otherCartItems = cart.filter((item) => item.id !== cartItem.id);
 
-  const addToCart = () => {
-    updateData({
-      ...data,
-      cart: [
-        ...data.cart,
-        {
-          id: generateRandomId(),
-          menu: validMenu,
-          addons: selectedAddons,
-          quantity,
-        },
-      ],
-    });
+    const newCartItems = [
+      ...otherCartItems,
+      { id: cartItemId, menu: cartItem.menu, addons: selectedAddons, quantity },
+    ];
 
-    router.push({ pathname: "/order", query });
+    updateData({ ...data, cart: newCartItems });
+    router.push({ pathname: "/order/cart", query });
   };
 
   const handleAddonSelect = (selected: boolean, addon: Addon) => {
@@ -84,7 +81,6 @@ const MenuDetail = () => {
       ]);
     }
   };
-
   const handleQuantityIncrease = () => {
     const newValue = quantity + 1;
     setQuantity(newValue);
@@ -122,6 +118,14 @@ const MenuDetail = () => {
     }
   }, [selectedAddons, validAddonCategories]);
 
+  useEffect(() => {
+    if (cartItem) {
+      const alreadySelectedAddons = cartItem.addons;
+      setSelectedAddons(alreadySelectedAddons);
+      setQuantity(cartItem.quantity);
+    }
+  }, [cartItem]);
+
   return (
     <Box sx={{ display: "flex", justifyContent: "center" }}>
       <Box
@@ -134,7 +138,7 @@ const MenuDetail = () => {
         }}
       >
         <Typography variant="h5" sx={{ textTransform: "capitalize" }}>
-          {validMenu?.name}
+          {menu?.name}
         </Typography>
 
         <AddonCategories
@@ -152,14 +156,14 @@ const MenuDetail = () => {
           variant="contained"
           sx={{ width: "fit-content", margin: "0 auto", mt: 2 }}
           disabled={isDisabled}
-          onClick={addToCart}
+          onClick={updateCart}
           startIcon={<AddShoppingCartIcon />}
         >
-          Add to cart
+          update
         </Button>
       </Box>
     </Box>
   );
 };
 
-export default MenuDetail;
+export default UpdateMenu;
