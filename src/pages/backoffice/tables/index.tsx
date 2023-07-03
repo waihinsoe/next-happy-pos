@@ -1,11 +1,14 @@
 import Layout from "@/components/Layout";
+import TableBarIcon from "@mui/icons-material/TableBar";
+
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import { getSelectedLocationId } from "@/utils";
-import { Box, Button, Paper, Typography } from "@mui/material";
-import Link from "next/link";
+import { Box, Button } from "@mui/material";
+
 import { useContext, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import NewTable from "./NewTable";
+import ItemCard from "@/components/ItemCard";
 
 const Tables = () => {
   const { tables } = useContext(BackOfficeContext);
@@ -45,27 +48,16 @@ const Tables = () => {
         <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
           {validTables.length > 0 &&
             validTables.map((table) => (
-              <Link
-                href={`/backoffice/tables/${table.id}`}
+              <ItemCard
                 key={table.id}
-                style={{ textDecoration: "none", color: "#333333" }}
-              >
-                <Paper
-                  sx={{
-                    width: 150,
-                    height: 150,
-                    borderRadius: 2,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    cursor: "pointer",
-                    textAlign: "center",
-                  }}
-                  elevation={2}
-                >
-                  <Typography sx={{ mt: 2 }}>{table.name}</Typography>
-                </Paper>
-              </Link>
+                icon={
+                  <TableBarIcon
+                    sx={{ fontSize: "60px", mb: 1.5, color: "#1B9C85" }}
+                  />
+                }
+                href={`/backoffice/tables/${table.id}`}
+                title={table.name}
+              />
             ))}
         </Box>
       </Box>

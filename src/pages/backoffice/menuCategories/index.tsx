@@ -1,4 +1,6 @@
 import { Box, Button, Paper, Typography } from "@mui/material";
+import CategoryIcon from "@mui/icons-material/Category";
+
 import { useContext, useState } from "react";
 import Link from "next/link";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
@@ -7,6 +9,7 @@ import AddIcon from "@mui/icons-material/Add";
 import NewMenuCategory from "./NewMenuCategory";
 import { getSelectedLocationId } from "@/utils";
 import { config } from "@/config/config";
+import ItemCard from "@/components/ItemCard";
 
 const MenuCategories = () => {
   const { menuCategories, menusMenuCategoriesLocations, fetchData } =
@@ -78,34 +81,17 @@ const MenuCategories = () => {
         <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
           {filteredMenuCategories.length > 0 &&
             filteredMenuCategories.map((filteredMenuCategory) => (
-              <Link
-                href={`/backoffice/menuCategories/${filteredMenuCategory.id}`}
+              <ItemCard
                 key={filteredMenuCategory.id}
-                style={{ textDecoration: "none", color: "#333333" }}
-              >
-                <Paper elevation={2}>
-                  <Box
-                    sx={{
-                      width: 150,
-                      height: 150,
-                      borderRadius: 2,
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "flex-end",
-                      alignItems: "flex-start",
-                      cursor: "pointer",
-                      p: 1,
-                    }}
-                  >
-                    <Typography sx={{ color: "#4C4C6D", fontWeight: "700" }}>
-                      {filteredMenuCategory.name}
-                    </Typography>
-                    <Typography sx={{ color: "#4C4C6D", fontSize: 14 }}>
-                      {getMenuCount(filteredMenuCategory.id)} menus
-                    </Typography>
-                  </Box>
-                </Paper>
-              </Link>
+                icon={
+                  <CategoryIcon
+                    sx={{ fontSize: "60px", mb: 1.5, color: "#1B9C85" }}
+                  />
+                }
+                href={`/backoffice/menuCategories/${filteredMenuCategory.id}`}
+                title={filteredMenuCategory.name}
+                subtitle={`${getMenuCount(filteredMenuCategory.id)} menus`}
+              />
             ))}
         </Box>
       </Box>

@@ -1,4 +1,6 @@
 import Layout from "@/components/Layout";
+import ClassIcon from "@mui/icons-material/Class";
+
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import { getSelectedLocationId } from "@/utils";
 import { Box, Button, Paper, Typography } from "@mui/material";
@@ -6,6 +8,7 @@ import Link from "next/link";
 import { useContext, useState } from "react";
 import NewAddonCategory from "./NewAddonCategory";
 import AddIcon from "@mui/icons-material/Add";
+import ItemCard from "@/components/ItemCard";
 
 const AddonCategories = () => {
   const [open, setOpen] = useState(false);
@@ -69,34 +72,15 @@ const AddonCategories = () => {
       </Box>
       <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
         {filteredAddonCategories.map((addonCategory) => (
-          <Link
-            href={`/backoffice/addonCategories/${addonCategory.id}`}
+          <ItemCard
             key={addonCategory.id}
-            style={{ textDecoration: "none", color: "black  " }}
-          >
-            <Paper elevation={2}>
-              <Box
-                sx={{
-                  width: 150,
-                  height: 150,
-                  borderRadius: 2,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "flex-end",
-                  alignItems: "flex-start",
-                  cursor: "pointer",
-                  p: 1,
-                }}
-              >
-                <Typography sx={{ color: "#4C4C6D", fontWeight: "700" }}>
-                  {addonCategory.name}
-                </Typography>
-                <Typography sx={{ color: "#4C4C6D", fontSize: 14 }}>
-                  {getAddonCount(addonCategory.id)} addon
-                </Typography>
-              </Box>
-            </Paper>
-          </Link>
+            icon={
+              <ClassIcon sx={{ fontSize: "60px", mb: 1.5, color: "#1B9C85" }} />
+            }
+            href={`/backoffice/addonCategories/${addonCategory.id}`}
+            title={addonCategory.name}
+            subtitle={`${getAddonCount(addonCategory.id)} adddons`}
+          />
         ))}
       </Box>
       <NewAddonCategory open={open} setOpen={setOpen} menuIds={menuIds} />
