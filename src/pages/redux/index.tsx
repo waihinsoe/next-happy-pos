@@ -1,6 +1,11 @@
 import { RootState } from "@/store";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { decrement, increment } from "@/store/slices/counterSlice";
+import {
+  decrement,
+  fetchContent,
+  increment,
+  incrementByAmount,
+} from "@/store/slices/counterSlice";
 import { Box, Button, Typography } from "@mui/material";
 
 const ReduxConcepts = () => {
@@ -16,8 +21,14 @@ const ReduxConcepts = () => {
         <Button variant="contained" onClick={() => dispatch(decrement())}>
           Decrese (-)
         </Button>
-        <Button variant="contained" onClick={() => dispatch(increment())}>
+        <Button
+          variant="contained"
+          onClick={() => dispatch(incrementByAmount(200))}
+        >
           Increse (+)
+        </Button>
+        <Button variant="contained" onClick={() => dispatch(fetchContent())}>
+          fetchContent
         </Button>
       </Box>
     </Box>
