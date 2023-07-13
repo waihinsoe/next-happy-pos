@@ -1,5 +1,6 @@
 import { RootState } from "@/store";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { fetchAppData } from "@/store/slices/appSlice";
 import {
   decrement,
   fetchContent,
@@ -7,11 +8,13 @@ import {
   incrementByAmount,
 } from "@/store/slices/counterSlice";
 import { Box, Button, Typography } from "@mui/material";
+import { useRouter } from "next/router";
 
 const ReduxConcepts = () => {
   const count = useAppSelector((state) => state.counter.value);
   const dispatch = useAppDispatch();
-
+  const router = useRouter();
+  const locationId = router.query.locationId as string;
   return (
     <Box>
       <Typography variant="h2" sx={{ textAlign: "center", mt: 5 }}>
@@ -27,7 +30,12 @@ const ReduxConcepts = () => {
         >
           Increse (+)
         </Button>
-        <Button variant="contained" onClick={() => dispatch(fetchContent())}>
+        <Button
+          variant="contained"
+          onClick={() => {
+            if (locationId) dispatch(fetchAppData(locationId));
+          }}
+        >
           fetchContent
         </Button>
       </Box>
