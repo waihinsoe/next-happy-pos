@@ -8,6 +8,8 @@ import { useRouter } from "next/router";
 import { getAddonCategoriesByMenuId, getSelectedLocationId } from "@/utils";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteDialog from "../../../components/DeleteDialog";
+import { useAppSelector } from "@/store/hook";
+import { appData } from "@/store/slices/appSlice";
 
 interface AutocompleteProps {
   id: number;
@@ -19,8 +21,8 @@ const EditMenu = () => {
   const menuId = router.query.id as string;
   const [open, setOpen] = useState(false);
   const selectedLocationId = getSelectedLocationId() as string;
-  const { menus, menusAddonCategories, addonCategories, fetchData } =
-    useContext(BackOfficeContext);
+  const { menus, menusAddonCategories, addonCategories } =
+    useAppSelector(appData);
   const [menu, setMenu] = useState<Menu>();
 
   const selectedAddonCategories = getAddonCategoriesByMenuId(
@@ -43,7 +45,7 @@ const EditMenu = () => {
 
   const updateMenu = async () => {
     const payload = { ...menu, addonCategoryIds };
-    const response = await fetch(`${config.backOfficeApiBaseUrl}/menus`, {
+    const response = await fetch(`${config.apiBaseUrl}/menus`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -51,20 +53,20 @@ const EditMenu = () => {
       body: JSON.stringify(payload),
     });
     if (response.ok) {
-      fetchData();
+      // fetchData();
     }
   };
 
   const handleDeleteMenu = async () => {
     if (!menuId) return alert("MenuId is required");
     const response = await fetch(
-      `${config.backOfficeApiBaseUrl}/menus?menuId=${menuId}`,
+      `${config.apiBaseUrl}/menus?menuId=${menuId}`,
       {
         method: "DELETE",
       }
     );
     if (response.ok) {
-      fetchData();
+      // fetchData();
       router.push("/backoffice/menus");
     }
   };

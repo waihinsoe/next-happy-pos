@@ -9,11 +9,13 @@ import { useContext, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import NewAddon from "./NewAddon";
 import ItemCard from "@/components/ItemCard";
+import { useAppSelector } from "@/store/hook";
+import { appData } from "@/store/slices/appSlice";
 
 const Addons = () => {
   const [open, setOpen] = useState(false);
   const { addons, menusMenuCategoriesLocations, menusAddonCategories } =
-    useContext(BackOfficeContext);
+    useAppSelector(appData);
 
   const validAddons = getAddonsByLocationId(
     menusMenuCategoriesLocations,

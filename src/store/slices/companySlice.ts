@@ -3,13 +3,13 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface CompanyState {
   isLoading: boolean;
-  company: Company | null;
+  item: Company | null;
   error: Error | null;
 }
 
 const initialState: CompanyState = {
   isLoading: true,
-  company: null,
+  item: null,
   error: null,
 };
 
@@ -17,10 +17,12 @@ export const companySlice = createSlice({
   name: "company",
   initialState,
   reducers: {
-    exampleAction: (state) => state,
+    setCompany: (state, action) => {
+      state.item = action.payload;
+    },
   },
 });
 
-export const { exampleAction } = companySlice.actions;
+export const { setCompany } = companySlice.actions;
 
 export default companySlice.reducer;

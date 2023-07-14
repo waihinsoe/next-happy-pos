@@ -3,13 +3,13 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface OrderLinesState {
   isLoading: boolean;
-  orderlines: OrderLine[];
+  items: OrderLine[];
   error: Error | null;
 }
 
 const initialState: OrderLinesState = {
   isLoading: true,
-  orderlines: [],
+  items: [],
   error: null,
 };
 
@@ -17,9 +17,11 @@ export const orderLinesSlice = createSlice({
   name: "orderLines",
   initialState,
   reducers: {
-    exampleAction: (state) => state,
+    setOrderLines: (state, action) => {
+      state.items = action.payload;
+    },
   },
 });
 
-export const { exampleAction } = orderLinesSlice.actions;
+export const { setOrderLines } = orderLinesSlice.actions;
 export default orderLinesSlice.reducer;

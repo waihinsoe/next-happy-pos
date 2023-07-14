@@ -8,9 +8,11 @@ import { useContext, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import NewLocation from "./NewLocation";
 import ItemCard from "@/components/ItemCard";
+import { useAppSelector } from "@/store/hook";
+import { appData } from "@/store/slices/appSlice";
 
 const Locations = () => {
-  const { locations } = useContext(BackOfficeContext);
+  const { locations } = useAppSelector(appData);
   const [open, setOpen] = useState(false);
   return (
     <Layout title="Locations">

@@ -3,13 +3,13 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface LocationsState {
   isLoading: boolean;
-  locations: Location[];
+  items: Location[];
   error: Error | null;
 }
 
 const initialState: LocationsState = {
   isLoading: true,
-  locations: [],
+  items: [],
   error: null,
 };
 
@@ -17,10 +17,12 @@ export const locationsSlice = createSlice({
   name: "locations",
   initialState,
   reducers: {
-    exampleAction: (state) => state,
+    setLocations: (state, action) => {
+      state.items = action.payload;
+    },
   },
 });
 
-export const { exampleAction } = locationsSlice.actions;
+export const { setLocations } = locationsSlice.actions;
 
 export default locationsSlice.reducer;

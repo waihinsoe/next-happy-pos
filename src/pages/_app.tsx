@@ -6,6 +6,9 @@ import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
 import { Provider } from "react-redux";
 import { store } from "@/store";
+import { getSelectedLocationId } from "@/utils";
+import { useEffect } from "react";
+import { fetchAppData } from "@/store/slices/appSlice";
 
 type CustomeAppProps = AppProps & { session: Session };
 
@@ -14,6 +17,11 @@ export default function App({
   pageProps,
   session,
 }: CustomeAppProps) {
+  const selectedLocationId = getSelectedLocationId() as string;
+
+  useEffect(() => {
+    store.dispatch(fetchAppData(selectedLocationId));
+  }, []);
   return (
     // <SessionProvider session={session}>
     //   <BackOfficeProvider>

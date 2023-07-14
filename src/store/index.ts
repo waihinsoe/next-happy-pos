@@ -1,5 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-import counterSlice from "./slices/counterSlice";
 import addonCategoriesSlice from "./slices/addonCategoriesSlice";
 import addonsSlice from "./slices/addonsSlice";
 import appSlice from "./slices/appSlice";
@@ -12,6 +11,7 @@ import menusMenuCategoriesLocationsSlice from "./slices/menusMenuCategoriesLocat
 import ordersSlice from "./slices/ordersSlice";
 import orderLinesSlice from "./slices/orderLinesSlice";
 import tablesSlice from "./slices/tablesSlice";
+import menusAddonCategoriesSlice from "./slices/menusAddonCategoriesSlice";
 // ...
 
 export const store = configureStore({
@@ -19,6 +19,7 @@ export const store = configureStore({
     app: appSlice,
     menuCategories: menuCategoriesSlice,
     menus: menusSlice,
+    menusAddonCategories: menusAddonCategoriesSlice,
     addonCategories: addonCategoriesSlice,
     addons: addonsSlice,
     locations: locationsSlice,
@@ -28,7 +29,6 @@ export const store = configureStore({
     orderLines: orderLinesSlice,
     tables: tablesSlice,
     company: companySlice,
-    counter: counterSlice,
   },
 });
 

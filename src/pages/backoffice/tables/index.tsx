@@ -9,9 +9,11 @@ import { useContext, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import NewTable from "./NewTable";
 import ItemCard from "@/components/ItemCard";
+import { useAppSelector } from "@/store/hook";
+import { appData } from "@/store/slices/appSlice";
 
 const Tables = () => {
-  const { tables } = useContext(BackOfficeContext);
+  const { tables } = useAppSelector(appData);
   const selectedLocationId = getSelectedLocationId() as string;
   const [open, setOpen] = useState(false);
   const validTables = tables.filter(

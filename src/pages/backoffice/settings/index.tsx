@@ -17,9 +17,11 @@ import Layout from "../../../components/Layout";
 import { config } from "../../../config/config";
 import { getSelectedLocationId } from "@/utils";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
+import { useAppSelector } from "@/store/hook";
+import { appData } from "@/store/slices/appSlice";
 
 const Settings = () => {
-  const { locations, company } = useContext(BackOfficeContext);
+  const { locations, company } = useAppSelector(appData);
   const [selectedLocation, setSelectedLocation] = useState<
     Location | undefined
   >();
@@ -51,7 +53,7 @@ const Settings = () => {
   if (!companyInfo) return null;
 
   const updateCompany = async () => {
-    const response = await fetch(`${config.backOfficeApiBaseUrl}/companies`, {
+    const response = await fetch(`${config.apiBaseUrl}/companies`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

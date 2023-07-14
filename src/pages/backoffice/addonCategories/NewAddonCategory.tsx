@@ -1,5 +1,7 @@
 import { config } from "@/config/config";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
+import { useAppSelector } from "@/store/hook";
+import { appData } from "@/store/slices/appSlice";
 import {
   Dialog,
   DialogTitle,
@@ -36,7 +38,7 @@ const MenuProps = {
 };
 
 const NewAddonCategory = ({ open, setOpen, menuIds }: Props) => {
-  const { menus, fetchData } = useContext(BackOfficeContext);
+  const { menus } = useAppSelector(appData);
   const [newAddonCategory, setNewAddonCategory] = useState({
     name: "",
     isRequired: false,
@@ -50,17 +52,14 @@ const NewAddonCategory = ({ open, setOpen, menuIds }: Props) => {
     const isValid = name.length > 0 && menuIds.length > 0;
     if (!isValid) return alert("name and menus are required!");
 
-    const response = await fetch(
-      `${config.backOfficeApiBaseUrl}/addonCategories`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newAddonCategory),
-      }
-    );
+    const response = await fetch(`${config.apiBaseUrl}/addonCategories`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newAddonCategory),
+    });
     if (response.ok) {
       setOpen(false);
-      fetchData();
+      // fetchData();
     }
   };
   return (

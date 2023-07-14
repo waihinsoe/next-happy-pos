@@ -24,7 +24,7 @@ interface Props {
 }
 
 const NewTable = ({ open, setOpen }: Props) => {
-  const { fetchData } = useContext(BackOfficeContext);
+  // const { fetchData } = useContext(BackOfficeContext);
   const selectedLocationId = getSelectedLocationId() as string;
   const [newTable, setNewTable] = useState({
     name: "",
@@ -36,7 +36,7 @@ const NewTable = ({ open, setOpen }: Props) => {
     const isValid = name && locationId;
     if (!isValid) return alert("Please enter table name");
 
-    const response = await fetch(`${config.backOfficeApiBaseUrl}/tables/`, {
+    const response = await fetch(`${config.apiBaseUrl}/tables/`, {
       method: "POST",
       body: JSON.stringify(newTable),
       headers: {
@@ -45,7 +45,7 @@ const NewTable = ({ open, setOpen }: Props) => {
     });
 
     if (response.ok) {
-      fetchData();
+      // fetchData();
       setNewTable({ ...newTable, name: "" });
       setOpen(false);
     }

@@ -10,10 +10,12 @@ import NewMenuCategory from "./NewMenuCategory";
 import { getSelectedLocationId } from "@/utils";
 import { config } from "@/config/config";
 import ItemCard from "@/components/ItemCard";
+import { useAppSelector } from "@/store/hook";
+import { appData } from "@/store/slices/appSlice";
 
 const MenuCategories = () => {
-  const { menuCategories, menusMenuCategoriesLocations, fetchData } =
-    useContext(BackOfficeContext);
+  const { menuCategories, menusMenuCategoriesLocations } =
+    useAppSelector(appData);
   const [open, setOpen] = useState(false);
   const selectedLocationId = getSelectedLocationId() as string;
 
@@ -41,13 +43,13 @@ const MenuCategories = () => {
 
   const handleDelete = async (menuCategoryId: number | undefined) => {
     const response = await fetch(
-      `${config.backOfficeApiBaseUrl}/menuCategories/?menuCategoryId=${menuCategoryId}`,
+      `${config.apiBaseUrl}/menuCategories/?menuCategoryId=${menuCategoryId}`,
       {
         method: "DELETE",
       }
     );
     if (response.ok) {
-      fetchData();
+      // fetchData();
     }
   };
   return (

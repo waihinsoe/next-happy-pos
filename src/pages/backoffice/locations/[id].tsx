@@ -7,33 +7,35 @@ import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import { config } from "@/config/config";
 import DeleteDialog from "@/components/DeleteDialog";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useAppSelector } from "@/store/hook";
+import { appData } from "@/store/slices/appSlice";
 
 const EditLocation = () => {
   const router = useRouter();
-  const { locations, fetchData } = useContext(BackOfficeContext);
+  const { locations } = useAppSelector(appData);
   const locationId = router.query.id as string;
   const [newLocation, setNewLocation] = useState<Partial<Location>>();
   const [open, setOpen] = useState(false);
   const updateLocation = async () => {
     if (!newLocation) return;
-    const response = await fetch(`${config.backOfficeApiBaseUrl}/locations`, {
+    const response = await fetch(`${config.apiBaseUrl}/locations`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newLocation),
     });
     if (response.ok) {
-      fetchData();
+      // fetchData();
     }
   };
   const handleDeleteLocation = async () => {
     const response = await fetch(
-      `${config.backOfficeApiBaseUrl}/locations?locationId=${locationId}`,
+      `${config.apiBaseUrl}/locations?locationId=${locationId}`,
       {
         method: "DELETE",
       }
     );
     if (response.ok) {
-      fetchData();
+      // fetchData();
       router.push("/backoffice/locations");
     }
   };

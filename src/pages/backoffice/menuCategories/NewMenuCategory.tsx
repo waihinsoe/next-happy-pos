@@ -16,6 +16,8 @@ import { useContext, useState } from "react";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import type { locations as Location } from "@prisma/client";
 import { config } from "@/config/config";
+import { useAppSelector } from "@/store/hook";
+import { appData } from "@/store/slices/appSlice";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -34,7 +36,7 @@ interface Props {
 }
 
 const NewMenuCategory = ({ open, setOpen }: Props) => {
-  const { locations, fetchData } = useContext(BackOfficeContext);
+  const { locations } = useAppSelector(appData);
 
   const [newMenuCategory, setNewMenuCategory] = useState({
     name: "",
@@ -45,19 +47,16 @@ const NewMenuCategory = ({ open, setOpen }: Props) => {
     if (!newMenuCategory.name || !newMenuCategory.locationIds.length)
       return alert("Please enter menu name and select locations");
 
-    const response = await fetch(
-      `${config.backOfficeApiBaseUrl}/menuCategories/`,
-      {
-        method: "POST",
-        body: JSON.stringify(newMenuCategory),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${config.apiBaseUrl}/menuCategories/`, {
+      method: "POST",
+      body: JSON.stringify(newMenuCategory),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     if (response.ok) {
-      fetchData();
+      // fetchData();
       setOpen(false);
     }
   };

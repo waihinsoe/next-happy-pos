@@ -14,10 +14,12 @@ import Layout from "@/components/Layout";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import NewMenu from "./NewMenu";
 import MenuCard from "@/components/MenuCard";
+import { useAppSelector } from "@/store/hook";
+import { appData } from "@/store/slices/appSlice";
 
 const Menus = () => {
   const [open, setOpen] = useState(false);
-  const { menus, menusMenuCategoriesLocations } = useContext(BackOfficeContext);
+  const { menus, menusMenuCategoriesLocations } = useAppSelector(appData);
   const selectedLocationId = getSelectedLocationId();
 
   const validMenuIds = menusMenuCategoriesLocations
