@@ -48,7 +48,7 @@ export default async function handler(
     const locationIds = locations.map((item: any) => item.id) as number[];
     const isValid = id && name && locations.length && locationIds.length;
 
-    if (!isValid) return res.send(400);
+    if (!isValid) return res.status(400).send("Bad request");
 
     //edit name
     await prisma.menu_categories.update({
