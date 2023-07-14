@@ -3,13 +3,13 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface CartState {
   isLoading: boolean;
-  cart: CartItem[];
+  items: CartItem[];
   error: Error | null;
 }
 
 const initialState: CartState = {
   isLoading: true,
-  cart: [],
+  items: [],
   error: null,
 };
 

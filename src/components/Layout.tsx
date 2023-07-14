@@ -3,6 +3,7 @@ import TopBar from "./TopBar";
 import SideBar from "./SideBar";
 import { useContext } from "react";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
+import { useAppSelector } from "@/store/hook";
 
 type Props = {
   children: string | JSX.Element | JSX.Element[];
@@ -10,7 +11,7 @@ type Props = {
 };
 
 const Layout = (props: Props) => {
-  const { isLoading } = useContext(BackOfficeContext);
+  const { isLoading } = useAppSelector((state) => state.app);
   if (isLoading) return null;
   return (
     <Box>

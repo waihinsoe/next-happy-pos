@@ -3,13 +3,13 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface AddonsState {
   isLoading: boolean;
-  addons: Addon[];
+  items: Addon[];
   error: Error | null;
 }
 
 const initialState: AddonsState = {
   isLoading: true,
-  addons: [],
+  items: [],
   error: null,
 };
 
@@ -18,7 +18,7 @@ export const addonsSlice = createSlice({
   initialState,
   reducers: {
     setAddons: (state, action) => {
-      state.addons = action.payload;
+      state.items = action.payload;
     },
   },
 });

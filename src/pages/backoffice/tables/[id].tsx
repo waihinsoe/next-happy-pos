@@ -7,36 +7,38 @@ import { useContext, useEffect, useState } from "react";
 import type { tables as Table } from "@prisma/client";
 import DeleteDialog from "@/components/DeleteDialog";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useAppSelector } from "@/store/hook";
+import { appData } from "@/store/slices/appSlice";
 
 const EditTable = () => {
   const router = useRouter();
-  const { tables, fetchData } = useContext(BackOfficeContext);
+  const { tables } = useAppSelector(appData);
   const tableId = router.query.id as string;
   const [newTable, setNewTable] = useState<Partial<Table>>();
   const [openDialog, setOpenDialog] = useState(false);
   const updateTable = async () => {
     if (!newTable) return alert("table name are required");
-    const response = await fetch(`${config.backOfficeApiBaseUrl}/tables`, {
+    const response = await fetch(`${config.apiBaseUrl}/tables`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newTable),
     });
 
     if (response.ok) {
-      fetchData();
+      // fetchData();
     }
   };
 
   const handleDeleteTable = async () => {
     if (!tableId) return;
     const response = await fetch(
-      `${config.backOfficeApiBaseUrl}/tables?tableId=${tableId}`,
+      `${config.apiBaseUrl}/tables?tableId=${tableId}`,
       {
         method: "DELETE",
       }
     );
     if (response.ok) {
-      fetchData();
+      // fetchData();
       router.push("/backoffice/tables");
     }
   };

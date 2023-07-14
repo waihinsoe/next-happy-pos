@@ -3,13 +3,13 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface MenusState {
   isLoading: boolean;
-  menus: Menu[];
+  items: Menu[];
   error: Error | null;
 }
 
 const initialState: MenusState = {
   isLoading: true,
-  menus: [],
+  items: [],
   error: null,
 };
 
@@ -17,10 +17,12 @@ export const menusSlice = createSlice({
   name: "menus",
   initialState,
   reducers: {
-    exampleAction: (state) => state,
+    setMenus: (state, action) => {
+      state.items = action.payload;
+    },
   },
 });
 
-export const { exampleAction } = menusSlice.actions;
+export const { setMenus } = menusSlice.actions;
 
 export default menusSlice.reducer;

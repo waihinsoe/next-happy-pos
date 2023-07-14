@@ -27,6 +27,8 @@ import { config } from "@/config/config";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { getSelectedLocationId } from "@/utils";
+import { useAppSelector } from "@/store/hook";
+import { appData } from "@/store/slices/appSlice";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -46,8 +48,8 @@ interface Props {
 
 const NewMenu = ({ open, setOpen }: Props) => {
   const selectedLocationId = getSelectedLocationId() as string;
-  const { fetchData, menusMenuCategoriesLocations, menuCategories } =
-    useContext(BackOfficeContext);
+  const { menusMenuCategoriesLocations, menuCategories } =
+    useAppSelector(appData);
   const [selectedMenuCategoryIds, setSelectedMenuCategoryIds] = useState<
     number[]
   >([]);
@@ -88,7 +90,7 @@ const NewMenu = ({ open, setOpen }: Props) => {
       if (menuImage) {
         const formData = new FormData();
         formData.append("files", menuImage as Blob);
-        const response = await fetch(`${config.backOfficeApiBaseUrl}/assets`, {
+        const response = await fetch(`${config.apiBaseUrl}/assets`, {
           method: "POST",
           body: formData,
         });
@@ -97,7 +99,7 @@ const NewMenu = ({ open, setOpen }: Props) => {
         menu.asset_url = assetUrl;
       }
       const response = await fetch(
-        `${config.backOfficeApiBaseUrl}/menus?locationId=${selectedLocationId}`,
+        `${config.apiBaseUrl}/menus?locationId=${selectedLocationId}`,
         {
           method: "POST",
           headers: {
@@ -117,7 +119,7 @@ const NewMenu = ({ open, setOpen }: Props) => {
           isAvailable: true,
         });
         setSelectedMenuCategoryIds([]);
-        fetchData();
+        // fetchData();
       }
 
       setIsLoading(false);

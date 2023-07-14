@@ -2,6 +2,8 @@ import Layout from "@/components/Layout";
 import { config } from "@/config/config";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import { OrderContext } from "@/contexts/OrderContext";
+import { useAppSelector } from "@/store/hook";
+import { appData } from "@/store/slices/appSlice";
 import { getNumberOfMenusByOrderId, getSelectedLocationId } from "@/utils";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -43,7 +45,7 @@ interface Props {
 }
 
 const Row = ({ order, orderLines, menus, addons, addonCategories }: Props) => {
-  const { fetchData } = useContext(BackOfficeContext);
+  // const { fetchData } = useContext(BackOfficeContext);
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const renderMenusAddonsFromOrder = () => {
@@ -241,13 +243,13 @@ const Row = ({ order, orderLines, menus, addons, addonCategories }: Props) => {
 
     if (!isValid) return;
 
-    const response = await fetch(`${config.backOfficeApiBaseUrl}/orderLines`, {
+    const response = await fetch(`${config.apiBaseUrl}/orderLines`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ orderId, menuId, status: evt.target.value }),
     });
     if (response.ok) {
-      fetchData();
+      // fetchDaeta();
     }
   };
   return (
@@ -279,7 +281,7 @@ const Row = ({ order, orderLines, menus, addons, addonCategories }: Props) => {
 
 const Orders = () => {
   const { orders, orderLines, menus, addonCategories, addons } =
-    useContext(BackOfficeContext);
+    useAppSelector(appData);
   const selectedLocationId = getSelectedLocationId() as string;
 
   const currentLocationOrders = orders.filter(

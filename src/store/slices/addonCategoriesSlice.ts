@@ -3,13 +3,13 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface AddonCategoriesState {
   isLoading: boolean;
-  addonCategories: AddonCategory[];
+  items: AddonCategory[];
   error: Error | null;
 }
 
 const initialState: AddonCategoriesState = {
   isLoading: true,
-  addonCategories: [],
+  items: [],
   error: null,
 };
 
@@ -17,10 +17,12 @@ export const addonCategoriesSlice = createSlice({
   name: "addonCategories",
   initialState,
   reducers: {
-    exampleAction: (state) => state,
+    setAddonCategories: (state, action) => {
+      state.items = action.payload;
+    },
   },
 });
 
-export const { exampleAction } = addonCategoriesSlice.actions;
+export const { setAddonCategories } = addonCategoriesSlice.actions;
 
 export default addonCategoriesSlice.reducer;

@@ -23,6 +23,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveMenuFromMenuCategory from "./RemoveMenuFromMenuCategory";
 import { menus as Menu } from "@prisma/client";
 import DeleteDialog from "../../../components/DeleteDialog";
+import { useAppSelector } from "@/store/hook";
+import { appData } from "@/store/slices/appSlice";
 const icon = (
   <CheckBoxOutlineBlankIcon fontSize="small" style={{ color: "lightblue" }} />
 );
@@ -39,13 +41,8 @@ const EditMenuCategory = () => {
   const router = useRouter();
   const menuCategoryId = router.query.id as string;
   const selectedLocationId = getSelectedLocationId() as string;
-  const {
-    menus,
-    fetchData,
-    menuCategories,
-    menusMenuCategoriesLocations,
-    locations,
-  } = useContext(BackOfficeContext);
+  const { menus, menuCategories, menusMenuCategoriesLocations, locations } =
+    useAppSelector(appData);
   const [open, setOpen] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const menuCategory = menuCategories.find(
@@ -88,24 +85,21 @@ const EditMenuCategory = () => {
   }, [menuCategory]);
 
   const updateMenuCategory = async () => {
-    const response = await fetch(
-      `${config.backOfficeApiBaseUrl}/menuCategories`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newMenuCategory),
-      }
-    );
+    const response = await fetch(`${config.apiBaseUrl}/menuCategories`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newMenuCategory),
+    });
     if (response.ok) {
-      fetchData();
+      // fetchData();
     }
   };
 
   const addMenuToMenuCategory = async () => {
     const response = await fetch(
-      `${config.backOfficeApiBaseUrl}/menuCategories/addMenu`,
+      `${config.apiBaseUrl}/menuCategories/addMenu`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -117,7 +111,7 @@ const EditMenuCategory = () => {
       }
     );
     if (response.ok) {
-      fetchData();
+      // fetchData();
       setSelectedMenu(null);
     }
   };
@@ -130,7 +124,7 @@ const EditMenuCategory = () => {
       locationId: selectedLocationId,
     });
     const response = await fetch(
-      `${config.backOfficeApiBaseUrl}/menuCategories/removeMenu`,
+      `${config.apiBaseUrl}/menuCategories/removeMenu`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -142,20 +136,20 @@ const EditMenuCategory = () => {
       }
     );
     if (response.ok) {
-      fetchData();
+      // fetchData();
       setOpen(false);
     }
   };
 
   const handleDeleteMenuCategory = async () => {
     const response = await fetch(
-      `${config.backOfficeApiBaseUrl}/menuCategories?menuCategoryId=${menuCategoryId}`,
+      `${config.apiBaseUrl}/menuCategories?menuCategoryId=${menuCategoryId}`,
       {
         method: "DELETE",
       }
     );
     if (response.ok) {
-      fetchData();
+      // fetchData();
       router.push("/backoffice/menuCategories");
     }
   };

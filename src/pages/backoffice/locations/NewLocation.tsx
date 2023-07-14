@@ -10,13 +10,15 @@ import { useContext, useState } from "react";
 import type { locations as Location } from "@prisma/client";
 import { config } from "@/config/config";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
+import { useAppSelector } from "@/store/hook";
+import { appData } from "@/store/slices/appSlice";
 interface Props {
   open: boolean;
   setOpen: (value: boolean) => void;
 }
 
 const NewLocation = ({ open, setOpen }: Props) => {
-  const { fetchData, company } = useContext(BackOfficeContext);
+  const { company } = useAppSelector(appData);
   const [newLocation, setNewLocation] = useState<Partial<Location>>();
 
   const createLocation = async () => {
@@ -27,7 +29,7 @@ const NewLocation = ({ open, setOpen }: Props) => {
     if (!isValid) return alert("name and address are required.");
 
     const response = await fetch(
-      `${config.backOfficeApiBaseUrl}/locations?companyId=${companyId}`,
+      `${config.apiBaseUrl}/locations?companyId=${companyId}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -35,7 +37,7 @@ const NewLocation = ({ open, setOpen }: Props) => {
       }
     );
     if (response.ok) {
-      fetchData();
+      // fetchData();
       setOpen(false);
     }
   };

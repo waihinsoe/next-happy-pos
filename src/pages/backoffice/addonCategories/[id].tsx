@@ -14,10 +14,12 @@ import { useContext, useEffect, useState } from "react";
 import type { addon_categories as AddonCategory } from "@prisma/client";
 import { config } from "@/config/config";
 import DeleteDialog from "@/components/DeleteDialog";
+import { useAppSelector } from "@/store/hook";
+import { appData } from "@/store/slices/appSlice";
 
 const EditAddonCategory = () => {
   const router = useRouter();
-  const { fetchData, addonCategories } = useContext(BackOfficeContext);
+  const { addonCategories } = useAppSelector(appData);
   const addonCategoryId = router.query.id as string;
   const [openDialog, setOpenDialog] = useState(false);
   const [newAddonCategory, setNewAddonCategory] =
@@ -27,29 +29,26 @@ const EditAddonCategory = () => {
     const isValid = newAddonCategory && newAddonCategory.name;
     if (!isValid) return alert("name is required");
 
-    const response = await fetch(
-      `${config.backOfficeApiBaseUrl}/addonCategories`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newAddonCategory),
-      }
-    );
+    const response = await fetch(`${config.apiBaseUrl}/addonCategories`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newAddonCategory),
+    });
 
     if (response.ok) {
-      fetchData();
+      // fetchData();
     }
   };
 
   const handleDeleteAddonCategory = async () => {
     const response = await fetch(
-      `${config.backOfficeApiBaseUrl}/addonCategories?id=${addonCategoryId}`,
+      `${config.apiBaseUrl}/addonCategories?id=${addonCategoryId}`,
       {
         method: "DELETE",
       }
     );
     if (response.ok) {
-      fetchData();
+      // fetchData();
       router.push("/backoffice/addonCategories");
     }
   };

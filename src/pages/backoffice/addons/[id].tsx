@@ -7,38 +7,40 @@ import type { addons as Addon } from "@prisma/client";
 import { config } from "@/config/config";
 import DeleteDialog from "@/components/DeleteDialog";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useAppSelector } from "@/store/hook";
+import { appData } from "@/store/slices/appSlice";
 
 const EditAddon = () => {
   const router = useRouter();
   const addonId = router.query.id as string;
-  const { addons, fetchData } = useContext(BackOfficeContext);
+  const { addons } = useAppSelector(appData);
   const [addon, setAddon] = useState<Addon>();
   const [open, setOpen] = useState(false);
 
   const updateAddon = async () => {
     const isValid = addon && addon.name;
     if (!isValid) return alert("Addon name is required.");
-    const response = await fetch(`${config.backOfficeApiBaseUrl}/addons`, {
+    const response = await fetch(`${config.apiBaseUrl}/addons`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(addon),
     });
 
     if (response.ok) {
-      fetchData();
+      // fetchData();
     }
   };
 
   const handleDeleteAddon = async () => {
     console.log("addonId", addonId);
     const response = await fetch(
-      `${config.backOfficeApiBaseUrl}/addons?addonId=${addonId}`,
+      `${config.apiBaseUrl}/addons?addonId=${addonId}`,
       {
         method: "DELETE",
       }
     );
     if (response.ok) {
-      fetchData();
+      // fetchData();
       router.push("/backoffice/addons");
     }
   };
