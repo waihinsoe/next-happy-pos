@@ -27,7 +27,7 @@ export default async function handler(
       data: menusMenuCategoriesLocationsData,
     });
 
-    res.send(200);
+    res.status(200).send(menuCategory);
   } else if (req.method === "DELETE") {
     const menuCategoryId = req.query.menuCategoryId as string;
 

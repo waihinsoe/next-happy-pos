@@ -1,5 +1,5 @@
 import type { menu_categories as MenuCategory } from "@prisma/client";
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 interface MenuCategoriesState {
   isLoading: boolean;
@@ -20,9 +20,16 @@ export const menuCategoriesSlice = createSlice({
     setMenuCategories: (state, action) => {
       state.items = action.payload;
     },
+    addMenuCategory: (state, action) => {
+      state.items = [...state.items, action.payload];
+    },
+    removeMenuCategory: (state, action: PayloadAction<MenuCategory>) => {
+      state.items = state.items.filter((item) => item.id !== action.payload.id);
+    },
   },
 });
 
-export const { setMenuCategories } = menuCategoriesSlice.actions;
+export const { setMenuCategories, addMenuCategory, removeMenuCategory } =
+  menuCategoriesSlice.actions;
 
 export default menuCategoriesSlice.reducer;

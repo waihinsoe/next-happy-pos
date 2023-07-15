@@ -23,8 +23,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveMenuFromMenuCategory from "./RemoveMenuFromMenuCategory";
 import { menus as Menu } from "@prisma/client";
 import DeleteDialog from "../../../components/DeleteDialog";
-import { useAppSelector } from "@/store/hook";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
+import { removeMenuCategory } from "@/store/slices/menuCategoriesSlice";
+import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocationsSlice";
 const icon = (
   <CheckBoxOutlineBlankIcon fontSize="small" style={{ color: "lightblue" }} />
 );
@@ -43,6 +45,7 @@ const EditMenuCategory = () => {
   const selectedLocationId = getSelectedLocationId() as string;
   const { menus, menuCategories, menusMenuCategoriesLocations, locations } =
     useAppSelector(appData);
+  const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const menuCategory = menuCategories.find(
@@ -93,7 +96,7 @@ const EditMenuCategory = () => {
       body: JSON.stringify(newMenuCategory),
     });
     if (response.ok) {
-      // fetchData();
+      dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId));
     }
   };
 
@@ -111,7 +114,7 @@ const EditMenuCategory = () => {
       }
     );
     if (response.ok) {
-      // fetchData();
+      dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId));
       setSelectedMenu(null);
     }
   };
@@ -136,7 +139,7 @@ const EditMenuCategory = () => {
       }
     );
     if (response.ok) {
-      // fetchData();
+      dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId));
       setOpen(false);
     }
   };
@@ -149,7 +152,8 @@ const EditMenuCategory = () => {
       }
     );
     if (response.ok) {
-      // fetchData();
+      menuCategory && dispatch(removeMenuCategory(menuCategory));
+      dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId));
       router.push("/backoffice/menuCategories");
     }
   };
