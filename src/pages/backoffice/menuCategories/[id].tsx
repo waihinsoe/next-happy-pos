@@ -8,6 +8,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import type { menu_categories as MenuCategory } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
@@ -23,8 +24,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveMenuFromMenuCategory from "./RemoveMenuFromMenuCategory";
 import { menus as Menu } from "@prisma/client";
 import DeleteDialog from "../../../components/DeleteDialog";
-import { useAppSelector } from "@/store/hook";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
+import {
+  removeMenuCategory,
+  updateMenuCategory,
+} from "@/store/slices/menuCategoriesSlice";
+import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocationsSlice";
 const icon = (
   <CheckBoxOutlineBlankIcon fontSize="small" style={{ color: "lightblue" }} />
 );
@@ -43,6 +49,7 @@ const EditMenuCategory = () => {
   const selectedLocationId = getSelectedLocationId() as string;
   const { menus, menuCategories, menusMenuCategoriesLocations, locations } =
     useAppSelector(appData);
+  const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const menuCategory = menuCategories.find(
@@ -82,9 +89,9 @@ const EditMenuCategory = () => {
         locations: selectedLocations,
       });
     }
-  }, [menuCategory]);
+  }, [menuCategory, menusMenuCategoriesLocations]);
 
-  const updateMenuCategory = async () => {
+  const handleUpdateMenuCategory = async () => {
     const response = await fetch(`${config.apiBaseUrl}/menuCategories`, {
       method: "PUT",
       headers: {
@@ -93,7 +100,9 @@ const EditMenuCategory = () => {
       body: JSON.stringify(newMenuCategory),
     });
     if (response.ok) {
-      // fetchData();
+      const menuCategoryUpdated = (await response.json()) as MenuCategory;
+      dispatch(updateMenuCategory(menuCategoryUpdated));
+      dispatch(fetchMenusMenuCategoriesLocations(locations));
     }
   };
 
@@ -111,7 +120,7 @@ const EditMenuCategory = () => {
       }
     );
     if (response.ok) {
-      // fetchData();
+      dispatch(fetchMenusMenuCategoriesLocations(locations));
       setSelectedMenu(null);
     }
   };
@@ -136,7 +145,7 @@ const EditMenuCategory = () => {
       }
     );
     if (response.ok) {
-      // fetchData();
+      dispatch(fetchMenusMenuCategoriesLocations(locations));
       setOpen(false);
     }
   };
@@ -149,7 +158,8 @@ const EditMenuCategory = () => {
       }
     );
     if (response.ok) {
-      // fetchData();
+      menuCategory && dispatch(removeMenuCategory(menuCategory));
+      dispatch(fetchMenusMenuCategoriesLocations(locations));
       router.push("/backoffice/menuCategories");
     }
   };
@@ -211,7 +221,7 @@ const EditMenuCategory = () => {
         />
         <Button
           variant="contained"
-          onClick={updateMenuCategory}
+          onClick={handleUpdateMenuCategory}
           sx={{ width: "fit-content", mt: 3 }}
         >
           Update

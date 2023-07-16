@@ -21,14 +21,15 @@ import type {
   menus as Menu,
   menu_categories as MenuCategory,
 } from "@prisma/client";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import FileDropZone from "@/components/FileDropZone";
 import { config } from "@/config/config";
-import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { getSelectedLocationId } from "@/utils";
-import { useAppSelector } from "@/store/hook";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
+import { addMenu } from "@/store/slices/menusSlice";
+import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocationsSlice";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -48,8 +49,9 @@ interface Props {
 
 const NewMenu = ({ open, setOpen }: Props) => {
   const selectedLocationId = getSelectedLocationId() as string;
-  const { menusMenuCategoriesLocations, menuCategories } =
+  const { menusMenuCategoriesLocations, menuCategories, locations } =
     useAppSelector(appData);
+  const dispatch = useAppDispatch();
   const [selectedMenuCategoryIds, setSelectedMenuCategoryIds] = useState<
     number[]
   >([]);
@@ -119,7 +121,10 @@ const NewMenu = ({ open, setOpen }: Props) => {
           isAvailable: true,
         });
         setSelectedMenuCategoryIds([]);
-        // fetchData();
+
+        const menuCreated = (await response.json()) as Menu;
+        dispatch(addMenu(menuCreated));
+        dispatch(fetchMenusMenuCategoriesLocations(locations));
       }
 
       setIsLoading(false);

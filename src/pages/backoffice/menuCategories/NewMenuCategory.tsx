@@ -12,12 +12,18 @@ import {
   ListItemText,
   Button,
 } from "@mui/material";
-import { useContext, useState } from "react";
-import { BackOfficeContext } from "@/contexts/BackOfficeContext";
-import type { locations as Location } from "@prisma/client";
+import { useState } from "react";
+
+import type {
+  locations as Location,
+  menu_categories as MenuCategory,
+} from "@prisma/client";
 import { config } from "@/config/config";
-import { useAppSelector } from "@/store/hook";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
+import { addMenuCategory } from "@/store/slices/menuCategoriesSlice";
+import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocationsSlice";
+import { getSelectedLocationId } from "@/utils";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -37,7 +43,7 @@ interface Props {
 
 const NewMenuCategory = ({ open, setOpen }: Props) => {
   const { locations } = useAppSelector(appData);
-
+  const dispatch = useAppDispatch();
   const [newMenuCategory, setNewMenuCategory] = useState({
     name: "",
     locationIds: [] as number[],
@@ -56,7 +62,9 @@ const NewMenuCategory = ({ open, setOpen }: Props) => {
     });
 
     if (response.ok) {
-      // fetchData();
+      const menuCategory = (await response.json()) as MenuCategory;
+      dispatch(addMenuCategory(menuCategory));
+      dispatch(fetchMenusMenuCategoriesLocations(locations));
       setOpen(false);
     }
   };

@@ -8,8 +8,10 @@ import { useRouter } from "next/router";
 import { getAddonCategoriesByMenuId, getSelectedLocationId } from "@/utils";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteDialog from "../../../components/DeleteDialog";
-import { useAppSelector } from "@/store/hook";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
+import { removeMenu, updateMenu } from "@/store/slices/menusSlice";
+import { fetchMenusAddonCategories } from "@/store/slices/menusAddonCategoriesSlice";
 
 interface AutocompleteProps {
   id: number;
@@ -23,6 +25,7 @@ const EditMenu = () => {
   const selectedLocationId = getSelectedLocationId() as string;
   const { menus, menusAddonCategories, addonCategories } =
     useAppSelector(appData);
+  const dispatch = useAppDispatch();
   const [menu, setMenu] = useState<Menu>();
 
   const selectedAddonCategories = getAddonCategoriesByMenuId(
@@ -41,9 +44,9 @@ const EditMenu = () => {
       setMenu(validMenu);
       setConnectedAddonCategories(selectedAddonCategories);
     }
-  }, [menus]);
+  }, [menus, menusAddonCategories]);
 
-  const updateMenu = async () => {
+  const handleUpdateMenu = async () => {
     const payload = { ...menu, addonCategoryIds };
     const response = await fetch(`${config.apiBaseUrl}/menus`, {
       method: "PUT",
@@ -53,7 +56,9 @@ const EditMenu = () => {
       body: JSON.stringify(payload),
     });
     if (response.ok) {
-      // fetchData();
+      const menuUpdated = (await response.json()) as Menu;
+      dispatch(updateMenu(menuUpdated));
+      dispatch(fetchMenusAddonCategories(menus));
     }
   };
 
@@ -66,7 +71,7 @@ const EditMenu = () => {
       }
     );
     if (response.ok) {
-      // fetchData();
+      menu && dispatch(removeMenu(menu));
       router.push("/backoffice/menus");
     }
   };
@@ -116,7 +121,6 @@ const EditMenu = () => {
 
             <Autocomplete
               multiple
-              limitTags={2}
               id="menuCategories"
               value={connectedAddonCategories}
               options={addonCategories}
@@ -138,7 +142,7 @@ const EditMenu = () => {
 
             <Button
               variant="contained"
-              onClick={updateMenu}
+              onClick={handleUpdateMenu}
               sx={{ width: "fit-content" }}
             >
               Update

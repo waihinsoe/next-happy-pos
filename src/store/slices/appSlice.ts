@@ -1,5 +1,9 @@
 import { config } from "@/config/config";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSelector,
+  createSlice,
+} from "@reduxjs/toolkit";
 import { setAddons } from "./addonsSlice";
 import { setMenus } from "./menusSlice";
 import { setMenuCategories } from "./menuCategoriesSlice";
@@ -75,20 +79,37 @@ export const appSlice = createSlice({
 
 export const { setAppLoading } = appSlice.actions;
 
-export const appData = (state: RootState) => {
-  const menus = state.menus.items;
-  const menuCategories = state.menuCategories.items;
-  const addons = state.addons.items;
-  const addonCategories = state.addonCategories.items;
-  const menusAddonCategories = state.menusAddonCategories.items;
-  const menusMenuCategoriesLocations = state.menusMenuCategoriesLocations.items;
-  const locations = state.locations.items;
-  const orders = state.orders.items;
-  const orderLines = state.orderLines.items;
-  const tables = state.tables.items;
-  const company = state.company.item;
+export const selectMenus = (state: RootState) => state.menus.items;
+export const selectMenuCategories = (state: RootState) =>
+  state.menuCategories.items;
+export const selectaddons = (state: RootState) => state.addons.items;
+export const selectAddonCategories = (state: RootState) =>
+  state.addonCategories.items;
+export const selectMenusAddonCategories = (state: RootState) =>
+  state.menusAddonCategories.items;
+export const selectMenusMenuCategoriesLocations = (state: RootState) =>
+  state.menusMenuCategoriesLocations.items;
+export const selectLocations = (state: RootState) => state.locations.items;
+export const selectOrders = (state: RootState) => state.orders.items;
+export const selectOrderLines = (state: RootState) => state.orderLines.items;
+export const selectTables = (state: RootState) => state.tables.items;
+export const selectCompany = (state: RootState) => state.company.item;
 
-  return {
+export const appData = createSelector(
+  [
+    selectMenus,
+    selectMenuCategories,
+    selectaddons,
+    selectAddonCategories,
+    selectMenusAddonCategories,
+    selectMenusMenuCategoriesLocations,
+    selectLocations,
+    selectOrders,
+    selectOrderLines,
+    selectTables,
+    selectCompany,
+  ],
+  (
     menus,
     menuCategories,
     addons,
@@ -99,8 +120,23 @@ export const appData = (state: RootState) => {
     orders,
     orderLines,
     tables,
-    company,
-  };
-};
+    company
+  ) => {
+    // do something with a, b, and c, and return a result
+    return {
+      menus,
+      menuCategories,
+      addons,
+      addonCategories,
+      menusAddonCategories,
+      menusMenuCategoriesLocations,
+      locations,
+      orders,
+      orderLines,
+      tables,
+      company,
+    };
+  }
+);
 
 export default appSlice.reducer;

@@ -22,17 +22,17 @@ const EditAddonCategory = () => {
   const { addonCategories } = useAppSelector(appData);
   const addonCategoryId = router.query.id as string;
   const [openDialog, setOpenDialog] = useState(false);
-  const [newAddonCategory, setNewAddonCategory] =
+  const [updateAddonCategory, setUpdateAddonCategory] =
     useState<Partial<AddonCategory>>();
 
-  const updateAddonCategory = async () => {
-    const isValid = newAddonCategory && newAddonCategory.name;
+  const handleUpdateAddonCategory = async () => {
+    const isValid = updateAddonCategory && updateAddonCategory.name;
     if (!isValid) return alert("name is required");
 
     const response = await fetch(`${config.apiBaseUrl}/addonCategories`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newAddonCategory),
+      body: JSON.stringify(updateAddonCategory),
     });
 
     if (response.ok) {
@@ -57,11 +57,11 @@ const EditAddonCategory = () => {
       const validAddonCategory = addonCategories.find(
         (item) => item.id === Number(addonCategoryId)
       );
-      setNewAddonCategory(validAddonCategory);
+      setUpdateAddonCategory(validAddonCategory);
     }
   }, [addonCategories]);
 
-  if (!newAddonCategory) return null;
+  if (!updateAddonCategory) return null;
   return (
     <Layout title="EditAddonCategory">
       <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
@@ -87,27 +87,30 @@ const EditAddonCategory = () => {
           id="name"
           label="name"
           variant="outlined"
-          value={newAddonCategory?.name}
+          value={updateAddonCategory?.name}
           onChange={(evt) =>
-            setNewAddonCategory({ ...newAddonCategory, name: evt.target.value })
+            setUpdateAddonCategory({
+              ...updateAddonCategory,
+              name: evt.target.value,
+            })
           }
         />
 
         <FormControlLabel
           control={
             <Switch
-              checked={newAddonCategory.is_required}
+              checked={updateAddonCategory.is_required}
               onChange={() =>
-                setNewAddonCategory({
-                  ...newAddonCategory,
-                  is_required: !newAddonCategory.is_required,
+                setUpdateAddonCategory({
+                  ...updateAddonCategory,
+                  is_required: !updateAddonCategory.is_required,
                 })
               }
             />
           }
           label="isRequired"
         />
-        <Button variant="contained" onClick={updateAddonCategory}>
+        <Button variant="contained" onClick={handleUpdateAddonCategory}>
           Update
         </Button>
       </Box>
