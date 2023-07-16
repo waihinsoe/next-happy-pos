@@ -19,12 +19,11 @@ export default async function handler(
       },
     });
 
-    return res.send(200);
+    return res.status(200).send(newLocation);
   } else if (req.method === "PUT") {
     const { id: locationId, name, address } = req.body;
-    console.log("id", locationId, "name", name, "address", address);
     if (!locationId || !name || !address) return res.send(400);
-    await prisma.locations.update({
+    const location = await prisma.locations.update({
       where: {
         id: locationId,
       },
@@ -33,7 +32,7 @@ export default async function handler(
         address,
       },
     });
-    res.send(200);
+    res.status(200).send(location);
   } else if (req.method === "DELETE") {
     const locationId = req.query.locationId as string;
     await prisma.locations.delete({

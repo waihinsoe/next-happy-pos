@@ -14,9 +14,11 @@ import {
 } from "@mui/material";
 import { useContext, useState } from "react";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
-import type { locations as Location } from "@prisma/client";
+import type { locations as Location, tables as Table } from "@prisma/client";
 import { config } from "@/config/config";
 import { getSelectedLocationId } from "@/utils";
+import { useAppDispatch } from "@/store/hook";
+import { addTable } from "@/store/slices/tablesSlice";
 
 interface Props {
   open: boolean;
@@ -24,7 +26,7 @@ interface Props {
 }
 
 const NewTable = ({ open, setOpen }: Props) => {
-  // const { fetchData } = useContext(BackOfficeContext);
+  const dispatch = useAppDispatch();
   const selectedLocationId = getSelectedLocationId() as string;
   const [newTable, setNewTable] = useState({
     name: "",
@@ -45,7 +47,8 @@ const NewTable = ({ open, setOpen }: Props) => {
     });
 
     if (response.ok) {
-      // fetchData();
+      const tableCreated = (await response.json()) as Table;
+      dispatch(addTable(tableCreated));
       setNewTable({ ...newTable, name: "" });
       setOpen(false);
     }

@@ -10,7 +10,7 @@ export default async function handler(
   if (req.method === "POST") {
     const { name, locationId } = req.body;
     const isValid = name && locationId;
-    if (!isValid) return res.send(400);
+    if (!isValid) return res.status(400).send("bad request");
 
     const table = await prisma.tables.create({
       data: {
@@ -32,13 +32,13 @@ export default async function handler(
       },
     });
 
-    return res.send(200);
+    return res.status(200).send(table);
   } else if (req.method === "PUT") {
     const { id: tableId, name } = req.body;
     const isValid = tableId && name;
     if (!isValid) return res.send(400);
 
-    await prisma.tables.update({
+    const table = await prisma.tables.update({
       data: {
         name,
       },
@@ -46,7 +46,7 @@ export default async function handler(
         id: Number(tableId),
       },
     });
-    res.send(200);
+    res.status(200).send(table);
   } else if (req.method === "DELETE") {
     const tableId = req.query.tableId as string;
     if (!tableId) return res.send(400);

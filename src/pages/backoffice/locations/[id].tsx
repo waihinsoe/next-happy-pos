@@ -7,16 +7,18 @@ import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import { config } from "@/config/config";
 import DeleteDialog from "@/components/DeleteDialog";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useAppSelector } from "@/store/hook";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
+import { removeLocation, updateLocation } from "@/store/slices/locationsSlice";
 
 const EditLocation = () => {
   const router = useRouter();
   const { locations } = useAppSelector(appData);
+  const dispatch = useAppDispatch();
   const locationId = router.query.id as string;
   const [newLocation, setNewLocation] = useState<Partial<Location>>();
   const [open, setOpen] = useState(false);
-  const updateLocation = async () => {
+  const handleUpdateLocation = async () => {
     if (!newLocation) return;
     const response = await fetch(`${config.apiBaseUrl}/locations`, {
       method: "PUT",
@@ -24,7 +26,8 @@ const EditLocation = () => {
       body: JSON.stringify(newLocation),
     });
     if (response.ok) {
-      // fetchData();
+      const locationUpdated = (await response.json()) as Location;
+      dispatch(updateLocation(locationUpdated));
     }
   };
   const handleDeleteLocation = async () => {
@@ -35,7 +38,10 @@ const EditLocation = () => {
       }
     );
     if (response.ok) {
-      // fetchData();
+      const deleteLocation = locations.find(
+        (item) => item.id === Number(locationId)
+      );
+      deleteLocation && dispatch(removeLocation(deleteLocation));
       router.push("/backoffice/locations");
     }
   };
@@ -84,7 +90,7 @@ const EditLocation = () => {
           <Button
             variant="contained"
             sx={{ width: "fit-content" }}
-            onClick={updateLocation}
+            onClick={handleUpdateLocation}
           >
             Update
           </Button>

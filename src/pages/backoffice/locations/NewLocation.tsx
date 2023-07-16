@@ -10,8 +10,9 @@ import { useContext, useState } from "react";
 import type { locations as Location } from "@prisma/client";
 import { config } from "@/config/config";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
-import { useAppSelector } from "@/store/hook";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
+import { addLocation } from "@/store/slices/locationsSlice";
 interface Props {
   open: boolean;
   setOpen: (value: boolean) => void;
@@ -19,6 +20,7 @@ interface Props {
 
 const NewLocation = ({ open, setOpen }: Props) => {
   const { company } = useAppSelector(appData);
+  const dispatch = useAppDispatch();
   const [newLocation, setNewLocation] = useState<Partial<Location>>();
 
   const createLocation = async () => {
@@ -37,7 +39,8 @@ const NewLocation = ({ open, setOpen }: Props) => {
       }
     );
     if (response.ok) {
-      // fetchData();
+      const locationCreated = (await response.json()) as Location;
+      dispatch(addLocation(locationCreated));
       setOpen(false);
     }
   };
