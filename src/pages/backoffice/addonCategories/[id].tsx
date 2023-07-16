@@ -14,29 +14,34 @@ import { useContext, useEffect, useState } from "react";
 import type { addon_categories as AddonCategory } from "@prisma/client";
 import { config } from "@/config/config";
 import DeleteDialog from "@/components/DeleteDialog";
-import { useAppSelector } from "@/store/hook";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
+import {
+  removeAddonCategory,
+  updateAddonCategory,
+} from "@/store/slices/addonCategoriesSlice";
 
 const EditAddonCategory = () => {
   const router = useRouter();
   const { addonCategories } = useAppSelector(appData);
+  const dispatch = useAppDispatch();
   const addonCategoryId = router.query.id as string;
   const [openDialog, setOpenDialog] = useState(false);
-  const [updateAddonCategory, setUpdateAddonCategory] =
-    useState<Partial<AddonCategory>>();
+  const [addonCategory, setAddonCategory] = useState<Partial<AddonCategory>>();
 
   const handleUpdateAddonCategory = async () => {
-    const isValid = updateAddonCategory && updateAddonCategory.name;
+    const isValid = addonCategory && addonCategory.name;
     if (!isValid) return alert("name is required");
 
     const response = await fetch(`${config.apiBaseUrl}/addonCategories`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updateAddonCategory),
+      body: JSON.stringify(addonCategory),
     });
 
     if (response.ok) {
-      // fetchData();
+      const addonCategoryUpdated = (await response.json()) as AddonCategory;
+      dispatch(updateAddonCategory(addonCategoryUpdated));
     }
   };
 
@@ -48,7 +53,10 @@ const EditAddonCategory = () => {
       }
     );
     if (response.ok) {
-      // fetchData();
+      const deleteAddonCategory = addonCategories.find(
+        (item) => item.id === Number(addonCategoryId)
+      );
+      deleteAddonCategory && dispatch(removeAddonCategory(deleteAddonCategory));
       router.push("/backoffice/addonCategories");
     }
   };
@@ -57,11 +65,11 @@ const EditAddonCategory = () => {
       const validAddonCategory = addonCategories.find(
         (item) => item.id === Number(addonCategoryId)
       );
-      setUpdateAddonCategory(validAddonCategory);
+      setAddonCategory(validAddonCategory);
     }
   }, [addonCategories]);
 
-  if (!updateAddonCategory) return null;
+  if (!addonCategory) return null;
   return (
     <Layout title="EditAddonCategory">
       <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
@@ -87,10 +95,10 @@ const EditAddonCategory = () => {
           id="name"
           label="name"
           variant="outlined"
-          value={updateAddonCategory?.name}
+          value={addonCategory?.name}
           onChange={(evt) =>
-            setUpdateAddonCategory({
-              ...updateAddonCategory,
+            setAddonCategory({
+              ...addonCategory,
               name: evt.target.value,
             })
           }
@@ -99,11 +107,11 @@ const EditAddonCategory = () => {
         <FormControlLabel
           control={
             <Switch
-              checked={updateAddonCategory.is_required}
+              checked={addonCategory.is_required}
               onChange={() =>
-                setUpdateAddonCategory({
-                  ...updateAddonCategory,
-                  is_required: !updateAddonCategory.is_required,
+                setAddonCategory({
+                  ...addonCategory,
+                  is_required: !addonCategory.is_required,
                 })
               }
             />

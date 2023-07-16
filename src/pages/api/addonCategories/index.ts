@@ -8,7 +8,7 @@ export default async function handler(
   if (req.method === "POST") {
     const { name, isRequired, menuIds } = req.body;
     const isValid = name.length > 0 && menuIds.length > 0;
-    if (!isValid) return res.send(400);
+    if (!isValid) return res.status(400).send("bad request");
 
     const newAddonCategory = await prisma.addon_categories.create({
       data: {
@@ -25,13 +25,13 @@ export default async function handler(
     await prisma.menus_addon_categories.createMany({
       data: menusAddonCategoriesData,
     });
-    res.send(200);
+    res.status(200).send(newAddonCategory);
   } else if (req.method === "PUT") {
     const { id, name, is_required } = req.body;
     const isValid = id && name;
-    if (!isValid) return res.send(400);
+    if (!isValid) return res.status(400).send("bad request");
 
-    await prisma.addon_categories.update({
+    const addonCategory = await prisma.addon_categories.update({
       data: {
         name,
         is_required,
@@ -40,7 +40,7 @@ export default async function handler(
         id,
       },
     });
-    res.send(200);
+    res.status(200).send(addonCategory);
   } else if (req.method === "DELETE") {
     const addonCategoryId = req.query.id as string;
 
@@ -52,8 +52,8 @@ export default async function handler(
         is_archived: true,
       },
     });
-    res.send(200);
+    res.status(200).send("ok");
   } else {
-    res.send(405);
+    res.status(405).send("method not allowed");
   }
 }
