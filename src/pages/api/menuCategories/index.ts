@@ -51,7 +51,7 @@ export default async function handler(
     if (!isValid) return res.status(400).send("Bad request");
 
     //edit name
-    await prisma.menu_categories.update({
+    const menuCategory = await prisma.menu_categories.update({
       data: {
         name,
       },
@@ -141,6 +141,6 @@ export default async function handler(
       return res.send(200);
     }
 
-    return res.send(200);
+    return res.status(200).send(menuCategory);
   }
 }

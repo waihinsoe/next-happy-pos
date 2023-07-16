@@ -43,7 +43,6 @@ interface Props {
 
 const NewMenuCategory = ({ open, setOpen }: Props) => {
   const { locations } = useAppSelector(appData);
-  const selectedLocationId = getSelectedLocationId() as string;
   const dispatch = useAppDispatch();
   const [newMenuCategory, setNewMenuCategory] = useState({
     name: "",
@@ -65,7 +64,7 @@ const NewMenuCategory = ({ open, setOpen }: Props) => {
     if (response.ok) {
       const menuCategory = (await response.json()) as MenuCategory;
       dispatch(addMenuCategory(menuCategory));
-      dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId));
+      dispatch(fetchMenusMenuCategoriesLocations(locations));
       setOpen(false);
     }
   };

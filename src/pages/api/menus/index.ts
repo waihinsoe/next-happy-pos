@@ -47,11 +47,11 @@ export default async function handler(
         },
       });
     }
-    return res.send(200);
+    return res.status(200).send(menu);
   } else if (req.method === "PUT") {
     const { id: menuId, name, price, addonCategoryIds } = req.body;
 
-    await prisma.menus.update({
+    const menu = await prisma.menus.update({
       where: {
         id: menuId,
       },
@@ -61,7 +61,7 @@ export default async function handler(
       },
     });
 
-    if (addonCategoryIds.length) {
+    if (addonCategoryIds && addonCategoryIds.length) {
       const menusAddonCategories = await prisma.menus_addon_categories.findMany(
         {
           where: {
@@ -104,8 +104,9 @@ export default async function handler(
           },
         });
       }
-      return res.send(200);
+      return res.status(200).send(menu);
     }
+    return res.status(200).send(menu);
   } else if (req.method === "DELETE") {
     const menuId = req.query.menuId as string;
     if (!menuId) return res.send(400);
