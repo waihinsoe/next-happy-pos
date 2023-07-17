@@ -7,16 +7,18 @@ import { useContext, useEffect, useState } from "react";
 import type { tables as Table } from "@prisma/client";
 import DeleteDialog from "@/components/DeleteDialog";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useAppSelector } from "@/store/hook";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
+import { removeTable, updateTable } from "@/store/slices/tablesSlice";
 
 const EditTable = () => {
   const router = useRouter();
   const { tables } = useAppSelector(appData);
+  const dispatch = useAppDispatch();
   const tableId = router.query.id as string;
   const [newTable, setNewTable] = useState<Partial<Table>>();
   const [openDialog, setOpenDialog] = useState(false);
-  const updateTable = async () => {
+  const handleUpdateTable = async () => {
     if (!newTable) return alert("table name are required");
     const response = await fetch(`${config.apiBaseUrl}/tables`, {
       method: "PUT",
@@ -25,7 +27,8 @@ const EditTable = () => {
     });
 
     if (response.ok) {
-      // fetchData();
+      const tableUpdated = (await response.json()) as Table;
+      dispatch(updateTable(tableUpdated));
     }
   };
 
@@ -38,7 +41,8 @@ const EditTable = () => {
       }
     );
     if (response.ok) {
-      // fetchData();
+      const deleteTable = tables.find((item) => item.id === Number(tableId));
+      deleteTable && dispatch(removeTable(deleteTable));
       router.push("/backoffice/tables");
     }
   };
@@ -73,7 +77,7 @@ const EditTable = () => {
         <Button
           variant="contained"
           sx={{ width: "fit-content" }}
-          onClick={updateTable}
+          onClick={handleUpdateTable}
         >
           Update
         </Button>

@@ -1,6 +1,6 @@
 import { config } from "@/config/config";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
-import { useAppSelector } from "@/store/hook";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
 import {
   Dialog,
@@ -19,7 +19,10 @@ import {
   Switch,
 } from "@mui/material";
 import { useContext, useState } from "react";
-
+import type { addon_categories as AddonCategory } from "@prisma/client";
+import { addAddonCategory } from "@/store/slices/addonCategoriesSlice";
+import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocationsSlice";
+import { fetchMenusAddonCategories } from "@/store/slices/menusAddonCategoriesSlice";
 interface Props {
   open: boolean;
   setOpen: (value: boolean) => void;
@@ -38,7 +41,8 @@ const MenuProps = {
 };
 
 const NewAddonCategory = ({ open, setOpen, menuIds }: Props) => {
-  const { menus } = useAppSelector(appData);
+  const { menus, locations } = useAppSelector(appData);
+  const dispatch = useAppDispatch();
   const [newAddonCategory, setNewAddonCategory] = useState({
     name: "",
     isRequired: false,
@@ -58,8 +62,11 @@ const NewAddonCategory = ({ open, setOpen, menuIds }: Props) => {
       body: JSON.stringify(newAddonCategory),
     });
     if (response.ok) {
+      const addonCategoryCreated = (await response.json()) as AddonCategory;
+      dispatch(addAddonCategory(addonCategoryCreated));
+      dispatch(fetchMenusMenuCategoriesLocations(locations));
+      dispatch(fetchMenusAddonCategories(menus));
       setOpen(false);
-      // fetchData();
     }
   };
   return (

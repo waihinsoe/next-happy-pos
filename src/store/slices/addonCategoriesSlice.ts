@@ -1,5 +1,5 @@
 import type { addon_categories as AddonCategory } from "@prisma/client";
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 interface AddonCategoriesState {
   isLoading: boolean;
@@ -20,9 +20,26 @@ export const addonCategoriesSlice = createSlice({
     setAddonCategories: (state, action) => {
       state.items = action.payload;
     },
+    addAddonCategory: (state, action: PayloadAction<AddonCategory>) => {
+      state.items = [...state.items, action.payload];
+    },
+    removeAddonCategory: (state, action: PayloadAction<AddonCategory>) => {
+      state.items = state.items.filter((item) => item.id !== action.payload.id);
+    },
+    updateAddonCategory: (state, action: PayloadAction<AddonCategory>) => {
+      state.items = [
+        ...state.items.filter((item) => item.id !== action.payload.id),
+        action.payload,
+      ];
+    },
   },
 });
 
-export const { setAddonCategories } = addonCategoriesSlice.actions;
+export const {
+  setAddonCategories,
+  addAddonCategory,
+  removeAddonCategory,
+  updateAddonCategory,
+} = addonCategoriesSlice.actions;
 
 export default addonCategoriesSlice.reducer;

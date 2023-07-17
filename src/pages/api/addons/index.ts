@@ -10,19 +10,19 @@ export default async function handler(
     const isValid = name.length > 0 && addonCategoryId;
     if (!isValid) return res.send(400);
 
-    await prisma.addons.create({
+    const addon = await prisma.addons.create({
       data: {
         name,
         price,
         addon_categories_id: addonCategoryId,
       },
     });
-    res.send(200);
+    res.status(200).send(addon);
   } else if (req.method === "PUT") {
     const { id: addonId, name, price } = req.body;
     const isValid = addonId && name;
-    if (!isValid) return res.send(400);
-    await prisma.addons.update({
+    if (!isValid) return res.status(400).send("bad request");
+    const addon = await prisma.addons.update({
       data: {
         name,
         price,
@@ -31,7 +31,7 @@ export default async function handler(
         id: addonId,
       },
     });
-    return res.send(200);
+    return res.status(200).send(addon);
   } else if (req.method === "DELETE") {
     const addonId = req.query.addonId as string;
 

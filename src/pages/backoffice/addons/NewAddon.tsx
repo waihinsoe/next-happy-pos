@@ -1,6 +1,6 @@
 import { config } from "@/config/config";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
-import { useAppSelector } from "@/store/hook";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
 import {
   Dialog,
@@ -15,11 +15,10 @@ import {
   MenuItem,
   OutlinedInput,
   Select,
-  FormControlLabel,
-  Switch,
 } from "@mui/material";
-import { useContext, useState } from "react";
-
+import { useState } from "react";
+import type { addons as Addon } from "@prisma/client";
+import { addAddon } from "@/store/slices/addonsSlice";
 interface Props {
   open: boolean;
   setOpen: (value: boolean) => void;
@@ -38,6 +37,7 @@ const MenuProps = {
 
 const NewAddon = ({ open, setOpen }: Props) => {
   const { addonCategories } = useAppSelector(appData);
+  const dispatch = useAppDispatch();
   const [newAddon, setNewAddon] = useState({
     name: "",
     price: 0,
@@ -56,8 +56,10 @@ const NewAddon = ({ open, setOpen }: Props) => {
       body: JSON.stringify(newAddon),
     });
     if (response.ok) {
+      const addonCreated = (await response.json()) as Addon;
+      dispatch(addAddon(addonCreated));
+
       setOpen(false);
-      // fetchData();
     }
   };
   return (

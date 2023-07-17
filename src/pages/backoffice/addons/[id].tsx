@@ -7,17 +7,19 @@ import type { addons as Addon } from "@prisma/client";
 import { config } from "@/config/config";
 import DeleteDialog from "@/components/DeleteDialog";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useAppSelector } from "@/store/hook";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
+import { removeAddon, updateAddon } from "@/store/slices/addonsSlice";
 
 const EditAddon = () => {
   const router = useRouter();
   const addonId = router.query.id as string;
   const { addons } = useAppSelector(appData);
+  const dispatch = useAppDispatch();
   const [addon, setAddon] = useState<Addon>();
   const [open, setOpen] = useState(false);
 
-  const updateAddon = async () => {
+  const handleUpdateAddon = async () => {
     const isValid = addon && addon.name;
     if (!isValid) return alert("Addon name is required.");
     const response = await fetch(`${config.apiBaseUrl}/addons`, {
@@ -27,7 +29,8 @@ const EditAddon = () => {
     });
 
     if (response.ok) {
-      // fetchData();
+      const addonUpdated = (await response.json()) as Addon;
+      dispatch(updateAddon(addonUpdated));
     }
   };
 
@@ -40,7 +43,7 @@ const EditAddon = () => {
       }
     );
     if (response.ok) {
-      // fetchData();
+      addon && dispatch(removeAddon(addon));
       router.push("/backoffice/addons");
     }
   };
@@ -92,7 +95,7 @@ const EditAddon = () => {
         <Button
           variant="contained"
           sx={{ width: "fit-content" }}
-          onClick={updateAddon}
+          onClick={handleUpdateAddon}
         >
           Update
         </Button>
