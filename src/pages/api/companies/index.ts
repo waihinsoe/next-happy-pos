@@ -8,9 +8,9 @@ export default async function handler(
   if (req.method === "PUT") {
     const { id, name, address } = req.body;
     const isValid = id && name && address;
-    if (!isValid) return res.send(400);
+    if (!isValid) return res.status(400).send("bad request");
 
-    await prisma.companies.update({
+    const companyUpdated = await prisma.companies.update({
       data: {
         name,
         address,
@@ -20,6 +20,6 @@ export default async function handler(
       },
     });
 
-    return res.send(200);
+    return res.status(200).send(companyUpdated);
   }
 }

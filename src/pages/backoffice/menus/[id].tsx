@@ -1,9 +1,8 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Autocomplete, Box, Button, TextField } from "@mui/material";
 import type { menus as Menu } from "@prisma/client";
 import { config } from "../../../config/config";
 import Layout from "../../../components/Layout";
-import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import { useRouter } from "next/router";
 import { getAddonCategoriesByMenuId, getSelectedLocationId } from "@/utils";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -26,7 +25,7 @@ const EditMenu = () => {
   const { menus, menusAddonCategories, addonCategories } =
     useAppSelector(appData);
   const dispatch = useAppDispatch();
-  const [menu, setMenu] = useState<Menu>();
+  const [menuToUpdate, setMenuToUpdate] = useState<Menu>();
 
   const selectedAddonCategories = getAddonCategoriesByMenuId(
     menusAddonCategories,
@@ -41,13 +40,13 @@ const EditMenu = () => {
   useEffect(() => {
     if (menus.length) {
       const validMenu = menus.find((menu) => menu.id === parseInt(menuId, 10));
-      setMenu(validMenu);
+      setMenuToUpdate(validMenu);
       setConnectedAddonCategories(selectedAddonCategories);
     }
   }, [menus, menusAddonCategories]);
 
   const handleUpdateMenu = async () => {
-    const payload = { ...menu, addonCategoryIds };
+    const payload = { ...menuToUpdate, addonCategoryIds };
     const response = await fetch(`${config.apiBaseUrl}/menus`, {
       method: "PUT",
       headers: {
@@ -71,11 +70,11 @@ const EditMenu = () => {
       }
     );
     if (response.ok) {
-      menu && dispatch(removeMenu(menu));
+      menuToUpdate && dispatch(removeMenu(menuToUpdate));
       router.push("/backoffice/menus");
     }
   };
-  if (!menu) return null;
+  if (!menuToUpdate) return null;
   return (
     <Layout title="EditMenu">
       <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
@@ -89,7 +88,7 @@ const EditMenu = () => {
         </Button>
       </Box>
       <Box>
-        {menu ? (
+        {menuToUpdate ? (
           <Box
             sx={{
               display: "flex",
@@ -103,19 +102,22 @@ const EditMenu = () => {
               id="name"
               label="name"
               variant="outlined"
-              defaultValue={menu.name}
+              defaultValue={menuToUpdate.name}
               onChange={(evt) => {
-                setMenu({ ...menu, name: evt.target.value });
+                setMenuToUpdate({ ...menuToUpdate, name: evt.target.value });
               }}
             />
             <TextField
               id="price"
               label="price"
               variant="outlined"
-              defaultValue={menu.price}
+              defaultValue={menuToUpdate.price}
               type="number"
               onChange={(evt) => {
-                setMenu({ ...menu, price: parseInt(evt.target.value) });
+                setMenuToUpdate({
+                  ...menuToUpdate,
+                  price: parseInt(evt.target.value),
+                });
               }}
             />
 

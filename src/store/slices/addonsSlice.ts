@@ -27,10 +27,9 @@ export const addonsSlice = createSlice({
       state.items = state.items.filter((item) => item.id !== action.payload.id);
     },
     updateAddon: (state, action: PayloadAction<Addon>) => {
-      state.items = [
-        ...state.items.filter((item) => item.id !== action.payload.id),
-        action.payload,
-      ];
+      state.items = state.items.map((item) =>
+        item.id === action.payload.id ? action.payload : item
+      );
     },
   },
 });

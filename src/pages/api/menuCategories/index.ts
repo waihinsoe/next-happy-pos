@@ -10,7 +10,7 @@ export default async function handler(
     const isValid = name && locationIds.length;
     if (!isValid) return res.send(400);
 
-    const menuCategory = await prisma.menu_categories.create({
+    const menuCategoryCreated = await prisma.menu_categories.create({
       data: {
         name,
       },
@@ -18,7 +18,7 @@ export default async function handler(
 
     const menusMenuCategoriesLocationsData = locationIds.map(
       (locationId: number) => ({
-        menu_categories_id: menuCategory.id,
+        menu_categories_id: menuCategoryCreated.id,
         locations_id: locationId,
       })
     );
@@ -27,7 +27,7 @@ export default async function handler(
       data: menusMenuCategoriesLocationsData,
     });
 
-    res.status(200).send(menuCategory);
+    res.status(200).send(menuCategoryCreated);
   } else if (req.method === "DELETE") {
     const menuCategoryId = req.query.menuCategoryId as string;
 
@@ -51,7 +51,7 @@ export default async function handler(
     if (!isValid) return res.status(400).send("Bad request");
 
     //edit name
-    const menuCategory = await prisma.menu_categories.update({
+    const menuCategoryUpdated = await prisma.menu_categories.update({
       data: {
         name,
       },
@@ -141,6 +141,6 @@ export default async function handler(
       return res.send(200);
     }
 
-    return res.status(200).send(menuCategory);
+    return res.status(200).send(menuCategoryUpdated);
   }
 }
