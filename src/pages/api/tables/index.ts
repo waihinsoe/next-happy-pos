@@ -12,33 +12,33 @@ export default async function handler(
     const isValid = name && locationId;
     if (!isValid) return res.status(400).send("bad request");
 
-    const table = await prisma.tables.create({
+    const tableCreated = await prisma.tables.create({
       data: {
         name,
         locations_id: Number(locationId),
       },
     });
 
-    await qrCodeImageUpload(Number(locationId), table.id);
+    await qrCodeImageUpload(Number(locationId), tableCreated.id);
 
-    const qrcodeUrl = getQrCodeUrl(Number(locationId), table.id);
+    const qrcodeUrl = getQrCodeUrl(Number(locationId), tableCreated.id);
 
     await prisma.tables.update({
       data: {
         asset_url: qrcodeUrl,
       },
       where: {
-        id: table.id,
+        id: tableCreated.id,
       },
     });
 
-    return res.status(200).send(table);
+    return res.status(200).send(tableCreated);
   } else if (req.method === "PUT") {
     const { id: tableId, name } = req.body;
     const isValid = tableId && name;
-    if (!isValid) return res.send(400);
+    if (!isValid) return res.status(400).send("bad request");
 
-    const table = await prisma.tables.update({
+    const tableUpdated = await prisma.tables.update({
       data: {
         name,
       },
@@ -46,7 +46,7 @@ export default async function handler(
         id: Number(tableId),
       },
     });
-    res.status(200).send(table);
+    res.status(200).send(tableUpdated);
   } else if (req.method === "DELETE") {
     const tableId = req.query.tableId as string;
     if (!tableId) return res.send(400);

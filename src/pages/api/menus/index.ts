@@ -15,11 +15,10 @@ export default async function handler(
       asset_url = "",
       description = "",
     } = req.body;
-    console.log(req.body);
     const isValid = name && price && locationId && menuCategoryIds.length;
     if (!isValid) return res.send(400);
 
-    const menu = await prisma.menus.create({
+    const menuCreated = await prisma.menus.create({
       data: {
         name,
         price,
@@ -27,7 +26,7 @@ export default async function handler(
         description,
       },
     });
-    const menuId = menu.id;
+    const menuId = menuCreated.id;
 
     if (menuCategoryIds.length > 1) {
       const data = menuCategoryIds.map((menuCategoryId: number) => ({
@@ -47,11 +46,11 @@ export default async function handler(
         },
       });
     }
-    return res.status(200).send(menu);
+    return res.status(200).send(menuCreated);
   } else if (req.method === "PUT") {
     const { id: menuId, name, price, addonCategoryIds } = req.body;
 
-    const menu = await prisma.menus.update({
+    const menuUpdated = await prisma.menus.update({
       where: {
         id: menuId,
       },
@@ -104,9 +103,9 @@ export default async function handler(
           },
         });
       }
-      return res.status(200).send(menu);
+      return res.status(200).send(menuUpdated);
     }
-    return res.status(200).send(menu);
+    return res.status(200).send(menuUpdated);
   } else if (req.method === "DELETE") {
     const menuId = req.query.menuId as string;
     if (!menuId) return res.send(400);

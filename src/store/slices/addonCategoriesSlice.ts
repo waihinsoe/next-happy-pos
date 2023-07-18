@@ -27,10 +27,9 @@ export const addonCategoriesSlice = createSlice({
       state.items = state.items.filter((item) => item.id !== action.payload.id);
     },
     updateAddonCategory: (state, action: PayloadAction<AddonCategory>) => {
-      state.items = [
-        ...state.items.filter((item) => item.id !== action.payload.id),
-        action.payload,
-      ];
+      state.items = state.items.map((item) =>
+        item.id === action.payload.id ? action.payload : item
+      );
     },
   },
 });

@@ -27,10 +27,9 @@ export const menuCategoriesSlice = createSlice({
       state.items = state.items.filter((item) => item.id !== action.payload.id);
     },
     updateMenuCategory: (state, action: PayloadAction<MenuCategory>) => {
-      state.items = [
-        ...state.items.filter((item) => item.id !== action.payload.id),
-        action.payload,
-      ];
+      state.items = state.items.map((item) =>
+        item.id === action.payload.id ? action.payload : item
+      );
     },
   },
 });

@@ -2,8 +2,9 @@ import Layout from "@/components/Layout";
 import { config } from "@/config/config";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import { OrderContext } from "@/contexts/OrderContext";
-import { useAppSelector } from "@/store/hook";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
+import { fetchOrderLines } from "@/store/slices/orderLinesSlice";
 import { getNumberOfMenusByOrderId, getSelectedLocationId } from "@/utils";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -37,6 +38,7 @@ import {
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 interface Props {
+  orders: Order[];
   order: Order;
   orderLines: OrderLine[];
   menus: Menu[];
@@ -44,8 +46,15 @@ interface Props {
   addonCategories: AddonCategory[];
 }
 
-const Row = ({ order, orderLines, menus, addons, addonCategories }: Props) => {
-  // const { fetchData } = useContext(BackOfficeContext);
+const Row = ({
+  orders,
+  order,
+  orderLines,
+  menus,
+  addons,
+  addonCategories,
+}: Props) => {
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const renderMenusAddonsFromOrder = () => {
@@ -240,7 +249,6 @@ const Row = ({ order, orderLines, menus, addons, addonCategories }: Props) => {
   ) => {
     const orderId = order.id;
     const isValid = orderId && menuId;
-
     if (!isValid) return;
 
     const response = await fetch(`${config.apiBaseUrl}/orderLines`, {
@@ -249,7 +257,7 @@ const Row = ({ order, orderLines, menus, addons, addonCategories }: Props) => {
       body: JSON.stringify({ orderId, menuId, status: evt.target.value }),
     });
     if (response.ok) {
-      // fetchDaeta();
+      dispatch(fetchOrderLines(orders));
     }
   };
   return (
@@ -313,6 +321,7 @@ const Orders = () => {
           <TableBody>
             {currentLocationOrders.map((order) => (
               <Row
+                orders={orders}
                 order={order}
                 key={order.id}
                 orderLines={getOrderLinesByOrderId(order.id)}

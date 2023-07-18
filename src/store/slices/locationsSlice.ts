@@ -27,10 +27,9 @@ export const locationsSlice = createSlice({
       state.items = state.items.filter((item) => item.id !== action.payload.id);
     },
     updateLocation: (state, action: PayloadAction<Location>) => {
-      state.items = [
-        ...state.items.filter((item) => item.id !== action.payload.id),
-        action.payload,
-      ];
+      state.items = state.items.map((item) =>
+        item.id === action.payload.id ? action.payload : item
+      );
     },
   },
 });
