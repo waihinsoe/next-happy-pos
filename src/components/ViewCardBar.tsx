@@ -3,10 +3,12 @@ import { Box, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useContext } from "react";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
+import { useAppSelector } from "@/store/hook";
+import { orderAppData } from "@/store/slices/orderAppSlice";
 const ViewCardBar = () => {
   const router = useRouter();
   const query = router.query;
-  const { cart } = useContext(OrderContext);
+  const { cart } = useAppSelector(orderAppData);
   const cartText = `You have ${cart.length} item in cart.`;
   return (
     <Box

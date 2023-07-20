@@ -1,6 +1,8 @@
 import MenuCard from "@/components/MenuCard";
 import ViewCardBar from "@/components/ViewCardBar";
 import { OrderContext } from "@/contexts/OrderContext";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { fetchOrderAppData, orderAppData } from "@/store/slices/orderAppSlice";
 import { getMenusByMenuCategoryId } from "@/utils";
 import { Box, Tab, Tabs } from "@mui/material";
 import { menu_categories as MenuCategory } from "@prisma/client";
@@ -12,7 +14,7 @@ const Order = () => {
   const query = router.query;
   const selectedLocationId = query.locationId as string;
   const { menuCategories, menus, menusMenuCategoriesLocations } =
-    useContext(OrderContext);
+    useAppSelector(orderAppData);
   const [selectedMenuCategory, setSelectedMenuCategory] =
     useState<MenuCategory>();
   const [value, setValue] = useState(0);

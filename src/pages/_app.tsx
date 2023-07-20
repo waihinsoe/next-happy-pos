@@ -9,6 +9,8 @@ import { store } from "@/store";
 import { getSelectedLocationId } from "@/utils";
 import { useEffect } from "react";
 import { fetchAppData } from "@/store/slices/appSlice";
+import { fetchOrderAppData } from "@/store/slices/orderAppSlice";
+import { useRouter } from "next/router";
 
 type CustomeAppProps = AppProps & { session: Session };
 
@@ -17,19 +19,17 @@ export default function App({
   pageProps,
   session,
 }: CustomeAppProps) {
+  const router = useRouter();
   const selectedLocationId = getSelectedLocationId() as string;
+  const selectedOrderAppLocationId = router.query.locationId as string;
 
   useEffect(() => {
     store.dispatch(fetchAppData(selectedLocationId));
-  }, []);
+    if (selectedOrderAppLocationId) {
+      store.dispatch(fetchOrderAppData(selectedOrderAppLocationId));
+    }
+  }, [selectedOrderAppLocationId, selectedLocationId]);
   return (
-    // <SessionProvider session={session}>
-    //   <BackOfficeProvider>
-    //     <OrderProvider>
-    //       <Component {...pageProps} />
-    //     </OrderProvider>
-    //   </BackOfficeProvider>
-    // </SessionProvider>
     <SessionProvider session={session}>
       <Provider store={store}>
         <Component {...pageProps} />
