@@ -7,21 +7,17 @@ import type { addons as Addon } from "@prisma/client";
 import { getAddonCategoriesByMenuId } from "@/utils";
 import { Box, Button, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { orderAppData, updateCartItem } from "@/store/slices/orderAppSlice";
 
 const UpdateMenu = () => {
   const router = useRouter();
   const query = router.query;
   const cartItemId = query.id as string;
-  const {
-    cart,
-    menus,
-    addonCategories,
-    menusAddonCategories,
-    addons,
-    updateData,
-  } = useContext(OrderContext);
-  const { ...data } = useContext(OrderContext);
+  const { cart, menus, addonCategories, menusAddonCategories, addons } =
+    useAppSelector(orderAppData);
+  const dispatch = useAppDispatch();
   const [selectedAddons, setSelectedAddons] = useState<Addon[]>([]);
   const [quantity, setQuantity] = useState(1);
   const [isDisabled, setIsDisabled] = useState(true);
@@ -33,16 +29,16 @@ const UpdateMenu = () => {
         addonCategories
       )
     : [];
-  const updateCart = () => {
+  const handleUpdateCart = () => {
     if (!cartItem) return;
-    const otherCartItems = cart.filter((item) => item.id !== cartItem.id);
-
-    const newCartItems = [
-      ...otherCartItems,
-      { id: cartItemId, menu: cartItem.menu, addons: selectedAddons, quantity },
-    ];
-
-    updateData({ ...data, cart: newCartItems });
+    dispatch(
+      updateCartItem({
+        id: cartItemId,
+        menu: cartItem.menu,
+        addons: selectedAddons,
+        quantity,
+      })
+    );
     router.push({ pathname: "/order/cart", query });
   };
 
@@ -155,7 +151,7 @@ const UpdateMenu = () => {
           variant="contained"
           sx={{ width: "fit-content", margin: "0 auto", mt: 2 }}
           disabled={isDisabled}
-          onClick={updateCart}
+          onClick={handleUpdateCart}
           startIcon={<AddShoppingCartIcon />}
         >
           update

@@ -8,11 +8,17 @@ import EditIcon from "@mui/icons-material/Edit";
 import { CartItem } from "@/typings/types";
 import { config } from "@/config/config";
 import { getCartTotalPrice } from "@/utils";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
+import {
+  fetchOrderAppData,
+  orderAppData,
+  removeCartItem,
+} from "@/store/slices/orderAppSlice";
 const Review = () => {
-  const { cart, isLoading, updateData, fetchData } = useContext(OrderContext);
+  const { cart, isLoading } = useAppSelector(orderAppData);
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const query = router.query;
-  const { ...data } = useContext(OrderContext);
 
   useEffect(() => {
     if (!isLoading && !cart.length) {
@@ -45,11 +51,8 @@ const Review = () => {
     );
   };
 
-  const removeCartItem = (cartItem: CartItem) => {
-    const removingCartItem = cart.filter((item) => {
-      return item.id !== cartItem.id;
-    });
-    updateData({ ...data, cart: removingCartItem });
+  const handleRemoveCartItem = (cartItem: CartItem) => {
+    dispatch(removeCartItem(cartItem));
   };
 
   const comfirmOrder = async () => {
@@ -57,7 +60,7 @@ const Review = () => {
     const isValid = locationId && tableId && cart.length;
     if (!isValid) return alert("locationId and tableId are required.");
     const response = await fetch(
-      `${config.orderApiBaseUrl}?locationId=${locationId}&tableId=${tableId}`,
+      `${config.apiBaseUrl}/order?locationId=${locationId}&tableId=${tableId}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -66,9 +69,10 @@ const Review = () => {
     );
 
     if (response.ok) {
+      const currentLocationId = locationId as string;
       const responseJson = await response.json();
       const order = responseJson.order;
-      fetchData();
+      dispatch(fetchOrderAppData(currentLocationId));
       router.push({ pathname: `/order/activeOrder/${order.id}`, query });
     }
   };
@@ -117,7 +121,7 @@ const Review = () => {
               >
                 <DeleteIcon
                   sx={{ mr: 2, cursor: "pointer" }}
-                  onClick={() => removeCartItem(cartItem)}
+                  onClick={() => handleRemoveCartItem(cartItem)}
                 />
                 <EditIcon
                   sx={{ cursor: "pointer" }}

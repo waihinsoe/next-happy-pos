@@ -17,11 +17,13 @@ import Layout from "../../../components/Layout";
 import { config } from "../../../config/config";
 import { getSelectedLocationId } from "@/utils";
 import { BackOfficeContext } from "@/contexts/BackOfficeContext";
-import { useAppSelector } from "@/store/hook";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
+import { setCompany } from "@/store/slices/companySlice";
 
 const Settings = () => {
   const { locations, company } = useAppSelector(appData);
+  const dispatch = useAppDispatch();
   const [selectedLocation, setSelectedLocation] = useState<
     Location | undefined
   >();
@@ -60,7 +62,10 @@ const Settings = () => {
       },
       body: JSON.stringify(companyInfo),
     });
-    return response;
+    if (response.ok) {
+      const companyUpdated = (await response.json()) as Company;
+      dispatch(setCompany(companyUpdated));
+    }
   };
 
   return (

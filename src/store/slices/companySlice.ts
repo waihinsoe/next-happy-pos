@@ -20,12 +20,9 @@ export const companySlice = createSlice({
     setCompany: (state, action) => {
       state.item = action.payload;
     },
-    updateCompany: (state, action) => {
-      state.item = action.payload;
-    },
   },
 });
 
-export const { setCompany, updateCompany } = companySlice.actions;
+export const { setCompany } = companySlice.actions;
 
 export default companySlice.reducer;

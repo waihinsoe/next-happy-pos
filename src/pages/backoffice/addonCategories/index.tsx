@@ -37,6 +37,8 @@ const AddonCategories = () => {
     addonCategoryIds.includes(item.id)
   );
 
+  const hello = () => {};
+
   const getAddonCount = (addonCategoryId?: number) => {
     if (!addonCategoryId) return;
     return addons.filter((item) => item.addon_categories_id === addonCategoryId)

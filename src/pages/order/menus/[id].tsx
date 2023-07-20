@@ -8,17 +8,13 @@ import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 
 import AddonCategories from "@/components/AddonCategories";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { orderAppData, setCartItem } from "@/store/slices/orderAppSlice";
 
 const MenuDetail = () => {
-  const {
-    menusAddonCategories,
-    addonCategories,
-    menus,
-    addons,
-    updateData,
-    cart,
-  } = useContext(OrderContext);
-  const { ...data } = useContext(OrderContext);
+  const { menusAddonCategories, addonCategories, menus, addons } =
+    useAppSelector(orderAppData);
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const query = router.query;
   const menuId = query.id as string;
@@ -34,19 +30,14 @@ const MenuDetail = () => {
   );
 
   const addToCart = () => {
-    updateData({
-      ...data,
-      cart: [
-        ...data.cart,
-        {
-          id: generateRandomId(),
-          menu: validMenu,
-          addons: selectedAddons,
-          quantity,
-        },
-      ],
-    });
-
+    dispatch(
+      setCartItem({
+        id: generateRandomId(),
+        menu: validMenu,
+        addons: selectedAddons,
+        quantity,
+      })
+    );
     router.push({ pathname: "/order", query });
   };
 

@@ -12,10 +12,12 @@ import ordersSlice from "./slices/ordersSlice";
 import orderLinesSlice from "./slices/orderLinesSlice";
 import tablesSlice from "./slices/tablesSlice";
 import menusAddonCategoriesSlice from "./slices/menusAddonCategoriesSlice";
+import orderAppSlice from "./slices/orderAppSlice";
 // ...
 
 export const store = configureStore({
   reducer: {
+    orderApp: orderAppSlice,
     app: appSlice,
     menuCategories: menuCategoriesSlice,
     menus: menusSlice,

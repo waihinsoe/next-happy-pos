@@ -41,17 +41,6 @@ const MenuCategories = () => {
     console.log("hello");
   };
 
-  const handleDelete = async (menuCategoryId: number | undefined) => {
-    const response = await fetch(
-      `${config.apiBaseUrl}/menuCategories/?menuCategoryId=${menuCategoryId}`,
-      {
-        method: "DELETE",
-      }
-    );
-    if (response.ok) {
-      // fetchData();
-    }
-  };
   return (
     <Layout title="MenuCategories">
       <Box>
