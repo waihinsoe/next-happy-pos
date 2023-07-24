@@ -13,9 +13,10 @@ function BackOfficeApp() {
   useEffect(() => {
     if (session) {
       router.push("/backoffice/orders");
-    } else {
-      router.push("/auth/signin");
     }
+    // } else {
+    //   router.push("/auth/signin");
+    // }
   }, [session]);
 
   useEffect(() => {
