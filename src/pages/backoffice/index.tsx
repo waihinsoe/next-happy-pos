@@ -16,7 +16,7 @@ function BackOfficeApp() {
     } else {
       router.push("/auth/signin");
     }
-  }, [session, router]);
+  }, [session]);
 
   useEffect(() => {
     dispatch(fetchAppData(selectedLocationId));
