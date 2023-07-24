@@ -2,14 +2,13 @@ import AddonCategories from "@/components/AddonCategories";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
 import QuantitySelector from "@/components/QuantitySelector";
-import { OrderContext } from "@/contexts/OrderContext";
-import type { addons as Addon } from "@prisma/client";
-import { getAddonCategoriesByMenuId } from "@/utils";
-import { Box, Button, Typography } from "@mui/material";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { orderAppData, updateCartItem } from "@/store/slices/orderAppSlice";
+import { getAddonCategoriesByMenuId } from "@/utils";
+import { Box, Button, Typography } from "@mui/material";
+import type { addons as Addon } from "@prisma/client";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 const UpdateMenu = () => {
   const router = useRouter();

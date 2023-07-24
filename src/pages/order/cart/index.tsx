@@ -1,19 +1,18 @@
-import { OrderContext } from "@/contexts/OrderContext";
-import { Avatar, Box, Button, Divider, Typography } from "@mui/material";
-import { useContext, useEffect } from "react";
-import type { addons as Addon } from "@prisma/client";
-import { useRouter } from "next/router";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import { CartItem } from "@/typings/types";
 import { config } from "@/config/config";
-import { getCartTotalPrice } from "@/utils";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import {
   fetchOrderAppData,
   orderAppData,
   removeCartItem,
 } from "@/store/slices/orderAppSlice";
+import { CartItem } from "@/typings/types";
+import { getCartTotalPrice } from "@/utils";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import { Avatar, Box, Button, Divider, Typography } from "@mui/material";
+import type { addons as Addon } from "@prisma/client";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 const Review = () => {
   const { cart, isLoading } = useAppSelector(orderAppData);
   const dispatch = useAppDispatch();
@@ -73,7 +72,7 @@ const Review = () => {
       const responseJson = await response.json();
       const order = responseJson.order;
       dispatch(fetchOrderAppData(currentLocationId));
-      router.push({ pathname: `/order/activeOrder/${order.id}`, query });
+      router.push({ pathname: `/order/ActiveOrder/${order.id}`, query });
     }
   };
   if (!cart.length) return null;

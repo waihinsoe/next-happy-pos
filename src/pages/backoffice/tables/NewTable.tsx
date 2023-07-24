@@ -1,24 +1,16 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  OutlinedInput,
-  MenuItem,
-  Checkbox,
-  ListItemText,
-  Button,
-} from "@mui/material";
-import { useContext, useState } from "react";
-import { BackOfficeContext } from "@/contexts/BackOfficeContext";
-import type { locations as Location, tables as Table } from "@prisma/client";
 import { config } from "@/config/config";
-import { getSelectedLocationId } from "@/utils";
 import { useAppDispatch } from "@/store/hook";
 import { addTable } from "@/store/slices/tablesSlice";
+import { getSelectedLocationId } from "@/utils";
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  TextField,
+} from "@mui/material";
+import type { tables as Table } from "@prisma/client";
+import { useState } from "react";
 
 interface Props {
   open: boolean;

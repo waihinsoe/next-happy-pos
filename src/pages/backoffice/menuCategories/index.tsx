@@ -1,17 +1,14 @@
-import { Box, Button, Paper, Typography } from "@mui/material";
 import CategoryIcon from "@mui/icons-material/Category";
+import { Box, Button } from "@mui/material";
 
-import { useContext, useState } from "react";
-import Link from "next/link";
-import { BackOfficeContext } from "@/contexts/BackOfficeContext";
-import Layout from "@/components/Layout";
-import AddIcon from "@mui/icons-material/Add";
-import NewMenuCategory from "./NewMenuCategory";
-import { getSelectedLocationId } from "@/utils";
-import { config } from "@/config/config";
 import ItemCard from "@/components/ItemCard";
+import Layout from "@/components/Layout";
 import { useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
+import { getSelectedLocationId } from "@/utils";
+import AddIcon from "@mui/icons-material/Add";
+import { useState } from "react";
+import NewMenuCategory from "./NewMenuCategory";
 
 const MenuCategories = () => {
   const { menuCategories, menusMenuCategoriesLocations } =

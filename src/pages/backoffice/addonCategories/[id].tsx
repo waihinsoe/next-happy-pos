@@ -1,5 +1,4 @@
 import Layout from "@/components/Layout";
-import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Box,
@@ -9,17 +8,17 @@ import {
   TextField,
 } from "@mui/material";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import type { addon_categories as AddonCategory } from "@prisma/client";
-import { config } from "@/config/config";
 import DeleteDialog from "@/components/DeleteDialog";
+import { config } from "@/config/config";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { appData } from "@/store/slices/appSlice";
 import {
   removeAddonCategory,
   updateAddonCategory,
 } from "@/store/slices/addonCategoriesSlice";
+import { appData } from "@/store/slices/appSlice";
+import type { addon_categories as AddonCategory } from "@prisma/client";
 
 const EditAddonCategory = () => {
   const router = useRouter();

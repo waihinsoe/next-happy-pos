@@ -1,16 +1,14 @@
 import Layout from "@/components/Layout";
 import LunchDiningIcon from "@mui/icons-material/LunchDining";
 
-import { BackOfficeContext } from "@/contexts/BackOfficeContext";
-import { getAddonsByLocationId, getSelectedLocationId } from "@/utils";
-import { Box, Button, Paper, Typography } from "@mui/material";
-import Link from "next/link";
-import { useContext, useState } from "react";
-import AddIcon from "@mui/icons-material/Add";
-import NewAddon from "./NewAddon";
 import ItemCard from "@/components/ItemCard";
 import { useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
+import { getAddonsByLocationId } from "@/utils";
+import AddIcon from "@mui/icons-material/Add";
+import { Box, Button } from "@mui/material";
+import { useState } from "react";
+import NewAddon from "./NewAddon";
 
 const Addons = () => {
   const [open, setOpen] = useState(false);

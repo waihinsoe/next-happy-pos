@@ -1,11 +1,10 @@
 import QuantitySelector from "@/components/QuantitySelector";
-import { OrderContext } from "@/contexts/OrderContext";
 import { generateRandomId, getAddonCategoriesByMenuId } from "@/utils";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { Box, Button, Typography } from "@mui/material";
 import type { addons as Addon } from "@prisma/client";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import AddonCategories from "@/components/AddonCategories";
 import { useAppDispatch, useAppSelector } from "@/store/hook";

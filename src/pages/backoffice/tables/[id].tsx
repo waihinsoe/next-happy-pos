@@ -1,15 +1,14 @@
+import DeleteDialog from "@/components/DeleteDialog";
 import Layout from "@/components/Layout";
 import { config } from "@/config/config";
-import { BackOfficeContext } from "@/contexts/BackOfficeContext";
-import { Box, Button, TextField } from "@mui/material";
-import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
-import type { tables as Table } from "@prisma/client";
-import DeleteDialog from "@/components/DeleteDialog";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
 import { removeTable, updateTable } from "@/store/slices/tablesSlice";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { Box, Button, TextField } from "@mui/material";
+import type { tables as Table } from "@prisma/client";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 const EditTable = () => {
   const router = useRouter();

@@ -2,7 +2,6 @@ import { Box } from "@mui/material";
 import TopBar from "./TopBar";
 import SideBar from "./SideBar";
 import { useContext } from "react";
-import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import { useAppSelector } from "@/store/hook";
 
 type Props = {

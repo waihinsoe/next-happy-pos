@@ -1,18 +1,17 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  Button,
-  TextField,
-  Box,
-} from "@mui/material";
-import { useContext, useState } from "react";
-import type { locations as Location } from "@prisma/client";
 import { config } from "@/config/config";
-import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
 import { addLocation } from "@/store/slices/locationsSlice";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  TextField,
+} from "@mui/material";
+import type { locations as Location } from "@prisma/client";
+import { useState } from "react";
 interface Props {
   open: boolean;
   setOpen: (value: boolean) => void;

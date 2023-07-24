@@ -1,15 +1,14 @@
-import Layout from "@/components/Layout";
-import { BackOfficeContext } from "@/contexts/BackOfficeContext";
-import { Box, Button, TextField } from "@mui/material";
-import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
-import type { addons as Addon } from "@prisma/client";
-import { config } from "@/config/config";
 import DeleteDialog from "@/components/DeleteDialog";
-import DeleteIcon from "@mui/icons-material/Delete";
+import Layout from "@/components/Layout";
+import { config } from "@/config/config";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { appData } from "@/store/slices/appSlice";
 import { removeAddon, updateAddon } from "@/store/slices/addonsSlice";
+import { appData } from "@/store/slices/appSlice";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { Box, Button, TextField } from "@mui/material";
+import type { addons as Addon } from "@prisma/client";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 const EditAddon = () => {
   const router = useRouter();
