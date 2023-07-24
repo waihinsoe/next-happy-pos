@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { getSelectedLocationId } from "@/utils";
 import { fetchAppData } from "@/store/slices/appSlice";
 function BackOfficeApp() {
-  const { isLoading } = useAppSelector((state) => state.app);
   const { data: session } = useSession();
   const router = useRouter();
   const selectedLocationId = getSelectedLocationId() as string;
@@ -13,11 +12,11 @@ function BackOfficeApp() {
 
   useEffect(() => {
     if (session) {
-      !isLoading && router.push("/backoffice/orders");
+      router.push("/backoffice/orders");
     } else {
       router.push("/auth/signin");
     }
-  }, [session, isLoading, router]);
+  }, [session, router]);
 
   useEffect(() => {
     dispatch(fetchAppData(selectedLocationId));

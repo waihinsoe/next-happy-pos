@@ -72,7 +72,7 @@ const Review = () => {
       const responseJson = await response.json();
       const order = responseJson.order;
       dispatch(fetchOrderAppData(currentLocationId));
-      router.push({ pathname: `/order/ActiveOrder/${order.id}`, query });
+      router.push({ pathname: `/order/activeOrder/${order.id}`, query });
     }
   };
   if (!cart.length) return null;
