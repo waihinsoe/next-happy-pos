@@ -1,13 +1,12 @@
 import MenuCard from "@/components/MenuCard";
 import ViewCardBar from "@/components/ViewCardBar";
-import { OrderContext } from "@/contexts/OrderContext";
-import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { fetchOrderAppData, orderAppData } from "@/store/slices/orderAppSlice";
+import { useAppSelector } from "@/store/hook";
+import { orderAppData } from "@/store/slices/orderAppSlice";
 import { getMenusByMenuCategoryId } from "@/utils";
 import { Box, Tab, Tabs } from "@mui/material";
 import { menu_categories as MenuCategory } from "@prisma/client";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const Order = () => {
   const router = useRouter();

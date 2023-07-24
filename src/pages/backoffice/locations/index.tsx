@@ -1,15 +1,13 @@
 import Layout from "@/components/Layout";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 
-import { BackOfficeContext } from "@/contexts/BackOfficeContext";
-import { Box, Button, Paper, Typography } from "@mui/material";
-import Link from "next/link";
-import { useContext, useState } from "react";
-import AddIcon from "@mui/icons-material/Add";
-import NewLocation from "./NewLocation";
 import ItemCard from "@/components/ItemCard";
 import { useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
+import AddIcon from "@mui/icons-material/Add";
+import { Box, Button } from "@mui/material";
+import { useState } from "react";
+import NewLocation from "./NewLocation";
 
 const Locations = () => {
   const { locations } = useAppSelector(appData);

@@ -1,10 +1,8 @@
-import { OrderContext } from "@/contexts/OrderContext";
-import { Box, Typography } from "@mui/material";
-import { useRouter } from "next/router";
-import { useContext } from "react";
-import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import { useAppSelector } from "@/store/hook";
 import { orderAppData } from "@/store/slices/orderAppSlice";
+import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
+import { Box, Typography } from "@mui/material";
+import { useRouter } from "next/router";
 const ViewCardBar = () => {
   const router = useRouter();
   const query = router.query;

@@ -1,16 +1,14 @@
 import Layout from "@/components/Layout";
 import ClassIcon from "@mui/icons-material/Class";
 
-import { BackOfficeContext } from "@/contexts/BackOfficeContext";
-import { getSelectedLocationId } from "@/utils";
-import { Box, Button, Paper, Typography } from "@mui/material";
-import Link from "next/link";
-import { useContext, useState } from "react";
-import NewAddonCategory from "./NewAddonCategory";
-import AddIcon from "@mui/icons-material/Add";
 import ItemCard from "@/components/ItemCard";
 import { useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
+import { getSelectedLocationId } from "@/utils";
+import AddIcon from "@mui/icons-material/Add";
+import { Box, Button } from "@mui/material";
+import { useState } from "react";
+import NewAddonCategory from "./NewAddonCategory";
 
 const AddonCategories = () => {
   const [open, setOpen] = useState(false);

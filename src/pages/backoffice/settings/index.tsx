@@ -1,25 +1,24 @@
+import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { appData } from "@/store/slices/appSlice";
+import { setCompany } from "@/store/slices/companySlice";
+import { getSelectedLocationId } from "@/utils";
 import {
   Box,
+  Button,
   FormControl,
   InputLabel,
-  Select,
   MenuItem,
+  Select,
   SelectChangeEvent,
   TextField,
-  Button,
 } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
 import type {
   companies as Company,
   locations as Location,
 } from "@prisma/client";
+import { useEffect, useState } from "react";
 import Layout from "../../../components/Layout";
 import { config } from "../../../config/config";
-import { getSelectedLocationId } from "@/utils";
-import { BackOfficeContext } from "@/contexts/BackOfficeContext";
-import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { appData } from "@/store/slices/appSlice";
-import { setCompany } from "@/store/slices/companySlice";
 
 const Settings = () => {
   const { locations, company } = useAppSelector(appData);

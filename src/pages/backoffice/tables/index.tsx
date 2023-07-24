@@ -1,16 +1,15 @@
 import Layout from "@/components/Layout";
 import TableBarIcon from "@mui/icons-material/TableBar";
 
-import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import { getSelectedLocationId } from "@/utils";
 import { Box, Button } from "@mui/material";
 
-import { useContext, useState } from "react";
-import AddIcon from "@mui/icons-material/Add";
-import NewTable from "./NewTable";
 import ItemCard from "@/components/ItemCard";
 import { useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
+import AddIcon from "@mui/icons-material/Add";
+import { useState } from "react";
+import NewTable from "./NewTable";
 
 const Tables = () => {
   const { tables } = useAppSelector(appData);

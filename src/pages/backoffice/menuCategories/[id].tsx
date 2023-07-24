@@ -1,5 +1,21 @@
 import Layout from "@/components/Layout";
-import { BackOfficeContext } from "@/contexts/BackOfficeContext";
+import MenuCard from "@/components/MenuCard";
+import { config } from "@/config/config";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { appData } from "@/store/slices/appSlice";
+import {
+  removeMenuCategory,
+  updateMenuCategory,
+} from "@/store/slices/menuCategoriesSlice";
+import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocationsSlice";
+import {
+  getLocationsByMenuCategoryId,
+  getMenusByMenuCategoryId,
+  getSelectedLocationId,
+} from "@/utils";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Autocomplete,
   Box,
@@ -9,28 +25,11 @@ import {
   Typography,
 } from "@mui/material";
 import type { menu_categories as MenuCategory } from "@prisma/client";
-import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import { config } from "@/config/config";
-import MenuCard from "@/components/MenuCard";
-import {
-  getLocationsByMenuCategoryId,
-  getMenusByMenuCategoryId,
-  getSelectedLocationId,
-} from "@/utils";
-import DeleteIcon from "@mui/icons-material/Delete";
-import RemoveMenuFromMenuCategory from "./RemoveMenuFromMenuCategory";
 import { menus as Menu } from "@prisma/client";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import DeleteDialog from "../../../components/DeleteDialog";
-import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { appData } from "@/store/slices/appSlice";
-import {
-  removeMenuCategory,
-  updateMenuCategory,
-} from "@/store/slices/menuCategoriesSlice";
-import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocationsSlice";
+import RemoveMenuFromMenuCategory from "./RemoveMenuFromMenuCategory";
 const icon = (
   <CheckBoxOutlineBlankIcon fontSize="small" style={{ color: "lightblue" }} />
 );

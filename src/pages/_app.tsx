@@ -1,16 +1,14 @@
-import BackOfficeProvider from "@/contexts/BackOfficeContext";
-import OrderProvider from "@/contexts/OrderContext";
-import "@/styles/globals.css";
-import type { AppProps } from "next/app";
-import { SessionProvider } from "next-auth/react";
-import { Session } from "next-auth";
-import { Provider } from "react-redux";
 import { store } from "@/store";
-import { getSelectedLocationId } from "@/utils";
-import { useEffect } from "react";
 import { fetchAppData } from "@/store/slices/appSlice";
 import { fetchOrderAppData } from "@/store/slices/orderAppSlice";
+import "@/styles/globals.css";
+import { getSelectedLocationId } from "@/utils";
+import { Session } from "next-auth";
+import { SessionProvider } from "next-auth/react";
+import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { Provider } from "react-redux";
 
 type CustomeAppProps = AppProps & { session: Session };
 

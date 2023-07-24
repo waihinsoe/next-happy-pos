@@ -1,21 +1,12 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  Typography,
-} from "@mui/material";
-import { useContext, useState } from "react";
-import AddIcon from "@mui/icons-material/Add";
-import Link from "next/link";
-import { getSelectedLocationId } from "@/utils";
 import Layout from "@/components/Layout";
-import { BackOfficeContext } from "@/contexts/BackOfficeContext";
-import NewMenu from "./NewMenu";
 import MenuCard from "@/components/MenuCard";
 import { useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
+import { getSelectedLocationId } from "@/utils";
+import AddIcon from "@mui/icons-material/Add";
+import { Box, Button } from "@mui/material";
+import { useState } from "react";
+import NewMenu from "./NewMenu";
 
 const Menus = () => {
   const [open, setOpen] = useState(false);

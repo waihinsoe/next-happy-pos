@@ -1,24 +1,22 @@
 import { config } from "@/config/config";
-import { BackOfficeContext } from "@/contexts/BackOfficeContext";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { addAddon } from "@/store/slices/addonsSlice";
 import { appData } from "@/store/slices/appSlice";
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  TextField,
   Button,
-  Checkbox,
+  Dialog,
+  DialogContent,
+  DialogTitle,
   FormControl,
   InputLabel,
   ListItemText,
   MenuItem,
   OutlinedInput,
   Select,
+  TextField,
 } from "@mui/material";
-import { useState } from "react";
 import type { addons as Addon } from "@prisma/client";
-import { addAddon } from "@/store/slices/addonsSlice";
+import { useState } from "react";
 interface Props {
   open: boolean;
   setOpen: (value: boolean) => void;

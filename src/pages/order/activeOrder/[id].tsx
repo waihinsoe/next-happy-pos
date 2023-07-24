@@ -1,12 +1,11 @@
-import { OrderContext } from "@/contexts/OrderContext";
 import { useAppSelector } from "@/store/hook";
 import { orderAppData } from "@/store/slices/orderAppSlice";
 import { Box, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 
-const activeOrder = () => {
-  const { orders, orderLines } = useAppSelector(orderAppData);
+const ActiveOrder = () => {
+  const { orders } = useAppSelector(orderAppData);
   const router = useRouter();
   const query = router.query;
   const orderId = query.id;
@@ -29,4 +28,4 @@ const activeOrder = () => {
   );
 };
 
-export default activeOrder;
+export default ActiveOrder;
