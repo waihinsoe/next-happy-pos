@@ -43,7 +43,7 @@ const EditMenu = () => {
       setMenuToUpdate(validMenu);
       setConnectedAddonCategories(selectedAddonCategories);
     }
-  }, [menus, menusAddonCategories]);
+  }, [menus, menusAddonCategories, selectedAddonCategories, menuId]);
 
   const handleUpdateMenu = async () => {
     const payload = { ...menuToUpdate, addonCategoryIds };

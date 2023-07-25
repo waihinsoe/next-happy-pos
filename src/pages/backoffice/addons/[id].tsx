@@ -52,7 +52,7 @@ const EditAddon = () => {
       const validAddon = addons.find((item) => item.id === Number(addonId));
       setAddon(validAddon);
     }
-  }, [addons]);
+  }, [addons, addonId]);
   if (!addon) return null;
   return (
     <Layout title="EditAddon">

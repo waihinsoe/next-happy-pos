@@ -25,7 +25,7 @@ const Review = () => {
 
       isValid && router.push({ pathname: "/order", query });
     }
-  }, [cart, query]);
+  }, [cart, query, isLoading, router]);
 
   const renderAddons = (addons: Addon[]) => {
     if (!addons.length) return;
@@ -72,7 +72,8 @@ const Review = () => {
       const responseJson = await response.json();
       const order = responseJson.order;
       dispatch(fetchOrderAppData(currentLocationId));
-      router.push({ pathname: `/order/activeOrder/${order.id}`, query });
+      order.id &&
+        router.push({ pathname: `/order/activeOrder/${order.id}`, query });
     }
   };
   if (!cart.length) return null;

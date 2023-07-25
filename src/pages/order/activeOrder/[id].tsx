@@ -16,7 +16,7 @@ const ActiveOrder = () => {
     if (!order) {
       router.push({ pathname: "/order", query });
     }
-  }, [order]);
+  }, [order, query, router]);
 
   if (!order) return null;
 

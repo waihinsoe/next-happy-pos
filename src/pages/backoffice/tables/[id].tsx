@@ -51,7 +51,7 @@ const EditTable = () => {
       const validTable = tables.find((table) => table.id === Number(tableId));
       setNewTable(validTable);
     }
-  }, [tables]);
+  }, [tables, tableId]);
 
   if (!newTable) return null;
   return (
