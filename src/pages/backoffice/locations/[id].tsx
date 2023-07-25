@@ -51,7 +51,7 @@ const EditLocation = () => {
       );
       setNewLocation(validLocation);
     }
-  }, [locations]);
+  }, [locations, locationId]);
   if (!newLocation) return null;
   return (
     <Layout title="EditLocation">
