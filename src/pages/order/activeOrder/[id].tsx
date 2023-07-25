@@ -12,11 +12,11 @@ const ActiveOrder = () => {
 
   const order = orders.find((item) => item.id === Number(orderId));
 
-  useEffect(() => {
-    if (!order) {
-      router.push({ pathname: "/order", query });
-    }
-  }, [order, query, router]);
+  // useEffect(() => {
+  //   if (!order) {
+  //     router.push({ pathname: "/order", query });
+  //   }
+  // }, [order, query, router]);
 
   if (!order) return null;
 
