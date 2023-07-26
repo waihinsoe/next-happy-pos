@@ -19,6 +19,7 @@ function BackOfficeApp() {
   useEffect(() => {
     dispatch(fetchAppData(selectedLocationId));
   }, []);
+
   return <div>backoffice app</div>;
 }
 

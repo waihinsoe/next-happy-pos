@@ -297,7 +297,11 @@ const Orders = () => {
   const getOrderLinesByOrderId = (orderId: number) => {
     return orderLines.filter((orderLine) => orderLine.orders_id === orderId);
   };
-
+  setInterval(() => {
+    // Reload the page
+    if (typeof window === "undefined") return "";
+    window.location.reload();
+  }, 10000);
   return (
     <Layout title="Orders">
       <TableContainer component={Paper} sx={{ maxHeight: "100%" }}>
