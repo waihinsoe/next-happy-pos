@@ -10,7 +10,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import { config } from "../config/config";
 import Link from "next/link";
-import Layout from "./Layout";
+import BackofficeLayout from "./BackofficeLayout";
 
 const Register = () => {
   const [open, setOpen] = useState(false);
@@ -52,7 +52,7 @@ const Register = () => {
   );
 
   return (
-    <Layout title="Register">
+    <BackofficeLayout title="Register">
       <Box
         sx={{
           display: "flex",
@@ -115,7 +115,7 @@ const Register = () => {
           </Box>
         </Box>
       </Box>
-    </Layout>
+    </BackofficeLayout>
   );
 };
 

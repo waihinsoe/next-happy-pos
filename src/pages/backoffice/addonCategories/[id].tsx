@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import BackofficeLayout from "@/components/BackofficeLayout";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Box,
@@ -70,7 +70,7 @@ const EditAddonCategory = () => {
 
   if (!addonCategory) return null;
   return (
-    <Layout title="EditAddonCategory">
+    <BackofficeLayout title="EditAddonCategory">
       <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
         <Button
           variant="contained"
@@ -127,7 +127,7 @@ const EditAddonCategory = () => {
         setOpen={setOpenDialog}
         callback={handleDeleteAddonCategory}
       />
-    </Layout>
+    </BackofficeLayout>
   );
 };
 

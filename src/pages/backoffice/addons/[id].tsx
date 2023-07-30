@@ -1,5 +1,5 @@
 import DeleteDialog from "@/components/DeleteDialog";
-import Layout from "@/components/Layout";
+import BackofficeLayout from "@/components/BackofficeLayout";
 import { config } from "@/config/config";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { removeAddon, updateAddon } from "@/store/slices/addonsSlice";
@@ -55,7 +55,7 @@ const EditAddon = () => {
   }, [addons, addonId]);
   if (!addon) return null;
   return (
-    <Layout title="EditAddon">
+    <BackofficeLayout title="EditAddon">
       <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
         <Button
           variant="contained"
@@ -105,7 +105,7 @@ const EditAddon = () => {
         setOpen={setOpen}
         callback={handleDeleteAddon}
       />
-    </Layout>
+    </BackofficeLayout>
   );
 };
 

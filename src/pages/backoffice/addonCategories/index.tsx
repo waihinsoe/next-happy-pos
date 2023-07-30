@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import BackofficeLayout from "@/components/BackofficeLayout";
 import ClassIcon from "@mui/icons-material/Class";
 
 import ItemCard from "@/components/ItemCard";
@@ -44,7 +44,7 @@ const AddonCategories = () => {
   };
 
   return (
-    <Layout title="AddonCategories">
+    <BackofficeLayout title="AddonCategories">
       <Box
         sx={{
           width: "100%",
@@ -85,7 +85,7 @@ const AddonCategories = () => {
         ))}
       </Box>
       <NewAddonCategory open={open} setOpen={setOpen} menuIds={menuIds} />
-    </Layout>
+    </BackofficeLayout>
   );
 };
 

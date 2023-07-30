@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Autocomplete, Box, Button, TextField } from "@mui/material";
 import type { menus as Menu } from "@prisma/client";
 import { config } from "../../../config/config";
-import Layout from "../../../components/Layout";
+import BackofficeLayout from "../../../components/BackofficeLayout";
 import { useRouter } from "next/router";
 import { getAddonCategoriesByMenuId, getSelectedLocationId } from "@/utils";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -76,7 +76,7 @@ const EditMenu = () => {
   };
   if (!menuToUpdate) return null;
   return (
-    <Layout title="EditMenu">
+    <BackofficeLayout title="EditMenu">
       <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
         <Button
           variant="contained"
@@ -160,7 +160,7 @@ const EditMenu = () => {
         setOpen={setOpen}
         callback={handleDeleteMenu}
       />
-    </Layout>
+    </BackofficeLayout>
   );
 };
 

@@ -1,7 +1,7 @@
-import Layout from "@/components/Layout";
+import BackofficeLayout from "@/components/BackofficeLayout";
 import { config } from "@/config/config";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { appData } from "@/store/slices/appSlice";
+import { appData, fetchAppData } from "@/store/slices/appSlice";
 import { fetchOrderLines } from "@/store/slices/orderLinesSlice";
 import { getNumberOfMenusByOrderId, getSelectedLocationId } from "@/utils";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -288,6 +288,7 @@ const Row = ({
 const Orders = () => {
   const { orders, orderLines, menus, addonCategories, addons } =
     useAppSelector(appData);
+  const dispatch = useAppDispatch();
   const selectedLocationId = getSelectedLocationId() as string;
 
   const currentLocationOrders = orders.filter(
@@ -297,13 +298,9 @@ const Orders = () => {
   const getOrderLinesByOrderId = (orderId: number) => {
     return orderLines.filter((orderLine) => orderLine.orders_id === orderId);
   };
-  setInterval(() => {
-    // Reload the page
-    if (typeof window === "undefined") return "";
-    window.location.reload();
-  }, 10000);
+
   return (
-    <Layout title="Orders">
+    <BackofficeLayout title="Orders">
       <TableContainer component={Paper} sx={{ maxHeight: "100%" }}>
         <Table
           sx={{ minWidth: 650 }}
@@ -335,7 +332,7 @@ const Orders = () => {
           </TableBody>
         </Table>
       </TableContainer>
-    </Layout>
+    </BackofficeLayout>
   );
 };
 

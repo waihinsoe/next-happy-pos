@@ -17,7 +17,7 @@ import type {
   locations as Location,
 } from "@prisma/client";
 import { useEffect, useState } from "react";
-import Layout from "../../../components/Layout";
+import BackofficeLayout from "../../../components/BackofficeLayout";
 import { config } from "../../../config/config";
 
 const Settings = () => {
@@ -68,7 +68,7 @@ const Settings = () => {
   };
 
   return (
-    <Layout title="Settings">
+    <BackofficeLayout title="Settings">
       <Box
         sx={{
           maxWidth: 400,
@@ -119,7 +119,7 @@ const Settings = () => {
           Update
         </Button>
       </Box>
-    </Layout>
+    </BackofficeLayout>
   );
 };
 

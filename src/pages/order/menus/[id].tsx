@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import AddonCategories from "@/components/AddonCategories";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { orderAppData, setCartItem } from "@/store/slices/orderAppSlice";
+import OrderLayout from "@/components/OrderLayout";
 
 const MenuDetail = () => {
   const { menusAddonCategories, addonCategories, menus, addons } =
@@ -37,6 +38,7 @@ const MenuDetail = () => {
         quantity,
       })
     );
+
     router.push({ pathname: "/order", query });
   };
 
@@ -113,42 +115,52 @@ const MenuDetail = () => {
   }, [selectedAddons, validAddonCategories]);
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "center" }}>
-      <Box
-        sx={{
-          p: 3,
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-          width: { xs: "100%", md: "500px" },
-        }}
-      >
-        <Typography variant="h5" sx={{ textTransform: "capitalize" }}>
-          {validMenu?.name}
-        </Typography>
-
-        <AddonCategories
-          validAddonCategories={validAddonCategories}
-          addons={addons}
-          selectedAddons={selectedAddons}
-          handleAddonSelect={handleAddonSelect}
-        />
-        <QuantitySelector
-          value={quantity}
-          onIncrease={handleQuantityIncrease}
-          onDecrease={handleQuantityDecrease}
-        />
-        <Button
-          variant="contained"
-          sx={{ width: "fit-content", margin: "0 auto", mt: 2 }}
-          disabled={isDisabled}
-          onClick={addToCart}
-          startIcon={<AddShoppingCartIcon />}
+    <OrderLayout>
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Box
+          sx={{
+            px: 3,
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            width: { xs: "100%", md: "500px" },
+            position: "relative",
+            zIndex: 10,
+            top: -90,
+          }}
         >
-          Add to cart
-        </Button>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Typography variant="h5" sx={{ textTransform: "capitalize" }}>
+              {validMenu?.name}
+            </Typography>
+            <Typography variant="h5" sx={{ textTransform: "capitalize" }}>
+              {validMenu?.price} kyats
+            </Typography>
+          </Box>
+
+          <AddonCategories
+            validAddonCategories={validAddonCategories}
+            addons={addons}
+            selectedAddons={selectedAddons}
+            handleAddonSelect={handleAddonSelect}
+          />
+          <QuantitySelector
+            value={quantity}
+            onIncrease={handleQuantityIncrease}
+            onDecrease={handleQuantityDecrease}
+          />
+          <Button
+            variant="contained"
+            sx={{ width: "fit-content", margin: "0 auto", mt: 2 }}
+            disabled={isDisabled}
+            onClick={addToCart}
+            startIcon={<AddShoppingCartIcon />}
+          >
+            Add to cart
+          </Button>
+        </Box>
       </Box>
-    </Box>
+    </OrderLayout>
   );
 };
 
