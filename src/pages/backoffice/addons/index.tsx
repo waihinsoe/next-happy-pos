@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import BackofficeLayout from "@/components/BackofficeLayout";
 import LunchDiningIcon from "@mui/icons-material/LunchDining";
 
 import ItemCard from "@/components/ItemCard";
@@ -21,7 +21,7 @@ const Addons = () => {
     addons
   );
   return (
-    <Layout title="Addons">
+    <BackofficeLayout title="Addons">
       <Box
         sx={{
           width: "100%",
@@ -64,7 +64,7 @@ const Addons = () => {
         ))}
       </Box>
       <NewAddon open={open} setOpen={setOpen} />
-    </Layout>
+    </BackofficeLayout>
   );
 };
 

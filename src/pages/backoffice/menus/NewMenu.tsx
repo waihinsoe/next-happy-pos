@@ -15,7 +15,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import Layout from "@/components/Layout";
 import type {
   locations as Location,
   menus as Menu,

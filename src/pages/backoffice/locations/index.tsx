@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import BackofficeLayout from "@/components/BackofficeLayout";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 import ItemCard from "@/components/ItemCard";
@@ -13,7 +13,7 @@ const Locations = () => {
   const { locations } = useAppSelector(appData);
   const [open, setOpen] = useState(false);
   return (
-    <Layout title="Locations">
+    <BackofficeLayout title="Locations">
       <Box>
         <Box
           sx={{
@@ -57,7 +57,7 @@ const Locations = () => {
         </Box>
       </Box>
       <NewLocation open={open} setOpen={setOpen} />
-    </Layout>
+    </BackofficeLayout>
   );
 };
 

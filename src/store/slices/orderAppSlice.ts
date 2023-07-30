@@ -11,7 +11,6 @@ import type {
   menus_addon_categories as MenuAddonCategory,
   orders as Order,
   orderLines as OrderLines,
-  orderLines,
 } from "@prisma/client";
 import {
   createAsyncThunk,
@@ -22,6 +21,8 @@ import { RootState } from "..";
 
 interface OrderAppState {
   isLoading: boolean;
+  company: Company | null;
+  locations: Location[];
   menus: Menu[];
   menuCategories: MenuCategory[];
   addons: Addon[];
@@ -29,13 +30,15 @@ interface OrderAppState {
   menusAddonCategories: MenuAddonCategory[];
   menusMenuCategoriesLocations: MenuMenuCategoryLocation[];
   orders: Order[];
-  orderLines: orderLines[];
+  orderLines: OrderLines[];
   cart: CartItem[];
   error: Error | null;
 }
 
 const initialState: OrderAppState = {
   isLoading: true,
+  company: null,
+  locations: [],
   menus: [],
   menuCategories: [],
   addons: [],
@@ -71,6 +74,8 @@ const orderAppSlice = createSlice({
       state.isLoading = action.payload;
     },
     setOrderAppData: (state, action) => {
+      state.company = action.payload.company;
+      state.locations = action.payload.locations;
       state.menus = action.payload.menus;
       state.menuCategories = action.payload.menuCategories;
       state.addons = action.payload.addons;
@@ -95,6 +100,8 @@ const orderAppSlice = createSlice({
   },
 });
 
+const selectCompany = (state: RootState) => state.orderApp.company;
+const selectLocations = (state: RootState) => state.orderApp.locations;
 const selectMenus = (state: RootState) => state.orderApp.menus;
 const selectMenuCategories = (state: RootState) =>
   state.orderApp.menuCategories;
@@ -112,6 +119,8 @@ const selectIsLoading = (state: RootState) => state.orderApp.isLoading;
 
 export const orderAppData = createSelector(
   [
+    selectCompany,
+    selectLocations,
     selectMenus,
     selectMenuCategories,
     selectAddons,
@@ -124,6 +133,8 @@ export const orderAppData = createSelector(
     selectIsLoading,
   ],
   (
+    company,
+    locations,
     menus,
     menuCategories,
     addons,
@@ -136,6 +147,8 @@ export const orderAppData = createSelector(
     isLoading
   ) => {
     return {
+      company,
+      locations,
       menus,
       menuCategories,
       addons,

@@ -3,6 +3,8 @@ import { fetchAppData } from "@/store/slices/appSlice";
 import { fetchOrderAppData } from "@/store/slices/orderAppSlice";
 import "@/styles/globals.css";
 import { getSelectedLocationId } from "@/utils";
+import { theme } from "@/utils/theme";
+import { ThemeProvider } from "@mui/material";
 import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
@@ -27,10 +29,13 @@ export default function App({
       store.dispatch(fetchOrderAppData(selectedOrderAppLocationId));
     }
   }, [selectedOrderAppLocationId, selectedLocationId]);
+
   return (
     <SessionProvider session={session}>
       <Provider store={store}>
-        <Component {...pageProps} />
+        <ThemeProvider theme={theme}>
+          <Component {...pageProps} />
+        </ThemeProvider>
       </Provider>
     </SessionProvider>
   );

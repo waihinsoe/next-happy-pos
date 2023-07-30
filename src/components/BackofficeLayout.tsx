@@ -1,7 +1,6 @@
 import { Box } from "@mui/material";
 import TopBar from "./TopBar";
 import SideBar from "./SideBar";
-import { useContext } from "react";
 import { useAppSelector } from "@/store/hook";
 
 type Props = {
@@ -9,13 +8,13 @@ type Props = {
   title?: string;
 };
 
-const Layout = (props: Props) => {
+const BackofficeLayout = (props: Props) => {
   const { isLoading } = useAppSelector((state) => state.app);
   if (isLoading) return null;
   return (
     <Box>
       <TopBar title={props.title} />
-      <Box sx={{ display: "flex", height: "100vh" }}>
+      <Box sx={{ display: "flex", height: "100vh", bgcolor: "#E8F6EF" }}>
         <SideBar />
         <Box
           sx={{
@@ -32,4 +31,4 @@ const Layout = (props: Props) => {
   );
 };
 
-export default Layout;
+export default BackofficeLayout;

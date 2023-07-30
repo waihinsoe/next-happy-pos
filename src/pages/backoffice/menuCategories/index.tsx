@@ -2,7 +2,7 @@ import CategoryIcon from "@mui/icons-material/Category";
 import { Box, Button } from "@mui/material";
 
 import ItemCard from "@/components/ItemCard";
-import Layout from "@/components/Layout";
+import BackofficeLayout from "@/components/BackofficeLayout";
 import { useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
 import { getSelectedLocationId } from "@/utils";
@@ -39,7 +39,7 @@ const MenuCategories = () => {
   };
 
   return (
-    <Layout title="MenuCategories">
+    <BackofficeLayout title="MenuCategories">
       <Box>
         <Box
           sx={{
@@ -84,7 +84,7 @@ const MenuCategories = () => {
         </Box>
       </Box>
       <NewMenuCategory open={open} setOpen={setOpen} />
-    </Layout>
+    </BackofficeLayout>
   );
 };
 

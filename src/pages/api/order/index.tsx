@@ -18,6 +18,14 @@ export default async function handler(
       },
     });
 
+    if (!location) return;
+
+    const company = await prisma.companies.findFirst({
+      where: {
+        id: location.companies_id as number,
+      },
+    });
+
     const menusMenuCategoriesLocations =
       await prisma.menus_menu_categories_locations.findMany({
         where: {
@@ -100,6 +108,7 @@ export default async function handler(
     });
 
     return res.send({
+      company,
       locations: [location],
       menus,
       menuCategories,

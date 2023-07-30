@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import BackofficeLayout from "@/components/BackofficeLayout";
 import MenuCard from "@/components/MenuCard";
 import { useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
@@ -24,7 +24,7 @@ const Menus = () => {
   );
 
   return (
-    <Layout title="Menus">
+    <BackofficeLayout title="Menus">
       <Box
         sx={{
           display: "flex",
@@ -69,7 +69,7 @@ const Menus = () => {
           ))}
       </Box>
       <NewMenu open={open} setOpen={setOpen} />
-    </Layout>
+    </BackofficeLayout>
   );
 };
 

@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import BackofficeLayout from "@/components/BackofficeLayout";
 import TableBarIcon from "@mui/icons-material/TableBar";
 
 import { getSelectedLocationId } from "@/utils";
@@ -19,7 +19,7 @@ const Tables = () => {
     (table) => table.locations_id === Number(selectedLocationId)
   );
   return (
-    <Layout title="Tables">
+    <BackofficeLayout title="Tables">
       <Box>
         <Box
           sx={{
@@ -63,7 +63,7 @@ const Tables = () => {
         </Box>
       </Box>
       <NewTable open={open} setOpen={setOpen} />
-    </Layout>
+    </BackofficeLayout>
   );
 };
 

@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import BackofficeLayout from "@/components/BackofficeLayout";
 import MenuCard from "@/components/MenuCard";
 import { config } from "@/config/config";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
@@ -165,7 +165,7 @@ const EditMenuCategory = () => {
   if (!menuCategory) return null;
 
   return (
-    <Layout title="EditMenuCategory">
+    <BackofficeLayout title="EditMenuCategory">
       <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
         <Button
           variant="contained"
@@ -317,7 +317,7 @@ const EditMenuCategory = () => {
         setOpen={setOpenDialog}
         callback={handleDeleteMenuCategory}
       />
-    </Layout>
+    </BackofficeLayout>
   );
 };
 
