@@ -178,6 +178,7 @@ export default async function handler(
           locations_id: {
             in: locationIds,
           },
+          is_archived: false,
         },
       });
 

@@ -10,7 +10,7 @@ const OrderAppHeader = () => {
   const router = useRouter();
   const query = router.query;
   const isHomePage = router.pathname === "/order";
-  const { cart } = useAppSelector(orderAppData);
+  const { cart, company } = useAppSelector(orderAppData);
   const cartItemCount = cart.length;
   return (
     <Box
@@ -65,14 +65,17 @@ const OrderAppHeader = () => {
                 mt: 15,
               }}
             >
-              Ah Wa Sarr
+              {company?.name}
             </Typography>
             <Typography
               variant="body1"
-              sx={{ fontStyle: "italic", lineHeight: 1.2 }}
+              sx={{
+                fontStyle: "italic",
+                lineHeight: 1.3,
+                mt: 2,
+              }}
             >
-              Hintada Street 39
-              <br /> Sanchaung, Yangon
+              {company?.address}
             </Typography>
           </Box>
         </Box>
