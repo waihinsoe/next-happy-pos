@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 import AddonCategories from "@/components/AddonCategories";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { orderAppData, setCartItem } from "@/store/slices/orderAppSlice";
+import { orderAppData, addCartItem } from "@/store/slices/orderAppSlice";
 import OrderLayout from "@/components/OrderLayout";
 
 const MenuDetail = () => {
@@ -31,7 +31,7 @@ const MenuDetail = () => {
 
   const addToCart = () => {
     dispatch(
-      setCartItem({
+      addCartItem({
         id: generateRandomId(),
         menu: validMenu,
         addons: selectedAddons,

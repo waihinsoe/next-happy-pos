@@ -144,6 +144,7 @@ export default async function handler(
             orders_id: newOrder.id,
             menus_id: menu.id,
             addons_id: addon.id,
+            quantity: orderLine.quantity
           };
         });
         await prisma.orderLines.createMany({
@@ -154,6 +155,7 @@ export default async function handler(
           data: {
             orders_id: newOrder.id,
             menus_id: menu.id,
+            quantity:orderLine.quantity
           },
         });
       }
