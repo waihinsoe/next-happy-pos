@@ -14,7 +14,7 @@ function BackOfficeApp() {
     if (session) {
       router.push("/backoffice/orders");
     }
-  }, [session, router]);
+  }, [session]);
 
   useEffect(() => {
     dispatch(fetchAppData(selectedLocationId));

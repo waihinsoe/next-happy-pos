@@ -51,7 +51,7 @@ const EditLocation = () => {
       );
       setNewLocation(validLocation);
     }
-  }, [locations, locationId]);
+  }, [locations]);
   if (!newLocation) return null;
   return (
     <BackofficeLayout title="EditLocation">

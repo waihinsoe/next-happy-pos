@@ -86,7 +86,7 @@ const orderAppSlice = createSlice({
       state.orders = action.payload.orders;
       state.orderLines = action.payload.orderLines;
     },
-    setCartItem: (state, action) => {
+    addCartItem: (state, action) => {
       state.cart = [...state.cart, action.payload];
     },
     updateCartItem: (state, action) => {
@@ -166,7 +166,7 @@ export const orderAppData = createSelector(
 export const {
   setOrderAppLoading,
   setOrderAppData,
-  setCartItem,
+  addCartItem,
   updateCartItem,
   removeCartItem,
 } = orderAppSlice.actions;

@@ -66,7 +66,7 @@ const EditAddonCategory = () => {
       );
       setAddonCategory(validAddonCategory);
     }
-  }, [addonCategories, addonCategoryId]);
+  }, [addonCategories]);
 
   if (!addonCategory) return null;
   return (

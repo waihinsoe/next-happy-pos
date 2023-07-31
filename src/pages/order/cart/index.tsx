@@ -4,6 +4,7 @@ import {
   fetchOrderAppData,
   orderAppData,
   removeCartItem,
+  addCartItem,
 } from "@/store/slices/orderAppSlice";
 import { CartItem } from "@/typings/types";
 import { getCartTotalPrice } from "@/utils";

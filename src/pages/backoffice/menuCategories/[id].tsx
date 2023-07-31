@@ -88,7 +88,7 @@ const EditMenuCategory = () => {
         locations: selectedLocations,
       });
     }
-  }, [menuCategory, menusMenuCategoriesLocations, selectedLocations]);
+  }, [menuCategory, menusMenuCategoriesLocations]);
 
   const handleUpdateMenuCategory = async () => {
     const response = await fetch(`${config.apiBaseUrl}/menuCategories`, {

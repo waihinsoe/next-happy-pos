@@ -52,7 +52,7 @@ const EditAddon = () => {
       const validAddon = addons.find((item) => item.id === Number(addonId));
       setAddon(validAddon);
     }
-  }, [addons, addonId]);
+  }, [addons]);
   if (!addon) return null;
   return (
     <BackofficeLayout title="EditAddon">
