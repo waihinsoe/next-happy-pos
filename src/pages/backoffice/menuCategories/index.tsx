@@ -30,7 +30,8 @@ const MenuCategories = () => {
       (item) =>
         item.menus_id &&
         item.locations_id === Number(selectedLocationId) &&
-        item.menu_categories_id === menuCategoryId
+        item.menu_categories_id === menuCategoryId &&
+        item.is_archived === false
     ).length;
   };
 
