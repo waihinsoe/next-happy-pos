@@ -9,7 +9,7 @@ interface Props {
 const OrderLayout = ({ children }: Props) => {
   const router = useRouter();
   return (
-    <Box>
+    <Box sx={{ bgcolor: "#E8F6EF", minHeight: "100vh" }}>
       <OrderAppHeader />
       <Box
         sx={{

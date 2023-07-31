@@ -9,9 +9,13 @@ interface Props {
 const MenuCard = ({ menu, href }: Props) => {
   return (
     <Link href={href} style={{ textDecoration: "none" }}>
-      <Card sx={{ Width: 200, height: 220 }}>
+      <Card sx={{ Width: { xs: 150, md: 200 }, height: 220 }}>
         <CardMedia
-          sx={{ height: 130, width: 200, backgroundSize: "contain" }}
+          sx={{
+            height: 130,
+            width: { xs: 150, md: 200 },
+            backgroundSize: "contain",
+          }}
           image={menu.asset_url || ""}
           component={"img"}
         />

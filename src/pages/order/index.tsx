@@ -53,6 +53,7 @@ const Order = () => {
         sx={{
           display: "flex",
           flexWrap: "wrap",
+          justifyContent: { xs: "center", sm: "start" },
           gap: 2,
           mt: 2,
           px: 2,
