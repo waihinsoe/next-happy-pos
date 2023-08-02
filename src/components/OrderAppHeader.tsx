@@ -8,6 +8,7 @@ import { orderAppData } from "@/store/slices/orderAppSlice";
 
 const OrderAppHeader = () => {
   const router = useRouter();
+  const isCartPage = router.pathname === "/order/cart";
   const query = router.query;
   const isHomePage = router.pathname === "/order";
   const { cart, company } = useAppSelector(orderAppData);
@@ -15,40 +16,45 @@ const OrderAppHeader = () => {
   return (
     <Box
       sx={{
-        width: "100vw",
+        width: "100%",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        position: "relative",
+        position: isHomePage ? "relative" : "fixed",
         zIndex: 5,
         top: -1,
       }}
     >
-      <Box
-        sx={{
-          position: "absolute",
-          right: { xs: 40, md: 80, lg: 200, xl: 400 },
-          top: 10,
-          cursor: "pointer",
-        }}
-        onClick={() => router.push({ pathname: "/order/cart", query })}
-      >
-        <ShoppingCartCheckoutIcon sx={{ fontSize: "40px", color: "#FFE194" }} />
+      {!isCartPage && (
+        <Box
+          sx={{
+            position: "absolute",
+            right: { xs: 40, md: 80, lg: 200, xl: 400 },
+            top: 10,
+            cursor: "pointer",
+          }}
+          onClick={() => router.push({ pathname: "/order/cart", query })}
+        >
+          <ShoppingCartCheckoutIcon
+            sx={{ fontSize: "40px", color: "#FFE194" }}
+          />
 
-        {cartItemCount > 0 && (
-          <Typography
-            variant="h5"
-            sx={{
-              position: "absolute",
-              color: "#E8F6EF",
-              top: -10,
-              right: -10,
-            }}
-          >
-            {cartItemCount}
-          </Typography>
-        )}
-      </Box>
+          {cartItemCount > 0 && (
+            <Typography
+              variant="h5"
+              sx={{
+                position: "absolute",
+                color: "#E8F6EF",
+                top: -10,
+                right: -10,
+              }}
+            >
+              {cartItemCount}
+            </Typography>
+          )}
+        </Box>
+      )}
+
       <Image
         src={OrderAppHeaderImg}
         alt="orderAppHeader"
@@ -62,7 +68,7 @@ const OrderAppHeader = () => {
               sx={{
                 fontWeight: "bold",
                 color: "#4C4C6D",
-                mt: 15,
+                mt: 16,
               }}
             >
               {company?.name}

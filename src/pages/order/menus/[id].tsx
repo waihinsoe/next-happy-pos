@@ -10,6 +10,7 @@ import AddonCategories from "@/components/AddonCategories";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { orderAppData, addCartItem } from "@/store/slices/orderAppSlice";
 import OrderLayout from "@/components/OrderLayout";
+import Image from "next/image";
 
 const MenuDetail = () => {
   const { menusAddonCategories, addonCategories, menus, addons } =
@@ -116,24 +117,36 @@ const MenuDetail = () => {
 
   return (
     <OrderLayout>
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
         <Box
           sx={{
-            px: 3,
+            p: 3,
             display: "flex",
             flexDirection: "column",
             gap: 2,
-            width: { xs: "100%", md: "500px" },
-            position: "relative",
+            width: { xs: "100%", md: "400px" },
             zIndex: 10,
-            top: -90,
           }}
         >
+          <Box sx={{ m: "0 auto" }}>
+            <Image
+              src={validMenu?.asset_url || ""}
+              width={130}
+              height={130}
+              alt="menu-image"
+              style={{ borderRadius: "50%" }}
+            />
+          </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography variant="h5" sx={{ textTransform: "capitalize" }}>
+            <Typography variant="h6" sx={{ textTransform: "capitalize" }}>
               {validMenu?.name}
             </Typography>
-            <Typography variant="h5" sx={{ textTransform: "capitalize" }}>
+            <Typography variant="h6" sx={{ textTransform: "capitalize" }}>
               {validMenu?.price} kyats
             </Typography>
           </Box>

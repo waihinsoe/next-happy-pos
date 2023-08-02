@@ -9,6 +9,8 @@ import AddIcon from "@mui/icons-material/Add";
 import { Box, Button } from "@mui/material";
 import { useState } from "react";
 import NewAddonCategory from "./NewAddonCategory";
+import { RootState } from "@/store";
+import Loading from "@/components/Loading";
 
 const AddonCategories = () => {
   const [open, setOpen] = useState(false);
@@ -34,8 +36,6 @@ const AddonCategories = () => {
   const filteredAddonCategories = addonCategories.filter((item) =>
     addonCategoryIds.includes(item.id)
   );
-
-  const hello = () => {};
 
   const getAddonCount = (addonCategoryId?: number) => {
     if (!addonCategoryId) return;

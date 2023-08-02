@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { getSelectedLocationId } from "@/utils";
 import { fetchAppData } from "@/store/slices/appSlice";
+import Loading from "@/components/Loading";
+import { Box } from "@mui/material";
 function BackOfficeApp() {
   const { data: session } = useSession();
   const router = useRouter();
@@ -20,7 +22,19 @@ function BackOfficeApp() {
     dispatch(fetchAppData(selectedLocationId));
   }, []);
 
-  return <div>backoffice app</div>;
+  return (
+    <Box
+      sx={{
+        width: "100%",
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Loading />
+    </Box>
+  );
 }
 
 export default BackOfficeApp;

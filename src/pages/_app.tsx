@@ -31,12 +31,17 @@ export default function App({
   }, [selectedOrderAppLocationId, selectedLocationId]);
 
   return (
-    <SessionProvider session={session}>
-      <Provider store={store}>
-        <ThemeProvider theme={theme}>
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </Provider>
-    </SessionProvider>
+    <>
+      {/* <head>
+        <title>Happy POS</title>
+      </head> */}
+      <SessionProvider session={session}>
+        <Provider store={store}>
+          <ThemeProvider theme={theme}>
+            <Component {...pageProps} />
+          </ThemeProvider>
+        </Provider>
+      </SessionProvider>
+    </>
   );
 }
