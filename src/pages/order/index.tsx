@@ -3,15 +3,7 @@ import OrderLayout from "@/components/OrderLayout";
 import { useAppSelector } from "@/store/hook";
 import { orderAppData } from "@/store/slices/orderAppSlice";
 import { getMenusByMenuCategoryId } from "@/utils";
-import {
-  Box,
-  Fab,
-  Tab,
-  Tabs,
-  ThemeProvider,
-  Typography,
-  createTheme,
-} from "@mui/material";
+import { Box, Fab, Tab, Tabs, Typography } from "@mui/material";
 import { menu_categories as MenuCategory } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -76,8 +68,7 @@ const Order = () => {
       setSelectedMenuCategory(menuCategories[value]);
     }
   }, [menuCategories]);
-
-  if (!selectedMenuCategory) return null;
+  // if (!selectedMenuCategory) return null;
   return (
     <OrderLayout>
       <Box sx={{ width: "100%" }}>

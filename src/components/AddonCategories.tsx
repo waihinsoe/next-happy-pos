@@ -42,7 +42,7 @@ const AddonCategories = ({
                   </Typography>
                   <Chip label={item.is_required ? "required" : "optional"} />
                 </Box>
-                <FormControl sx={{ px: 2 }}>
+                <FormControl sx={{ px: 2, mb: 3 }}>
                   <RadioGroup
                     aria-labelledby="demo-radio-buttons-group-label"
                     defaultValue="female"
