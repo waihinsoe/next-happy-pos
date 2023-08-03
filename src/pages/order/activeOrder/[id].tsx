@@ -1,3 +1,4 @@
+import OrderLayout from "@/components/OrderLayout";
 import { useAppSelector } from "@/store/hook";
 import { orderAppData } from "@/store/slices/orderAppSlice";
 import { Box, Typography } from "@mui/material";
@@ -15,10 +16,12 @@ const ActiveOrder = () => {
   if (!order) return null;
 
   return (
-    <Box>
-      <Typography>orderId :{order.id}</Typography>
-      <Typography>orderPrice :{order.price}</Typography>
-    </Box>
+    <OrderLayout>
+      <Box>
+        <Typography>orderId :{order.id}</Typography>
+        <Typography>orderPrice :{order.price}</Typography>
+      </Box>
+    </OrderLayout>
   );
 };
 

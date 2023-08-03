@@ -1,6 +1,6 @@
 import AddonCategories from "@/components/AddonCategories";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-
+import Image from "next/image";
 import QuantitySelector from "@/components/QuantitySelector";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { orderAppData, updateCartItem } from "@/store/slices/orderAppSlice";
@@ -9,12 +9,13 @@ import { Box, Button, Typography } from "@mui/material";
 import type { addons as Addon } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import OrderLayout from "@/components/OrderLayout";
 
 const UpdateMenu = () => {
   const router = useRouter();
   const query = router.query;
   const cartItemId = query.id as string;
-  const { cart, menus, addonCategories, menusAddonCategories, addons } =
+  const { cart, addonCategories, menusAddonCategories, addons } =
     useAppSelector(orderAppData);
   const dispatch = useAppDispatch();
   const [selectedAddons, setSelectedAddons] = useState<Addon[]>([]);
@@ -121,42 +122,58 @@ const UpdateMenu = () => {
   }, [cartItem]);
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "center" }}>
-      <Box
-        sx={{
-          p: 3,
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-          width: { xs: "100%", md: "500px" },
-        }}
-      >
-        <Typography variant="h5" sx={{ textTransform: "capitalize" }}>
-          {cartItem?.menu?.name}
-        </Typography>
-
-        <AddonCategories
-          validAddonCategories={validAddonCategories}
-          addons={addons}
-          selectedAddons={selectedAddons}
-          handleAddonSelect={handleAddonSelect}
-        />
-        <QuantitySelector
-          value={quantity}
-          onIncrease={handleQuantityIncrease}
-          onDecrease={handleQuantityDecrease}
-        />
-        <Button
-          variant="contained"
-          sx={{ width: "fit-content", margin: "0 auto", mt: 2 }}
-          disabled={isDisabled}
-          onClick={handleUpdateCart}
-          startIcon={<AddShoppingCartIcon />}
+    <OrderLayout>
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Box
+          sx={{
+            p: 3,
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            width: { xs: "100%", md: "500px" },
+          }}
         >
-          update
-        </Button>
+          <Box sx={{ m: "0 auto" }}>
+            <Image
+              src={cartItem?.menu?.asset_url || ""}
+              width={130}
+              height={130}
+              alt="menu-image"
+              style={{ borderRadius: "50%" }}
+            />
+          </Box>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Typography variant="h5" sx={{ textTransform: "capitalize" }}>
+              {cartItem?.menu?.name}
+            </Typography>
+            <Typography variant="h5" sx={{ textTransform: "capitalize" }}>
+              {cartItem?.menu?.price} kyats
+            </Typography>
+          </Box>
+
+          <AddonCategories
+            validAddonCategories={validAddonCategories}
+            addons={addons}
+            selectedAddons={selectedAddons}
+            handleAddonSelect={handleAddonSelect}
+          />
+          <QuantitySelector
+            value={quantity}
+            onIncrease={handleQuantityIncrease}
+            onDecrease={handleQuantityDecrease}
+          />
+          <Button
+            variant="contained"
+            sx={{ width: "fit-content", margin: "0 auto", mt: 2 }}
+            disabled={isDisabled}
+            onClick={handleUpdateCart}
+            startIcon={<AddShoppingCartIcon />}
+          >
+            update
+          </Button>
+        </Box>
       </Box>
-    </Box>
+    </OrderLayout>
   );
 };
 
