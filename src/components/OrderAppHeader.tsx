@@ -8,9 +8,12 @@ import { orderAppData } from "@/store/slices/orderAppSlice";
 
 const OrderAppHeader = () => {
   const router = useRouter();
-  const isCartPage = router.pathname === "/order/cart";
-  const query = router.query;
+  const isMenusPage = router.pathname.includes("/menus");
+  const isUpdateMenuPage = router.pathname.includes("/updateMenu");
   const isHomePage = router.pathname === "/order";
+  const shouldShowCartIcon = isMenusPage || isUpdateMenuPage || isHomePage;
+  console.log(shouldShowCartIcon);
+  const query = router.query;
   const { cart, company } = useAppSelector(orderAppData);
   const cartItemCount = cart.length;
   return (
@@ -25,7 +28,7 @@ const OrderAppHeader = () => {
         top: -1,
       }}
     >
-      {!isCartPage && (
+      {shouldShowCartIcon && (
         <Box
           sx={{
             position: "absolute",
