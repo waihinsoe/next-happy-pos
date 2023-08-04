@@ -34,7 +34,7 @@ import {
   type orderLines as OrderLine,
 } from "@prisma/client";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 interface Props {
   orders: Order[];
   order: Order;
@@ -56,16 +56,16 @@ const Row = ({
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const renderMenusAddonsFromOrder = () => {
-    const orderLineMenuIds = orderLines.map((item) => item.menus_id);
-    const menuIds: number[] = [];
-    orderLineMenuIds.map((item) => {
-      const hasAdded = menuIds.includes(item);
-      if (!hasAdded) menuIds.push(item);
+    const orderLineItemIds = orderLines.map((item) => item.item_id);
+    const itemIds: string[] = [];
+    orderLineItemIds.map((item) => {
+      const hasAdded = itemIds.includes(item);
+      if (!hasAdded) itemIds.push(item);
     });
 
-    const orderLineMenus = menuIds.map((menuId) => {
+    const orderLineMenus = itemIds.map((itemId) => {
       const orderLineAddonIds = orderLines
-        .filter((item) => item.menus_id === menuId)
+        .filter((item) => item.item_id === itemId)
         .map((item) => item.addons_id) as number[];
 
       //Addons
@@ -73,14 +73,17 @@ const Row = ({
         orderLineAddonIds.includes(addon.id)
       );
       //Menu
+      const menuId = orderLines.find(
+        (item) => item.item_id === itemId
+      )?.menus_id;
       const orderLineMenu = menus.find((menu) => menu.id === menuId);
       //status
       const status = orderLines.find(
-        (item) => item.menus_id === menuId
+        (item) => item.item_id === itemId
       )?.order_status;
       //quantity
       const quantity = orderLines.find(
-        (item) => item.menus_id === menuId
+        (item) => item.item_id === itemId
       )?.quantity;
       // AddonsWithCategories
       const addonsWithCategories: { [key: number]: Addon[] } = {};
@@ -115,7 +118,7 @@ const Row = ({
       //   }
       // );
 
-      return { menu: orderLineMenu, status, addonsWithCategories, quantity };
+      return {id:itemId, menu: orderLineMenu, status, addonsWithCategories, quantity };
     });
     return (
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
@@ -218,7 +221,7 @@ const Row = ({
                         value={item.status}
                         label="Status"
                         onChange={(evt) =>
-                          handleUpdateOrderStatus(evt, item.menu?.id)
+                          handleUpdateOrderStatus(evt, item.id)
                         }
                       >
                         <MenuItem value={OrderStatus.PENDING}>Pending</MenuItem>
@@ -243,16 +246,16 @@ const Row = ({
 
   const handleUpdateOrderStatus = async (
     evt: SelectChangeEvent<"PENDING" | "PREPARING" | "COMPLETE" | "REJECTED">,
-    menuId: number | undefined
+    itemId: string | undefined
   ) => {
     const orderId = order.id;
-    const isValid = orderId && menuId;
+    const isValid = orderId && itemId;
     if (!isValid) return;
 
     const response = await fetch(`${config.apiBaseUrl}/orderLines`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ orderId, menuId, status: evt.target.value }),
+      body: JSON.stringify({ orderId, itemId, status: evt.target.value }),
     });
     if (response.ok) {
       dispatch(fetchOrderLines(orders));

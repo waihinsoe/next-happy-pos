@@ -13,12 +13,13 @@ const OrderLayout = ({ children }: Props) => {
   const router = useRouter();
   const isHomePage = router.pathname === "/order";
   const isCartPage = router.pathname === "/order/cart";
+  const isActiveOrderPage = router.pathname.includes("/activeOrder");
   const { isLoading } = useAppSelector(orderAppData);
 
   return (
     <Box
       sx={{
-        bgcolor: isCartPage ? "#ffffff" : "#E8F6EF",
+        bgcolor: isCartPage || isActiveOrderPage ? "#ffffff" : "#E8F6EF",
         minHeight: "100vh",
       }}
     >

@@ -10,6 +10,7 @@ import {
   TextField,
 } from "@mui/material";
 import type { tables as Table } from "@prisma/client";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 interface Props {
@@ -18,6 +19,8 @@ interface Props {
 }
 
 const NewTable = ({ open, setOpen }: Props) => {
+  const router = useRouter();
+
   const dispatch = useAppDispatch();
   const selectedLocationId = getSelectedLocationId() as string;
   const [newTable, setNewTable] = useState({
@@ -40,6 +43,9 @@ const NewTable = ({ open, setOpen }: Props) => {
 
     if (response.ok) {
       const tableCreated = (await response.json()) as Table;
+      if (tableCreated.asset_url) {
+        router.push(tableCreated.asset_url);
+      }
       dispatch(addTable(tableCreated));
       setNewTable({ ...newTable, name: "" });
       setOpen(false);

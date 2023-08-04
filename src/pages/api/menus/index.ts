@@ -119,14 +119,14 @@ export default async function handler(
       },
     });
 
-    await prisma.menus_menu_categories_locations.updateMany({
-      data: {
-        is_archived: true,
-      },
-      where: {
-        menus_id: Number(menuId),
-      },
-    });
+    // await prisma.menus_menu_categories_locations.updateMany({
+    //   data: {
+    //     is_archived: true,
+    //   },
+    //   where: {
+    //     menus_id: Number(menuId),
+    //   },
+    // });
     return res.send(200);
   } else {
     return res.send(405);

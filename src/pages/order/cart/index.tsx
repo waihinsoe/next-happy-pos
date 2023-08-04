@@ -5,10 +5,9 @@ import {
   fetchOrderAppData,
   orderAppData,
   removeCartItem,
-  addCartItem,
 } from "@/store/slices/orderAppSlice";
 import { CartItem } from "@/typings/types";
-import { getCartTotalPrice } from "@/utils";
+import { getCartTotalPrice, renderAddons } from "@/utils";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { Avatar, Box, Button, Divider, Typography } from "@mui/material";
@@ -28,33 +27,6 @@ const Review = () => {
       isValid && router.push({ pathname: "/order", query });
     }
   }, [cart, query, isLoading, router]);
-
-  const renderAddons = (addons: Addon[]) => {
-    if (!addons.length) return;
-    return (
-      <Box sx={{ pl: 6 }}>
-        {addons.map((addon) => {
-          return (
-            <Box
-              key={addon.id}
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Typography color={"primary"} sx={{ fontStyle: "italic" }}>
-                {addon.name}
-              </Typography>
-              <Typography color={"primary"} sx={{ fontStyle: "italic" }}>
-                {addon.price}
-              </Typography>
-            </Box>
-          );
-        })}
-      </Box>
-    );
-  };
 
   const handleRemoveCartItem = (cartItem: CartItem) => {
     dispatch(removeCartItem(cartItem));
@@ -76,10 +48,9 @@ const Review = () => {
     if (response.ok) {
       const currentLocationId = locationId as string;
       const responseJson = await response.json();
-      const order = responseJson.order;
+      // const order = responseJson.order;
       dispatch(fetchOrderAppData(currentLocationId));
-      order.id &&
-        router.push({ pathname: `/order/activeOrder/${order.id}`, query });
+      router.push({ pathname: `/order/activeOrder/`, query });
     }
   };
   if (!cart.length) return null;

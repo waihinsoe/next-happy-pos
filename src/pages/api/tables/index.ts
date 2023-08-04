@@ -12,23 +12,23 @@ export default async function handler(
     const isValid = name && locationId;
     if (!isValid) return res.status(400).send("bad request");
 
-    const tableCreated = await prisma.tables.create({
+    const newTable = await prisma.tables.create({
       data: {
         name,
         locations_id: Number(locationId),
       },
     });
 
-    await qrCodeImageUpload(Number(locationId), tableCreated.id);
+    await qrCodeImageUpload(Number(locationId), newTable.id);
 
-    const qrcodeUrl = getQrCodeUrl(Number(locationId), tableCreated.id);
+    const qrcodeUrl = getQrCodeUrl(Number(locationId), newTable.id);
 
-    await prisma.tables.update({
+    const tableCreated = await prisma.tables.update({
       data: {
         asset_url: qrcodeUrl,
       },
       where: {
-        id: tableCreated.id,
+        id: newTable.id,
       },
     });
 

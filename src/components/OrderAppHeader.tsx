@@ -5,14 +5,13 @@ import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import { useRouter } from "next/router";
 import { useAppSelector } from "@/store/hook";
 import { orderAppData } from "@/store/slices/orderAppSlice";
-
+import ListAltIcon from "@mui/icons-material/ListAlt";
 const OrderAppHeader = () => {
   const router = useRouter();
   const isMenusPage = router.pathname.includes("/menus");
   const isUpdateMenuPage = router.pathname.includes("/updateMenu");
   const isHomePage = router.pathname === "/order";
   const shouldShowCartIcon = isMenusPage || isUpdateMenuPage || isHomePage;
-  console.log(shouldShowCartIcon);
   const query = router.query;
   const { cart, company } = useAppSelector(orderAppData);
   const cartItemCount = cart.length;
@@ -28,6 +27,19 @@ const OrderAppHeader = () => {
         top: -1,
       }}
     >
+      {shouldShowCartIcon && (
+        <Box
+          sx={{
+            position: "absolute",
+            left: { xs: 40, md: 80, lg: 200, xl: 400 },
+            top: 10,
+            cursor: "pointer",
+          }}
+          onClick={() => router.push({ pathname: "/order/activeOrder", query })}
+        >
+          <ListAltIcon sx={{ fontSize: "40px", color: "#FFE194" }} />
+        </Box>
+      )}
       {shouldShowCartIcon && (
         <Box
           sx={{
