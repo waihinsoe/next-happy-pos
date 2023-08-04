@@ -144,6 +144,7 @@ model orders {
 model orderLines {
   id           Int         @id @default(autoincrement())
   orders_id    Int
+  item_id      String
   menus_id     Int
   addons_id    Int?
   quantity     Int         @default(1)

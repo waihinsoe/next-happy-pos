@@ -1,5 +1,6 @@
 import { config } from "@/config/config";
 import { CartItem } from "@/typings/types";
+import { Box, Typography } from "@mui/material";
 import type {
   menus as Menu,
   locations as Location,
@@ -132,3 +133,30 @@ export const getMenuByMenuId = (menus: Menu[], menuId: number) =>
 
 export const getAddonByAddonId = (addons: Addon[], addonId: number) =>
   addons.find((addon) => addon.id === addonId);
+
+export const renderAddons = (addons: Addon[]) => {
+  if (!addons.length) return;
+  return (
+    <Box sx={{ pl: 6 }}>
+      {addons.map((addon) => {
+        return (
+          <Box
+            key={addon.id}
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Typography color={"primary"} sx={{ fontStyle: "italic" }}>
+              {addon.name}
+            </Typography>
+            <Typography color={"primary"} sx={{ fontStyle: "italic" }}>
+              {addon.price}
+            </Typography>
+          </Box>
+        );
+      })}
+    </Box>
+  );
+};
