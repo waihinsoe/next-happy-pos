@@ -29,6 +29,7 @@ const OrderTables = () => {
               );
               return (
                 <Badge
+                  key={table.id}
                   badgeContent={currentTableOrders.length}
                   color="primary"
                   sx={{
@@ -41,7 +42,6 @@ const OrderTables = () => {
                   }}
                 >
                   <ItemCard
-                    key={table.id}
                     icon={
                       <TableBarIcon
                         sx={{ fontSize: "60px", mb: 1.5, color: "#1B9C85" }}
