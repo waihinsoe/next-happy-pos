@@ -48,12 +48,12 @@ const Review = () => {
 
     if (response.ok) {
       const currentLocationId = locationId as string;
-
+      dispatch(fetchOrderAppData(currentLocationId));
+      dispatch(setCartItem([]));
       if (!isLoading) {
         router.push({ pathname: `/order/activeOrder/`, query });
       }
-      dispatch(fetchOrderAppData(currentLocationId));
-      dispatch(setCartItem([]));
+
     }
   };
   if (!cart.length) return null;
