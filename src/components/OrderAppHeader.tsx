@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Badge, Box, Typography } from "@mui/material";
 import Image from "next/image";
 import OrderAppHeaderImg from "@/assets/order_app_header.svg";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { useAppSelector } from "@/store/hook";
 import { orderAppData } from "@/store/slices/orderAppSlice";
 import ListAltIcon from "@mui/icons-material/ListAlt";
+
 const OrderAppHeader = () => {
   const router = useRouter();
   const isMenusPage = router.pathname.includes("/menus");
@@ -13,8 +14,31 @@ const OrderAppHeader = () => {
   const isHomePage = router.pathname === "/order";
   const shouldShowCartIcon = isMenusPage || isUpdateMenuPage || isHomePage;
   const query = router.query;
-  const { cart, company } = useAppSelector(orderAppData);
+  const { cart, company, orders, orderLines } = useAppSelector(orderAppData);
   const cartItemCount = cart.length;
+
+  const currentLocationId = Number(query.locationId);
+  const currentTableId = Number(query.tableId);
+
+  const tableOrders = orders.filter(
+    (order) =>
+      order.locations_id === currentLocationId &&
+      order.tables_id === currentTableId
+  );
+  const tableOrderIds = tableOrders.map((tableOrder) => tableOrder.id);
+
+  const tableOrderLines = orderLines.filter((orderLine) =>
+    tableOrderIds.includes(orderLine.orders_id)
+  );
+
+  const orderLineItemIds = tableOrderLines.map((item) => item.item_id);
+  const itemIds: string[] = [];
+  orderLineItemIds.map((item) => {
+    const hasAdded = itemIds.includes(item);
+    if (!hasAdded) itemIds.push(item);
+  });
+
+  const orderCount = itemIds.length;
   return (
     <Box
       sx={{
@@ -37,7 +61,24 @@ const OrderAppHeader = () => {
           }}
           onClick={() => router.push({ pathname: "/order/activeOrder", query })}
         >
-          <ListAltIcon sx={{ fontSize: "40px", color: "#FFE194" }} />
+          <Badge
+            badgeContent={orderCount}
+            color="primary"
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            sx={{
+              "& .MuiBadge-badge": {
+                width: 30,
+                height: 30,
+                fontSize: 15,
+                borderRadius: "50%",
+              },
+            }}
+          >
+            <ListAltIcon sx={{ fontSize: "40px", color: "#FFE194" }} />
+          </Badge>
         </Box>
       )}
       {shouldShowCartIcon && (
@@ -50,23 +91,26 @@ const OrderAppHeader = () => {
           }}
           onClick={() => router.push({ pathname: "/order/cart", query })}
         >
-          <ShoppingCartCheckoutIcon
-            sx={{ fontSize: "40px", color: "#FFE194" }}
-          />
-
-          {cartItemCount > 0 && (
-            <Typography
-              variant="h5"
-              sx={{
-                position: "absolute",
-                color: "#E8F6EF",
-                top: -10,
-                right: -10,
-              }}
-            >
-              {cartItemCount}
-            </Typography>
-          )}
+          <Badge
+            badgeContent={cartItemCount}
+            color="primary"
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            sx={{
+              "& .MuiBadge-badge": {
+                width: 30,
+                height: 30,
+                fontSize: 15,
+                borderRadius: "50%",
+              },
+            }}
+          >
+            <ShoppingCartCheckoutIcon
+              sx={{ fontSize: "40px", color: "#FFE194" }}
+            />
+          </Badge>
         </Box>
       )}
 
@@ -76,7 +120,7 @@ const OrderAppHeader = () => {
         style={{ width: "100%", objectFit: "cover", padding: 0, margin: 0 }}
       />
       {isHomePage && (
-        <Box sx={{ position: "absolute" }}>
+        <Box sx={{ position: "absolute", zIndex: -1 }}>
           <Box sx={{ textAlign: "center" }}>
             <Typography
               variant="h3"

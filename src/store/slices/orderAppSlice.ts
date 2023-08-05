@@ -60,8 +60,9 @@ export const fetchOrderAppData = createAsyncThunk(
     );
     if (response.ok) {
       const orderAppData = await response.json();
+      console.log(orderAppData.orderLines);
       thunkAPI.dispatch(setOrderAppData(orderAppData));
-      thunkAPI.dispatch(setOrderAppLoading(false));
+      // thunkAPI.dispatch(setOrderAppLoading(false));
     }
   }
 );
@@ -85,6 +86,10 @@ const orderAppSlice = createSlice({
         action.payload.menusMenuCategoriesLocations;
       state.orders = action.payload.orders;
       state.orderLines = action.payload.orderLines;
+      state.isLoading = false;
+    },
+    setCartItem: (state, action) => {
+      state.cart = action.payload;
     },
     addCartItem: (state, action) => {
       state.cart = [...state.cart, action.payload];
@@ -163,7 +168,38 @@ export const orderAppData = createSelector(
   }
 );
 
+// export const orderAppData = (state: RootState) => {
+//   const company = state.orderApp.company;
+//   const locations = state.orderApp.locations;
+//   const menus = state.orderApp.menus;
+//   const menuCategories = state.orderApp.menuCategories;
+//   const addons = state.orderApp.addons;
+//   const addonCategories = state.orderApp.addonCategories;
+//   const menusAddonCategories = state.orderApp.menusAddonCategories;
+//   const menusMenuCategoriesLocations =
+//     state.orderApp.menusMenuCategoriesLocations;
+//   const orders = state.orderApp.orders;
+//   const orderLines = state.orderApp.orderLines;
+//   const cart = state.orderApp.cart;
+//   const isLoading = state.orderApp.isLoading;
+//   return {
+//     company,
+//     locations,
+//     menus,
+//     menuCategories,
+//     addons,
+//     addonCategories,
+//     menusAddonCategories,
+//     menusMenuCategoriesLocations,
+//     orders,
+//     orderLines,
+//     cart,
+//     isLoading,
+//   };
+// };
+
 export const {
+  setCartItem,
   setOrderAppLoading,
   setOrderAppData,
   addCartItem,

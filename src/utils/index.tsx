@@ -9,6 +9,7 @@ import type {
   addon_categories as AddonCategory,
   addons as Addon,
   orderLines as OrderLine,
+  orders as Order,
 } from "@prisma/client";
 export const getAccessToken = () => {
   if (typeof window === "undefined") return "";
@@ -158,5 +159,17 @@ export const renderAddons = (addons: Addon[]) => {
         );
       })}
     </Box>
+  );
+};
+
+export const getOrdersByLocationIdAndTableId = (
+  orders: Order[],
+  selectedLocationId: string,
+  tableId: string
+) => {
+  return orders.filter(
+    (order) =>
+      order.locations_id === Number(selectedLocationId) &&
+      order.tables_id === Number(tableId)
   );
 };

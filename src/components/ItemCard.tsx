@@ -16,8 +16,8 @@ const ItemCard = ({ subtitle, href, title, icon }: Props) => {
         <Paper elevation={2}>
           <Box
             sx={{
-              width: 150,
-              height: 150,
+              width: 200,
+              height: 200,
               borderRadius: 2,
               display: "flex",
               flexDirection: "column",
@@ -32,7 +32,7 @@ const ItemCard = ({ subtitle, href, title, icon }: Props) => {
               {title}
             </Typography>
             {subtitle && (
-              <Typography sx={{ color: "#4C4C6D", fontSize: 14 }}>
+              <Typography sx={{ color: "#4C4C6D", fontSize: 14, mt: 2 }}>
                 {subtitle}
               </Typography>
             )}

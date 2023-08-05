@@ -5,6 +5,7 @@ import {
   fetchOrderAppData,
   orderAppData,
   removeCartItem,
+  setCartItem,
 } from "@/store/slices/orderAppSlice";
 import { CartItem } from "@/typings/types";
 import { getCartTotalPrice, renderAddons } from "@/utils";
@@ -47,10 +48,12 @@ const Review = () => {
 
     if (response.ok) {
       const currentLocationId = locationId as string;
-      const responseJson = await response.json();
-      // const order = responseJson.order;
+
+      if (!isLoading) {
+        router.push({ pathname: `/order/activeOrder/`, query });
+      }
       dispatch(fetchOrderAppData(currentLocationId));
-      router.push({ pathname: `/order/activeOrder/`, query });
+      dispatch(setCartItem([]));
     }
   };
   if (!cart.length) return null;
