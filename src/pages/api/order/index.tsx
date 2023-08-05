@@ -94,6 +94,7 @@ export default async function handler(
     const orders = await prisma.orders.findMany({
       where: {
         locations_id: Number(locationId),
+        is_paid: false,
       },
     });
 
@@ -134,7 +135,7 @@ export default async function handler(
       },
     });
 
-    cart.forEach(async (orderLine) => {
+    cart.forEach(async (orderLine, index) => {
       const menu = orderLine.menu;
       const hasAddons = orderLine.addons.length;
       if (hasAddons) {
@@ -161,8 +162,10 @@ export default async function handler(
           },
         });
       }
+      if (index === cart.length - 1) {
+        return res.status(200).send("ok");
+      }
     });
-    return res.send({ order: newOrder });
   } else {
     return res.send(405);
   }

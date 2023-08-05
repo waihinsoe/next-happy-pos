@@ -15,7 +15,6 @@ const OrderLayout = ({ children }: Props) => {
   const isCartPage = router.pathname === "/order/cart";
   const isActiveOrderPage = router.pathname.includes("/activeOrder");
   const { isLoading } = useAppSelector(orderAppData);
-
   return (
     <Box
       sx={{
