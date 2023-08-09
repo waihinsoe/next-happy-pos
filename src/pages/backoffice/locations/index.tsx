@@ -1,6 +1,6 @@
 import BackofficeLayout from "@/components/BackofficeLayout";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-
+import { locations as Location } from "@prisma/client";
 import ItemCard from "@/components/ItemCard";
 import { useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
@@ -8,10 +8,16 @@ import AddIcon from "@mui/icons-material/Add";
 import { Box, Button } from "@mui/material";
 import { useState } from "react";
 import NewLocation from "./NewLocation";
+import SortingAndSearching from "@/components/SortingAndSearching";
+import { searching, sorting } from "@/utils";
 
 const Locations = () => {
   const { locations } = useAppSelector(appData);
   const [open, setOpen] = useState(false);
+  const [sortStatus, setSortStatus] = useState<string>("id");
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
+  const sortedLocations = sorting(locations, sortStatus);
+  const searchedLocations = searching(sortedLocations, searchKeyword);
   return (
     <BackofficeLayout title="Locations">
       <Box>
@@ -23,6 +29,12 @@ const Locations = () => {
             mb: 2,
           }}
         >
+          <SortingAndSearching
+            sortStatus={sortStatus}
+            changeSortStatus={setSortStatus}
+            searchKeyword={searchKeyword}
+            changeSearchKeyword={setSearchKeyword}
+          />
           <Button
             variant="contained"
             onClick={() => setOpen(true)}
@@ -41,8 +53,8 @@ const Locations = () => {
           </Button>
         </Box>
         <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-          {locations.length > 0 &&
-            locations.map((location) => (
+          {searchedLocations.length > 0 &&
+            searchedLocations.map((location: Location) => (
               <ItemCard
                 key={location.id}
                 icon={

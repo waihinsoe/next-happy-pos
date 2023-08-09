@@ -53,7 +53,6 @@ const Review = () => {
       if (!isLoading) {
         router.push({ pathname: `/order/activeOrder/`, query });
       }
-
     }
   };
   if (!cart.length) return null;

@@ -1,7 +1,7 @@
 import BackofficeLayout from "@/components/BackofficeLayout";
 import TableBarIcon from "@mui/icons-material/TableBar";
-
-import { getSelectedLocationId } from "@/utils";
+import { tables as Table } from "@prisma/client";
+import { getSelectedLocationId, searching, sorting } from "@/utils";
 import { Box, Button } from "@mui/material";
 
 import ItemCard from "@/components/ItemCard";
@@ -10,14 +10,19 @@ import { appData } from "@/store/slices/appSlice";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import NewTable from "./NewTable";
+import SortingAndSearching from "@/components/SortingAndSearching";
 
 const Tables = () => {
   const { tables } = useAppSelector(appData);
   const selectedLocationId = getSelectedLocationId() as string;
   const [open, setOpen] = useState(false);
+  const [sortStatus, setSortStatus] = useState<string>("id");
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
   const validTables = tables.filter(
     (table) => table.locations_id === Number(selectedLocationId)
   );
+  const sortedTables = sorting(validTables, sortStatus);
+  const searchedTables = searching(sortedTables, searchKeyword);
   return (
     <BackofficeLayout title="Tables">
       <Box>
@@ -29,6 +34,12 @@ const Tables = () => {
             mb: 2,
           }}
         >
+          <SortingAndSearching
+            sortStatus={sortStatus}
+            changeSortStatus={setSortStatus}
+            searchKeyword={searchKeyword}
+            changeSearchKeyword={setSearchKeyword}
+          />
           <Button
             variant="contained"
             onClick={() => setOpen(true)}
@@ -47,8 +58,8 @@ const Tables = () => {
           </Button>
         </Box>
         <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-          {validTables.length > 0 &&
-            validTables.map((table) => (
+          {searchedTables.length > 0 &&
+            searchedTables.map((table: Table) => (
               <ItemCard
                 key={table.id}
                 icon={

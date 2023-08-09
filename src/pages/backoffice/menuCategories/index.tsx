@@ -1,16 +1,20 @@
 import CategoryIcon from "@mui/icons-material/Category";
 import { Box, Button } from "@mui/material";
-
+import { menu_categories as MenuCategory } from "@prisma/client";
 import ItemCard from "@/components/ItemCard";
 import BackofficeLayout from "@/components/BackofficeLayout";
 import { useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
-import { getSelectedLocationId } from "@/utils";
+import { getSelectedLocationId, searching, sorting } from "@/utils";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import NewMenuCategory from "./NewMenuCategory";
+import SortingAndSearching from "@/components/SortingAndSearching";
 
 const MenuCategories = () => {
+  const [sortStatus, setSortStatus] = useState<string>("id");
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
+
   const { menuCategories, menusMenuCategoriesLocations } =
     useAppSelector(appData);
   const [open, setOpen] = useState(false);
@@ -23,6 +27,9 @@ const MenuCategories = () => {
   const filteredMenuCategories = menuCategories.filter(
     (item) => item.id && validMenuCategoryIds.includes(item.id)
   );
+
+  const sortedMenuCategories = sorting(filteredMenuCategories, sortStatus);
+  const searchedMenuCategories = searching(sortedMenuCategories, searchKeyword);
 
   const getMenuCount = (menuCategoryId?: number) => {
     if (!menuCategoryId) return 0;
@@ -49,6 +56,12 @@ const MenuCategories = () => {
             mb: 2,
           }}
         >
+          <SortingAndSearching
+            sortStatus={sortStatus}
+            changeSortStatus={setSortStatus}
+            searchKeyword={searchKeyword}
+            changeSearchKeyword={setSearchKeyword}
+          />
           <Button
             variant="contained"
             onClick={() => setOpen(true)}
@@ -67,8 +80,8 @@ const MenuCategories = () => {
           </Button>
         </Box>
         <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-          {filteredMenuCategories.length > 0 &&
-            filteredMenuCategories.map((filteredMenuCategory) => (
+          {searchedMenuCategories.length > 0 &&
+            searchedMenuCategories.map((filteredMenuCategory: MenuCategory) => (
               <ItemCard
                 key={filteredMenuCategory.id}
                 icon={

@@ -2,14 +2,18 @@ import BackofficeLayout from "@/components/BackofficeLayout";
 import MenuCard from "@/components/MenuCard";
 import { useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
-import { getSelectedLocationId } from "@/utils";
+import { getSelectedLocationId, searching, sorting } from "@/utils";
 import AddIcon from "@mui/icons-material/Add";
 import { Box, Button } from "@mui/material";
 import { useState } from "react";
 import NewMenu from "./NewMenu";
+import { menus as Menu } from "@prisma/client";
+import SortingAndSearching from "@/components/SortingAndSearching";
 
 const Menus = () => {
   const [open, setOpen] = useState(false);
+  const [sortStatus, setSortStatus] = useState<string>("id");
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
   const { menus, menusMenuCategoriesLocations } = useAppSelector(appData);
   const selectedLocationId = getSelectedLocationId();
 
@@ -22,17 +26,25 @@ const Menus = () => {
   const filteredMenus = menus.filter(
     (menu) => menu.id && validMenuIds.includes(menu.id)
   );
+  const sortedMenus = sorting(filteredMenus, sortStatus);
 
+  const searchedMenus = searching(sortedMenus, searchKeyword);
   return (
     <BackofficeLayout title="Menus">
       <Box
         sx={{
           display: "flex",
           width: "100%",
-          justifyContent: "flex-end",
+          justifyContent: "space-between",
           mb: 2,
         }}
       >
+        <SortingAndSearching
+          sortStatus={sortStatus}
+          changeSortStatus={setSortStatus}
+          searchKeyword={searchKeyword}
+          changeSearchKeyword={setSearchKeyword}
+        />
         <Button
           variant="contained"
           onClick={() => setOpen(true)}
@@ -59,8 +71,8 @@ const Menus = () => {
           flexWrap: "wrap",
         }}
       >
-        {filteredMenus.length > 0 &&
-          filteredMenus.map((menu) => (
+        {searchedMenus.length > 0 &&
+          searchedMenus.map((menu: Menu) => (
             <MenuCard
               key={menu.id}
               menu={menu}
