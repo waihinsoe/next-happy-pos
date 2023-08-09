@@ -5,23 +5,39 @@ import { appData } from "@/store/slices/appSlice";
 import {
   getOrdersByLocationIdAndTableId,
   getSelectedLocationId,
+  searching,
+  sorting,
 } from "@/utils";
+import { tables as Table } from "@prisma/client";
 import { Badge, Box } from "@mui/material";
 import TableBarIcon from "@mui/icons-material/TableBar";
+import SortingAndSearching from "@/components/SortingAndSearching";
+import { useState } from "react";
 
 const OrderTables = () => {
+  const [sortStatus, setSortStatus] = useState<string>("id");
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
   const { tables, orders } = useAppSelector(appData);
   const selectedLocationId = getSelectedLocationId() as string;
   const validTables = tables.filter(
     (table) => table.locations_id === Number(selectedLocationId)
   );
-
+  const sortedTables = sorting(validTables, sortStatus);
+  const searchedTables = searching(sortedTables, searchKeyword);
   return (
     <BackofficeLayout title="Orders">
-      <Box>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
+        <Box>
+          <SortingAndSearching
+            sortStatus={sortStatus}
+            changeSortStatus={setSortStatus}
+            searchKeyword={searchKeyword}
+            changeSearchKeyword={setSearchKeyword}
+          />
+        </Box>
         <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
-          {validTables.length > 0 &&
-            validTables.map((table) => {
+          {searchedTables.length > 0 &&
+            searchedTables.map((table: Table) => {
               const currentTableOrders = getOrdersByLocationIdAndTableId(
                 orders,
                 selectedLocationId,

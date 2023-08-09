@@ -1,19 +1,22 @@
 import BackofficeLayout from "@/components/BackofficeLayout";
 import ClassIcon from "@mui/icons-material/Class";
-
+import { addon_categories as AddonCategory } from "@prisma/client";
 import ItemCard from "@/components/ItemCard";
 import { useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
-import { getSelectedLocationId } from "@/utils";
+import { getSelectedLocationId, searching, sorting } from "@/utils";
 import AddIcon from "@mui/icons-material/Add";
 import { Box, Button } from "@mui/material";
 import { useState } from "react";
 import NewAddonCategory from "./NewAddonCategory";
 import { RootState } from "@/store";
 import Loading from "@/components/Loading";
+import SortingAndSearching from "@/components/SortingAndSearching";
 
 const AddonCategories = () => {
   const [open, setOpen] = useState(false);
+  const [sortStatus, setSortStatus] = useState<string>("id");
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
   const {
     addons,
     addonCategories,
@@ -37,6 +40,12 @@ const AddonCategories = () => {
     addonCategoryIds.includes(item.id)
   );
 
+  const sortedAddonCategories = sorting(filteredAddonCategories, sortStatus);
+  const searchedAddonCategories = searching(
+    sortedAddonCategories,
+    searchKeyword
+  );
+
   const getAddonCount = (addonCategoryId?: number) => {
     if (!addonCategoryId) return;
     return addons.filter((item) => item.addon_categories_id === addonCategoryId)
@@ -54,6 +63,12 @@ const AddonCategories = () => {
           mb: 2,
         }}
       >
+        <SortingAndSearching
+          sortStatus={sortStatus}
+          changeSortStatus={setSortStatus}
+          searchKeyword={searchKeyword}
+          changeSearchKeyword={setSearchKeyword}
+        />
         <Button
           variant="contained"
           onClick={() => setOpen(true)}
@@ -72,7 +87,7 @@ const AddonCategories = () => {
         </Button>
       </Box>
       <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-        {filteredAddonCategories.map((addonCategory) => (
+        {searchedAddonCategories.map((addonCategory: AddonCategory) => (
           <ItemCard
             key={addonCategory.id}
             icon={

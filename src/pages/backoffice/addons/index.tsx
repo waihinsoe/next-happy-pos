@@ -1,17 +1,21 @@
 import BackofficeLayout from "@/components/BackofficeLayout";
 import LunchDiningIcon from "@mui/icons-material/LunchDining";
-
+import { addons as Addon } from "@prisma/client";
 import ItemCard from "@/components/ItemCard";
 import { useAppSelector } from "@/store/hook";
 import { appData } from "@/store/slices/appSlice";
-import { getAddonsByLocationId } from "@/utils";
+import { getAddonsByLocationId, searching, sorting } from "@/utils";
 import AddIcon from "@mui/icons-material/Add";
 import { Box, Button } from "@mui/material";
 import { useState } from "react";
 import NewAddon from "./NewAddon";
+import SortingAndSearching from "@/components/SortingAndSearching";
 
 const Addons = () => {
   const [open, setOpen] = useState(false);
+  const [sortStatus, setSortStatus] = useState<string>("id");
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
+
   const { addons, menusMenuCategoriesLocations, menusAddonCategories } =
     useAppSelector(appData);
 
@@ -20,6 +24,10 @@ const Addons = () => {
     menusAddonCategories,
     addons
   );
+
+  const sortedAddons = sorting(validAddons, sortStatus);
+
+  const searchedAddons = searching(sortedAddons, searchKeyword);
   return (
     <BackofficeLayout title="Addons">
       <Box
@@ -31,6 +39,12 @@ const Addons = () => {
           mb: 2,
         }}
       >
+        <SortingAndSearching
+          sortStatus={sortStatus}
+          changeSortStatus={setSortStatus}
+          searchKeyword={searchKeyword}
+          changeSearchKeyword={setSearchKeyword}
+        />
         <Button
           variant="contained"
           onClick={() => setOpen(true)}
@@ -49,7 +63,7 @@ const Addons = () => {
         </Button>
       </Box>
       <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-        {validAddons.map((addon) => (
+        {searchedAddons.map((addon: Addon) => (
           <ItemCard
             key={addon.id}
             href={`/backoffice/addons/${addon.id}`}

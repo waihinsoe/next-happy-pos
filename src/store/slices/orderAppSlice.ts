@@ -60,7 +60,6 @@ export const fetchOrderAppData = createAsyncThunk(
     );
     if (response.ok) {
       const orderAppData = await response.json();
-      console.log(orderAppData.orderLines);
       thunkAPI.dispatch(setOrderAppData(orderAppData));
       // thunkAPI.dispatch(setOrderAppLoading(false));
     }

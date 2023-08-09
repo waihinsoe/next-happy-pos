@@ -10,6 +10,8 @@ import type {
   addons as Addon,
   orderLines as OrderLine,
   orders as Order,
+  menu_categories as MenuCategory,
+  tables as Table,
 } from "@prisma/client";
 export const getAccessToken = () => {
   if (typeof window === "undefined") return "";
@@ -171,5 +173,49 @@ export const getOrdersByLocationIdAndTableId = (
     (order) =>
       order.locations_id === Number(selectedLocationId) &&
       order.tables_id === Number(tableId)
+  );
+};
+
+export const sorting = (
+  items: any,
+  // | Menu[]
+  // | Addon[]
+  // | AddonCategory[]
+  // | MenuCategory[]
+  // | Table[]
+  // | Location[],
+  status: string
+) => {
+  if (status === "time") {
+    return items.sort((a: { updatedAt: Date }, b: { updatedAt: Date }) => {
+      const dataA = new Date(a.updatedAt);
+      const dataB = new Date(b.updatedAt);
+      return dataB.getTime() - dataA.getTime();
+    });
+  } else if (status === "id") {
+    return items.sort((a: { id: number }, b: { id: number }) => a.id - b.id);
+  } else if (status === "A-Z") {
+    return items.sort((a: { name: string }, b: { name: string }) => {
+      const nameA = a.name.toLowerCase(); // Convert to lowercase for case-insensitive sorting
+      const nameB = b.name.toLowerCase();
+      return nameA.localeCompare(nameB); // Sort alphabetically from A to Z
+    });
+  }
+  return [];
+};
+
+export const searching = (
+  items: any,
+  // | Menu[]
+  // | Addon[]
+  // | AddonCategory[]
+  // | MenuCategory[]
+  // | Table[]
+  // | Location[],
+  keyword: string
+) => {
+  if (keyword.length === 0) return items;
+  return items.filter((item: { name: string }) =>
+    item.name.toLocaleLowerCase().includes(keyword.toLocaleLowerCase())
   );
 };
