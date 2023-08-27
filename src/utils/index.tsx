@@ -186,16 +186,22 @@ export const sorting = (
   // | Location[],
   status: string
 ) => {
+  const copiedItems = items.slice(); //for read-only error
+
   if (status === "time") {
-    return items.sort((a: { updatedAt: Date }, b: { updatedAt: Date }) => {
-      const dataA = new Date(a.updatedAt);
-      const dataB = new Date(b.updatedAt);
-      return dataB.getTime() - dataA.getTime();
-    });
+    return copiedItems.sort(
+      (a: { updatedAt: Date }, b: { updatedAt: Date }) => {
+        const dataA = new Date(a.updatedAt);
+        const dataB = new Date(b.updatedAt);
+        return dataB.getTime() - dataA.getTime();
+      }
+    );
   } else if (status === "id") {
-    return items.sort((a: { id: number }, b: { id: number }) => a.id - b.id);
+    return copiedItems.sort(
+      (a: { id: number }, b: { id: number }) => a.id - b.id
+    );
   } else if (status === "A-Z") {
-    return items.sort((a: { name: string }, b: { name: string }) => {
+    return copiedItems.sort((a: { name: string }, b: { name: string }) => {
       const nameA = a.name.toLowerCase(); // Convert to lowercase for case-insensitive sorting
       const nameB = b.name.toLowerCase();
       return nameA.localeCompare(nameB); // Sort alphabetically from A to Z
