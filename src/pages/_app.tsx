@@ -24,6 +24,7 @@ export default function App({
   const selectedOrderAppLocationId = router.query.locationId as string;
 
   useEffect(() => {
+    console.log(selectedLocationId);
     store.dispatch(fetchAppData(selectedLocationId));
     if (selectedOrderAppLocationId) {
       store.dispatch(fetchOrderAppData(selectedOrderAppLocationId));
