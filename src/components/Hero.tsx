@@ -1,7 +1,10 @@
+import { getSelectedLocationId } from "@/utils";
 import { AddBoxRounded } from "@mui/icons-material";
 import { Box, Button, Slide, Typography } from "@mui/material";
+import Link from "next/link";
 
 const Hero = () => {
+  const selectedLocationId = getSelectedLocationId() as string;
   return (
     <Box
       sx={{
@@ -37,26 +40,30 @@ const Hero = () => {
               gap: 2,
             }}
           >
-            <Button
-              variant="contained"
-              sx={{
-                fontSize: { xs: "16px", md: "20px" },
-                width: "fit-content",
-                backgroundColor: "#4C4C6D",
-              }}
-            >
-              order app
-            </Button>
-            <Button
-              variant="contained"
-              sx={{
-                fontSize: { xs: "16px", md: "20px" },
-                width: "fit-content",
-                backgroundColor: "#4C4C6D",
-              }}
-            >
-              backoffice app
-            </Button>
+            <Link href={`/order?locationId=${selectedLocationId}`}>
+              <Button
+                variant="contained"
+                sx={{
+                  fontSize: { xs: "16px", md: "20px" },
+                  width: "fit-content",
+                  backgroundColor: "#4C4C6D",
+                }}
+              >
+                order app
+              </Button>
+            </Link>
+            <Link href={"/backoffice"}>
+              <Button
+                variant="contained"
+                sx={{
+                  fontSize: { xs: "16px", md: "20px" },
+                  width: "fit-content",
+                  backgroundColor: "#4C4C6D",
+                }}
+              >
+                backoffice app
+              </Button>
+            </Link>
           </Box>
         </Box>
       </Slide>
