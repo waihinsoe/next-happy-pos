@@ -58,24 +58,6 @@ const Tables = () => {
           >
             New Table
           </Button>
-          <Button
-            variant="contained"
-            onClick={() => console.log("hello")}
-            startIcon={<AddIcon />}
-            sx={{
-              backgroundColor: "#4C4C6D",
-              color: "#E8F6EF",
-              width: "fit-content",
-              ":hover": {
-                bgcolor: "#1B9C85", // theme.palette.primary.main
-                color: "white",
-              },
-            }}
-          >
-            <a href="https://res.cloudinary.com/dnhwkmskb/image/upload/fl_attachment/v1705941273/happy-pos/qrcode/locationId-1-tableId-5.png.png">
-              Download
-            </a>
-          </Button>
         </Box>
         <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
           {searchedTables.length > 0 &&
