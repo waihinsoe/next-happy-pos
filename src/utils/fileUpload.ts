@@ -48,7 +48,7 @@ export const qrCodeImageUpload = async (
           if (error) {
             console.error(error);
           } else {
-            console.log(result);
+            return result?.secure_url;
           }
         }
       )
