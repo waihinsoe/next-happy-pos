@@ -13,6 +13,9 @@ interface Config {
   dataBaseName: string;
   clientId: string;
   clientSecret: string;
+  cloudinaryName: string;
+  cloudinaryApiKey: string;
+  cloudinaryApiSecret: string;
 }
 
 export const config: Config = {
@@ -30,4 +33,7 @@ export const config: Config = {
   dataBaseName: process.env.DATABASE_NAME || "",
   clientId: process.env.GOOGLE_CLIENT_ID || "",
   clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+  cloudinaryName: process.env.CLOUDINARY_CLOUD_NAME || "",
+  cloudinaryApiKey: process.env.CLOUDINARY_API_KEY || "",
+  cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET || "",
 };

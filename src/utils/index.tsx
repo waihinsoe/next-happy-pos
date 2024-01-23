@@ -95,7 +95,8 @@ export const getAddonsByLocationId = (
 };
 
 export const getQrCodeUrl = (locationId: number, tableId: number) => {
-  return `https://msquarefdc.sgp1.cdn.digitaloceanspaces.com/happy-pos/qrcode/wai-hin-soe/locationId-${locationId}-tableId-${tableId}.png`;
+  return `https://res.cloudinary.com/dnhwkmskb/image/upload/v1705941273/happy-pos/qrcode/locationId-${locationId}-tableId-${tableId}.png`;
+  // return `https://msquarefdc.sgp1.cdn.digitaloceanspaces.com/happy-pos/qrcode/wai-hin-soe/locationId-${locationId}-tableId-${tableId}.png`;
 };
 
 export const getNumberOfMenusByOrderId = (

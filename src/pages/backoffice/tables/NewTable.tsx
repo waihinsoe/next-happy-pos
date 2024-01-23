@@ -43,9 +43,6 @@ const NewTable = ({ open, setOpen }: Props) => {
 
     if (response.ok) {
       const tableCreated = (await response.json()) as Table;
-      if (tableCreated.asset_url) {
-        router.push(tableCreated.asset_url);
-      }
       dispatch(addTable(tableCreated));
       setNewTable({ ...newTable, name: "" });
       setOpen(false);

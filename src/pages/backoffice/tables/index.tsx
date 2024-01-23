@@ -11,6 +11,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import NewTable from "./NewTable";
 import SortingAndSearching from "@/components/SortingAndSearching";
+import { config } from "@/config/config";
 
 const Tables = () => {
   const { tables } = useAppSelector(appData);
@@ -23,6 +24,7 @@ const Tables = () => {
   );
   const sortedTables = sorting(validTables, sortStatus);
   const searchedTables = searching(sortedTables, searchKeyword);
+
   return (
     <BackofficeLayout title="Tables">
       <Box>

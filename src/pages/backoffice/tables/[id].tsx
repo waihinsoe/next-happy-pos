@@ -9,6 +9,7 @@ import { Box, Button, TextField } from "@mui/material";
 import type { tables as Table } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 const EditTable = () => {
   const router = useRouter();
@@ -17,6 +18,9 @@ const EditTable = () => {
   const tableId = router.query.id as string;
   const [newTable, setNewTable] = useState<Partial<Table>>();
   const [openDialog, setOpenDialog] = useState(false);
+
+  const onlyFileName = newTable?.asset_url && newTable.asset_url.split("/")[9];
+
   const handleUpdateTable = async () => {
     if (!newTable) return alert("table name are required");
     const response = await fetch(`${config.apiBaseUrl}/tables`, {
@@ -67,6 +71,17 @@ const EditTable = () => {
         </Button>
       </Box>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <Image
+          alt="qrCode"
+          width={200}
+          height={200}
+          src={newTable.asset_url || ""}
+        />
+        <a
+          href={`https://res.cloudinary.com/dnhwkmskb/image/upload/fl_attachment/v1705941273/happy-pos/qrcode/${onlyFileName}`}
+        >
+          Download
+        </a>
         <TextField
           defaultValue={newTable.name}
           onChange={(evt) =>
